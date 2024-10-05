@@ -11,9 +11,18 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<PharmaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PharmaDatabase")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>()
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true; // Requires account confirmation (e.g., email confirmation)
+})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PharmaContext>();
+
+// Add AccessDeniedPath
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
 
 var app = builder.Build();
 
@@ -39,7 +48,8 @@ using (var scope = app.Services.CreateScope())
         adminUser = new IdentityUser
         {
             UserName = adminEmail,
-            Email = adminEmail
+            Email = adminEmail,
+            EmailConfirmed = true // Set email as confirmed
         };
         await userManager.CreateAsync(adminUser, "Admin123!"); // Default password
         await userManager.AddToRoleAsync(adminUser, adminRole);
@@ -65,7 +75,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Add this line to enable Identity Razor Pages
 app.MapRazorPages();
 
 app.Run();
