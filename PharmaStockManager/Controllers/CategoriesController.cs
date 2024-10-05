@@ -58,8 +58,10 @@ namespace PharmaStockManager.Controllers
             {
                 _context.Add(category);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Category created successfully.";
                 return RedirectToAction(nameof(Index));
             }
+            TempData["ErrorMessage"] = "Failed to create category.";
             return View(category);
         }
 
@@ -95,6 +97,7 @@ namespace PharmaStockManager.Controllers
                 {
                     _context.Update(category);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Category updated successfully.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -104,11 +107,13 @@ namespace PharmaStockManager.Controllers
                     }
                     else
                     {
+                        TempData["ErrorMessage"] = "Failed to update category.";
                         throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
+            TempData["ErrorMessage"] = "Invalid input. Failed to update category.";
             return View(category);
         }
 
@@ -139,9 +144,14 @@ namespace PharmaStockManager.Controllers
             if (category != null)
             {
                 _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Category deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete category.";
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

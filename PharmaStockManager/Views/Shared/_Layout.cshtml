@@ -58,6 +58,22 @@
         </nav>
     </header>
     <div class="container">
+        <!-- Notification Messages -->
+        <div class="mt-3">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+        </div>
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

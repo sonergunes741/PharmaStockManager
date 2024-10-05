@@ -60,8 +60,10 @@ namespace PharmaStockManager.Controllers
             {
                 _context.Add(drug);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Drug created successfully.";
                 return RedirectToAction(nameof(Index));
             }
+            TempData["ErrorMessage"] = "Failed to create drug.";
             ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
             return View(drug);
         }
@@ -100,20 +102,24 @@ namespace PharmaStockManager.Controllers
                 {
                     _context.Update(drug);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Drug updated successfully.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!DrugExists(drug.Id))
                     {
+                        TempData["ErrorMessage"] = "Drug not found.";
                         return NotFound();
                     }
                     else
                     {
+                        TempData["ErrorMessage"] = "Failed to update drug.";
                         throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
+            TempData["ErrorMessage"] = "Invalid input. Failed to update drug.";
             ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
             return View(drug);
         }
@@ -128,6 +134,10 @@ namespace PharmaStockManager.Controllers
                 drug.Quantity += quantity;
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = $"{quantity} units added to {drug.Name}.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to add stock. Drug not found.";
             }
             return RedirectToAction(nameof(Index));
         }
@@ -145,7 +155,7 @@ namespace PharmaStockManager.Controllers
             }
             else
             {
-                TempData["ErrorMessage"] = $"Cannot remove {quantity} units from {drug?.Name}. Not enough stock.";
+                TempData["ErrorMessage"] = $"Cannot remove {quantity} units from {drug?.Name}. Not enough stock or drug not found.";
             }
             return RedirectToAction(nameof(Index));
         }
@@ -177,9 +187,14 @@ namespace PharmaStockManager.Controllers
             if (drug != null)
             {
                 _context.Drugs.Remove(drug);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Drug deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete drug. Drug not found.";
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
