@@ -32,6 +32,16 @@
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    <form asp-action="StockIn" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" />
+                        <button type="submit" class="btn btn-success">Stock In</button>
+                    </form>
+                    <form asp-action="StockOut" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" />
+                        <button type="submit" class="btn btn-secondary">Stock Out</button>
+                    </form>
                 </td>
             </tr>
         }

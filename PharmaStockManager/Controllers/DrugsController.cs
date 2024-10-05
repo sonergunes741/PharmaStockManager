@@ -116,6 +116,32 @@ namespace PharmaStockManager.Controllers
             return View(drug);
         }
 
+        // POST: StockIn
+        [HttpPost]
+        public async Task<IActionResult> StockIn(int id, int quantity)
+        {
+            var drug = await _context.Drugs.FindAsync(id);
+            if (drug != null)
+            {
+                drug.Quantity += quantity;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // POST: StockOut
+        [HttpPost]
+        public async Task<IActionResult> StockOut(int id, int quantity)
+        {
+            var drug = await _context.Drugs.FindAsync(id);
+            if (drug != null && drug.Quantity >= quantity)
+            {
+                drug.Quantity -= quantity;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
         // GET: Drugs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
