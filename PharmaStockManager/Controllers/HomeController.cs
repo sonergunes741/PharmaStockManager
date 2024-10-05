@@ -1,21 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models;
 using System.Diagnostics;
+using System.Linq;
 
 namespace PharmaStockManager.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly PharmaContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(PharmaContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var model = new
+            {
+                Drugs = _context.Drugs.ToList(),
+                Categories = _context.Categories.ToList()
+            };
+            return View(model);
         }
 
         public IActionResult Privacy()
