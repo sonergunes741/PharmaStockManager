@@ -14,6 +14,15 @@
             {
                 <li class="list-group-item">
                     <strong>@drug.Name</strong> - Quantity: @drug.Quantity, Category: @drug.Category
+
+                    <!-- Stock Request Form -->
+                    <form asp-controller="UserPanel" asp-action="RequestStock" method="post" class="mt-2">
+                        <input type="hidden" name="drugId" value="@drug.Id" />
+                        <div class="input-group">
+                            <input type="number" name="quantity" class="form-control" placeholder="Quantity" min="1" required />
+                            <button type="submit" class="btn btn-primary">Request Stock</button>
+                        </div>
+                    </form>
                 </li>
             }
         </ul>

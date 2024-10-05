@@ -44,10 +44,27 @@ public class UserPanelController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult RequestStock(int drugId, int quantity)
     {
+        if (quantity <= 0)
+        {
+            TempData["ErrorMessage"] = "Quantity must be a positive number.";
+            return RedirectToAction(nameof(Index));
+        }
+
         var drug = _context.Drugs.FirstOrDefault(d => d.Id == drugId);
         if (drug != null)
         {
-            TempData["SuccessMessage"] = $"You have requested {quantity} units of {drug.Name}.";
+            // Stok kontrolü: Kullanıcının talep ettiği miktarın mevcut stoku aşmamasını kontrol ediyoruz.
+            if (quantity > drug.Quantity)
+            {
+                TempData["ErrorMessage"] = $"Requested quantity exceeds available stock for {drug.Name}.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = $"You have requested {quantity} units of {drug.Name}.";
+                // İş mantığını burada uygulayabilirsiniz, örneğin:
+                // drug.Quantity -= quantity;
+                // _context.SaveChanges();
+            }
         }
         else
         {
