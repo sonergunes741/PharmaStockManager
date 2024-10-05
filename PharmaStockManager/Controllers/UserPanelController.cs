@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models;
-using System;
 using System.Linq;
 
 [Authorize(Roles = "User")] // Bu controller'a yalnızca "User" rolündeki kullanıcılar erişebilir.
@@ -61,21 +60,10 @@ public class UserPanelController : Controller
             }
             else
             {
-                // Yeni StockRequest kaydı oluşturma
-                var stockRequest = new StockRequest
-                {
-                    DrugId = drugId,
-                    Quantity = quantity,
-                    UserId = User.Identity.Name, // Kullanıcının kimliğini kaydediyoruz
-                    UserName = User.Identity.Name, // Kullanıcı adını kaydediyoruz
-                    RequestDate = DateTime.Now,
-                    IsApproved = false
-                };
-
-                _context.StockRequests.Add(stockRequest);
-                _context.SaveChanges();
-
                 TempData["SuccessMessage"] = $"You have requested {quantity} units of {drug.Name}.";
+                // İş mantığını burada uygulayabilirsiniz, örneğin:
+                // drug.Quantity -= quantity;
+                // _context.SaveChanges();
             }
         }
         else
