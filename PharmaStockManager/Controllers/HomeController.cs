@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using PharmaStockManager.Models;
 using System.Diagnostics;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace PharmaStockManager.Controllers
             return View(model);
         }
 
+        [Authorize] // Only allow authenticated users to access the Privacy page
         public IActionResult Privacy()
         {
             return View();

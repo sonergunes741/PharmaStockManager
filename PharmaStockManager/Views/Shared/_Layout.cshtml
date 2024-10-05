@@ -36,6 +36,14 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Manage Categories</a>
                             </li>
                         }
+
+                        <!-- User Only Links -->
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserPanel" asp-action="Index">User Panel</a>
+                            </li>
+                        }
                     </ul>
 
                     <!-- User Authentication Links -->

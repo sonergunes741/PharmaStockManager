@@ -1,0 +1,20 @@
+﻿@model IEnumerable<PharmaStockManager.Models.Category>
+
+@{
+    ViewData["Title"] = "View Categories";
+}
+
+<h2>All Available Categories</h2>
+
+<ul class="list-group">
+    @foreach (var category in Model)
+    {
+        <li class="list-group-item">
+            @category.Name
+        </li>
+    }
+</ul>
+
+<div class="mt-3">
+    <a class="btn btn-primary" asp-controller="UserPanel" asp-action="Index">Back to User Panel</a>
+</div>

@@ -31,6 +31,13 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new IdentityRole(adminRole));
     }
 
+    // Create User role if it doesn't exist
+    var userRole = "User";
+    if (!await roleManager.RoleExistsAsync(userRole))
+    {
+        await roleManager.CreateAsync(new IdentityRole(userRole));
+    }
+
     // Create a default admin user if it doesn't exist
     var adminEmail = "admin@example.com";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
@@ -43,6 +50,20 @@ using (var scope = app.Services.CreateScope())
         };
         await userManager.CreateAsync(adminUser, "Admin123!"); // Default password
         await userManager.AddToRoleAsync(adminUser, adminRole);
+    }
+
+    // Create a default user if it doesn't exist
+    var userEmail = "user@example.com";
+    var defaultUser = await userManager.FindByEmailAsync(userEmail);
+    if (defaultUser == null)
+    {
+        defaultUser = new IdentityUser
+        {
+            UserName = userEmail,
+            Email = userEmail
+        };
+        await userManager.CreateAsync(defaultUser, "User123!"); // Default password
+        await userManager.AddToRoleAsync(defaultUser, userRole);
     }
 }
 
