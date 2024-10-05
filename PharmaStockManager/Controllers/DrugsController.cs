@@ -125,6 +125,7 @@ namespace PharmaStockManager.Controllers
             {
                 drug.Quantity += quantity;
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = $"{quantity} units added to {drug.Name}.";
             }
             return RedirectToAction(nameof(Index));
         }
@@ -138,6 +139,11 @@ namespace PharmaStockManager.Controllers
             {
                 drug.Quantity -= quantity;
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = $"{quantity} units removed from {drug.Name}.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"Cannot remove {quantity} units from {drug?.Name}. Not enough stock.";
             }
             return RedirectToAction(nameof(Index));
         }
