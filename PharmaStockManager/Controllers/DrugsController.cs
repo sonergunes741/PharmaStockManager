@@ -45,12 +45,11 @@ namespace PharmaStockManager.Controllers
         // GET: Drugs/Create
         public IActionResult Create()
         {
+            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name");
             return View();
         }
 
         // POST: Drugs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Category,Quantity,UnitPrice")] Drug drug)
@@ -61,6 +60,7 @@ namespace PharmaStockManager.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
             return View(drug);
         }
 
@@ -77,12 +77,12 @@ namespace PharmaStockManager.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
             return View(drug);
         }
 
         // POST: Drugs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Category,Quantity,UnitPrice")] Drug drug)
@@ -112,6 +112,7 @@ namespace PharmaStockManager.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
             return View(drug);
         }
 

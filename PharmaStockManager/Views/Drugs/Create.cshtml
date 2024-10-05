@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
+                <select asp-for="Category" class="form-control" asp-items="ViewBag.Categories"></select>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,5 +44,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
