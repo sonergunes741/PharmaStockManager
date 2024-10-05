@@ -12,10 +12,7 @@ namespace PharmaStockManager.Models
         public string Name { get; set; }
 
         [Required]
-        public int CategoryId { get; set; } // Foreign key for Category
-
-        [ForeignKey("CategoryId")]
-        public Category Category { get; set; } // Navigation property for the Category
+        public string Category { get; set; }
 
         [Required]
         public int Quantity { get; set; }

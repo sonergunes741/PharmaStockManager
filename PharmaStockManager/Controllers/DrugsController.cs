@@ -21,8 +21,7 @@ namespace PharmaStockManager.Controllers
         // GET: Drugs
         public async Task<IActionResult> Index()
         {
-            var drugs = _context.Drugs.Include(d => d.Category);
-            return View(await drugs.ToListAsync());
+            return View(await _context.Drugs.ToListAsync());
         }
 
         // GET: Drugs/Details/5
@@ -34,7 +33,6 @@ namespace PharmaStockManager.Controllers
             }
 
             var drug = await _context.Drugs
-                .Include(d => d.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (drug == null)
             {
@@ -47,14 +45,14 @@ namespace PharmaStockManager.Controllers
         // GET: Drugs/Create
         public IActionResult Create()
         {
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name");
             return View();
         }
 
         // POST: Drugs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,CategoryId,Quantity,UnitPrice")] Drug drug)
+        public async Task<IActionResult> Create([Bind("Id,Name,Category,Quantity,UnitPrice")] Drug drug)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +60,7 @@ namespace PharmaStockManager.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", drug.CategoryId);
+            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
             return View(drug);
         }
 
@@ -80,14 +78,14 @@ namespace PharmaStockManager.Controllers
                 return NotFound();
             }
 
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", drug.CategoryId);
+            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
             return View(drug);
         }
 
         // POST: Drugs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryId,Quantity,UnitPrice")] Drug drug)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Category,Quantity,UnitPrice")] Drug drug)
         {
             if (id != drug.Id)
             {
@@ -114,7 +112,7 @@ namespace PharmaStockManager.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", drug.CategoryId);
+            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
             return View(drug);
         }
 
@@ -127,7 +125,6 @@ namespace PharmaStockManager.Controllers
             }
 
             var drug = await _context.Drugs
-                .Include(d => d.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (drug == null)
             {
