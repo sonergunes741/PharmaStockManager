@@ -61,9 +61,9 @@ public class UserPanelController : Controller
             else
             {
                 TempData["SuccessMessage"] = $"You have requested {quantity} units of {drug.Name}.";
-                // İş mantığını burada uygulayabilirsiniz, örneğin:
-                // drug.Quantity -= quantity;
-                // _context.SaveChanges();
+                // Stok miktarını güncelle:
+                drug.Quantity -= quantity;
+                _context.SaveChanges();
             }
         }
         else
