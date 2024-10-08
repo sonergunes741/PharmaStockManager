@@ -13,6 +13,7 @@ namespace PharmaStockManager.Models
 
         public DbSet<Drug> Drugs { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<StockRequest> StockRequests { get; set; } // Yeni eklenen DbSet
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,11 @@ namespace PharmaStockManager.Models
                 new Drug { Id = 1, Name = "Aspirin", Category = "Painkillers", Quantity = 50, UnitPrice = 10.0m },
                 new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 30, UnitPrice = 20.0m }
             );
+
+            // Yeni StockRequest Modeline Seed Data eklenebilir.
+            // modelBuilder.Entity<StockRequest>().HasData(
+            //     new StockRequest { Id = 1, DrugId = 1, UserId = "admin", QuantityRequested = 10, IsApproved = false, IsRejected = false, RequestDate = DateTime.Now }
+            // );
         }
     }
 }
