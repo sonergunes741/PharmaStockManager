@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models;
+using Microsoft.Extensions.Logging; // Loglama için gerekli
 using System.Linq;
 
 [Authorize(Roles = "User")] // Bu controller'a yalnızca "User" rolündeki kullanıcılar erişebilir.
 public class UserPanelController : Controller
 {
     private readonly PharmaContext _context;
+    private readonly ILogger<UserPanelController> _logger; // Logger
 
-    public UserPanelController(PharmaContext context)
+    public UserPanelController(PharmaContext context, ILogger<UserPanelController> logger)
     {
         _context = context;
+        _logger = logger; // Logger'ı yapılandırıyoruz
     }
 
     // GET: UserPanel/Index
@@ -61,9 +64,14 @@ public class UserPanelController : Controller
             else
             {
                 TempData["SuccessMessage"] = $"You have requested {quantity} units of {drug.Name}.";
+
                 // Stok miktarını güncelle:
                 drug.Quantity -= quantity;
                 _context.SaveChanges();
+
+                // İşlemi logluyoruz
+                _logger.LogInformation("User {User} requested {Quantity} units of {Drug} on {Date}.",
+                                        User.Identity.Name, quantity, drug.Name, DateTime.Now);
             }
         }
         else
