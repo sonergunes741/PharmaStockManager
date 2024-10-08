@@ -1,0 +1,45 @@
+﻿@model dynamic
+
+<h2>Admin Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Drugs</h5>
+                <p class="card-text">@Model.TotalDrugs</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Critical Stock Drugs</h5>
+                <ul class="list-group">
+                    @foreach (var drug in Model.CriticalStockDrugs)
+                    {
+                        <li class="list-group-item">
+                            @drug.Name - Stock: @drug.Quantity
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Categories</h5>
+                <p class="card-text">@Model.TotalCategories</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text">@Model.TotalUsers</p>
+            </div>
+        </div>
+    </div>
+</div>
