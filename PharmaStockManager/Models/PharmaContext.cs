@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace PharmaStockManager.Models
 {
@@ -12,7 +13,6 @@ namespace PharmaStockManager.Models
 
         public DbSet<Drug> Drugs { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<StockRequest> StockRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,13 +29,6 @@ namespace PharmaStockManager.Models
                 new Drug { Id = 1, Name = "Aspirin", Category = "Painkillers", Quantity = 50, UnitPrice = 10.0m },
                 new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 30, UnitPrice = 20.0m }
             );
-
-            // StockRequest tablosu için ilişkiler
-            modelBuilder.Entity<StockRequest>()
-                .HasOne(s => s.Drug) // Her StockRequest bir Drug ile ilişkilidir
-                .WithMany() // Drug birden fazla StockRequest'e sahip olabilir
-                .HasForeignKey(s => s.DrugId)
-                .OnDelete(DeleteBehavior.Restrict); // ON DELETE RESTRICT kullanıldı
         }
     }
 }

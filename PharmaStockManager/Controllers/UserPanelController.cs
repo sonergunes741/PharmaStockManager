@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models;
 using Microsoft.Extensions.Logging; // Loglama için gerekli
-using System;
 using System.Linq;
 
 [Authorize(Roles = "User")] // Bu controller'a yalnızca "User" rolündeki kullanıcılar erişebilir.
@@ -68,19 +67,6 @@ public class UserPanelController : Controller
 
                 // Stok miktarını güncelle:
                 drug.Quantity -= quantity;
-
-                // Stok talebini kaydet:
-                var stockRequest = new StockRequest
-                {
-                    DrugId = drugId,
-                    UserId = User.Identity.Name,
-                    QuantityRequested = quantity,
-                    IsApproved = false,
-                    IsRejected = false,
-                    RequestDate = DateTime.Now
-                };
-                _context.StockRequests.Add(stockRequest);
-
                 _context.SaveChanges();
 
                 // İşlemi logluyoruz
