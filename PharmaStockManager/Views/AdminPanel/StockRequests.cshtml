@@ -1,0 +1,50 @@
+﻿@model IEnumerable<PharmaStockManager.Models.StockRequest>
+
+<h2>Pending Stock Requests</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Drug</th>
+            <th>User</th>
+            <th>Quantity</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.Drug.Name</td> <!-- StockRequest ile ilgili Drug bilgisi -->
+                <td>@request.UserId</td>
+                <td>@request.QuantityRequested</td>
+                <td>@request.RequestDate.ToString("g")</td> <!-- Tarih formatını güzel gösteriyoruz -->
+                <td>
+                    @if (!request.IsApproved && !request.IsRejected)
+                    {
+                        <!-- Onaylama Formu -->
+                        <form asp-action="ApproveRequest" method="post" style="display:inline;">
+                            <input type="hidden" name="requestId" value="@request.Id" />
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+
+                        <!-- Reddetme Formu -->
+                        <form asp-action="RejectRequest" method="post" style="display:inline;">
+                            <input type="hidden" name="requestId" value="@request.Id" />
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                    }
+                    else if (request.IsApproved)
+                    {
+                        <span class="text-success">Approved</span> <!-- Onaylandıysa mesaj -->
+                    }
+                    else if (request.IsRejected)
+                    {
+                        <span class="text-danger">Rejected</span> <!-- Reddedildiyse mesaj -->
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

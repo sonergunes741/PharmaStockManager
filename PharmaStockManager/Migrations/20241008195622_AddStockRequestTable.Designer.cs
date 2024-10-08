@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmaStockManager.Models;
 
@@ -11,13 +12,15 @@ using PharmaStockManager.Models;
 namespace PharmaStockManager.Migrations
 {
     [DbContext(typeof(PharmaContext))]
-    partial class PharmaContextModelSnapshot : ModelSnapshot
+    [Migration("20241008195622_AddStockRequestTable")]
+    partial class AddStockRequestTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -387,13 +390,11 @@ namespace PharmaStockManager.Migrations
 
             modelBuilder.Entity("PharmaStockManager.Models.StockRequest", b =>
                 {
-                    b.HasOne("PharmaStockManager.Models.Drug", "Drug")
+                    b.HasOne("PharmaStockManager.Models.Drug", null)
                         .WithMany()
                         .HasForeignKey("DrugId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Drug");
                 });
 #pragma warning restore 612, 618
         }

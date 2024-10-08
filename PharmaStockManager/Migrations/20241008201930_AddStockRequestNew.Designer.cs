@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmaStockManager.Models;
 
@@ -11,9 +12,11 @@ using PharmaStockManager.Models;
 namespace PharmaStockManager.Migrations
 {
     [DbContext(typeof(PharmaContext))]
-    partial class PharmaContextModelSnapshot : ModelSnapshot
+    [Migration("20241008201930_AddStockRequestNew")]
+    partial class AddStockRequestNew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -311,6 +314,9 @@ namespace PharmaStockManager.Migrations
                     b.Property<int>("DrugId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DrugId1")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
@@ -330,6 +336,8 @@ namespace PharmaStockManager.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DrugId");
+
+                    b.HasIndex("DrugId1");
 
                     b.ToTable("StockRequests");
                 });
@@ -387,10 +395,16 @@ namespace PharmaStockManager.Migrations
 
             modelBuilder.Entity("PharmaStockManager.Models.StockRequest", b =>
                 {
-                    b.HasOne("PharmaStockManager.Models.Drug", "Drug")
+                    b.HasOne("PharmaStockManager.Models.Drug", null)
                         .WithMany()
                         .HasForeignKey("DrugId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PharmaStockManager.Models.Drug", "Drug")
+                        .WithMany()
+                        .HasForeignKey("DrugId1")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Drug");
