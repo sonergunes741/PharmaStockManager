@@ -41,7 +41,46 @@
     </div>
 </div>
 
+<!-- Drug Stock Chart -->
+<div class="row mt-5">
+    <div class="col-md-12">
+        <h3>Drug Stock Overview</h3>
+        <canvas id="drugStockChart"></canvas>
+    </div>
+</div>
+
 <div class="mt-3">
     <a class="btn btn-primary" asp-controller="UserPanel" asp-action="ViewDrugs">View All Drugs</a>
     <a class="btn btn-secondary" asp-controller="UserPanel" asp-action="ViewCategories">View All Categories</a>
 </div>
+
+@section Scripts {
+    <script>
+        // Prepare data for the chart
+        var drugNames = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Drugs.Select(d => d.Name).ToList()));
+        var drugQuantities = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Drugs.Select(d => d.Quantity).ToList()));
+
+        // Initialize the Chart.js chart
+        var ctx = document.getElementById('drugStockChart').getContext('2d');
+        var drugStockChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: drugNames,
+                datasets: [{
+                    label: 'Quantity in Stock',
+                    data: drugQuantities,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}
