@@ -23,6 +23,7 @@ namespace PharmaStockManager.Controllers
         // GET: Drugs
         public async Task<IActionResult> Index()
         {
+            ViewBag.Categories = _context.Categories.Select(c => c.Name).ToList();
             return View(await _context.Drugs.ToListAsync());
         }
 
@@ -157,7 +158,6 @@ namespace PharmaStockManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         // POST: StockOut
         [HttpPost]
         public async Task<IActionResult> StockOut(int id, int quantity, DateTime expiryDate, string type, decimal price)
@@ -190,7 +190,6 @@ namespace PharmaStockManager.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
 
         // GET: Drugs/Delete/5
         public async Task<IActionResult> Delete(int? id)
