@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PharmaStockManager.Models
@@ -21,6 +22,10 @@ namespace PharmaStockManager.Models
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18,2)")] // Precision and scale specified here
         public decimal UnitPrice { get; set; }
+
+        // Yeni eklenen ExpiryDate alanı
+        [DataType(DataType.Date)] // Expiry date input formatı için
+        public DateTime? ExpiryDate { get; set; } // Nullable çünkü bazı ilaçların son kullanma tarihi olmayabilir.
 
         public decimal TotalValue => Quantity * UnitPrice;
     }

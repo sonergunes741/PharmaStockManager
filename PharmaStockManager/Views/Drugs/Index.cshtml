@@ -48,51 +48,38 @@
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
 
-                    <!-- Stock In Form -->
-                    <form asp-action="StockIn" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@item.Id" />
-                        <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
+                    <div style="display: inline-block;">
+                        <!-- Stock In Form -->
+                        <form asp-action="StockIn" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
 
-                        <!-- Expiry Date Input -->
-                        <input type="date" name="expiryDate" class="form-control" style="width: 150px; display: inline-block;" required />
+                            <!-- Expiry Date Input -->
+                            <input type="date" name="expiryDate" class="form-control" style="width: 150px; display: inline-block;" required />
 
-                        <!-- Drug Type Dropdown -->
-                        <select name="type" class="form-control" style="width: 150px; display: inline-block;" required>
-                            <option value="">Select Type</option>
-                            @foreach (var category in ViewBag.Categories)
-                            {
-                                <option value="@category">@category</option>
-                            }
-                        </select>
+                            <!-- Drug Type Dropdown -->
+                            <select name="type" class="form-control" style="width: 150px; display: inline-block;" required>
+                                <option value="">Select Type</option>
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    <option value="@category">@category</option>
+                                }
+                            </select>
 
-                        <!-- Price Input -->
-                        <input type="number" name="price" class="form-control" placeholder="Price" style="width: 100px; display: inline-block;" step="0.01" required />
+                            <!-- Price Input -->
+                            <input type="number" name="price" class="form-control" placeholder="Price" style="width: 100px; display: inline-block;" step="0.01" required />
 
-                        <button type="submit" class="btn btn-success">Stock In</button>
-                    </form>
+                            <button type="submit" class="btn btn-success">Stock In</button>
+                        </form>
 
-                    <!-- Stock Out Form -->
-                    <form asp-action="StockOut" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@item.Id" />
-                        <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
+                        <!-- Stock Out Form -->
+                        <form asp-action="StockOut" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
 
-                        <!-- Expiry Date Input -->
-                        <input type="date" name="expiryDate" class="form-control" style="width: 150px; display: inline-block;" required />
-
-                        <!-- Drug Type Dropdown -->
-                        <select name="type" class="form-control" style="width: 150px; display: inline-block;" required>
-                            <option value="">Select Type</option>
-                            @foreach (var category in ViewBag.Categories)
-                            {
-                                <option value="@category">@category</option>
-                            }
-                        </select>
-
-                        <!-- Price Input -->
-                        <input type="number" name="price" class="form-control" placeholder="Price" style="width: 100px; display: inline-block;" step="0.01" required />
-
-                        <button type="submit" class="btn btn-secondary">Stock Out</button>
-                    </form>
+                            <button type="submit" class="btn btn-secondary">Stock Out</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
         }

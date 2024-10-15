@@ -160,7 +160,7 @@ namespace PharmaStockManager.Controllers
 
         // POST: StockOut
         [HttpPost]
-        public async Task<IActionResult> StockOut(int id, int quantity, DateTime expiryDate, string type, decimal price)
+        public async Task<IActionResult> StockOut(int id, int quantity)
         {
             var drug = await _context.Drugs.FindAsync(id);
             if (drug != null && drug.Quantity >= quantity)
@@ -174,9 +174,9 @@ namespace PharmaStockManager.Controllers
                     Quantity = quantity,
                     TransactionType = "StockOut", // İşlem türü StockOut
                     TransactionDate = DateTime.Now,
-                    ExpiryDate = expiryDate,
-                    Type = type, // İlacın türü
-                    Price = price
+                    ExpiryDate = drug.ExpiryDate ?? DateTime.Now, // Null kontrolü yapıldı
+                    Type = drug.Category, // Kategori türü
+                    Price = drug.UnitPrice
                 };
 
                 _context.Transactions.Add(transaction); // Transaction tablosuna ekle
@@ -190,6 +190,8 @@ namespace PharmaStockManager.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+
 
         // GET: Drugs/Delete/5
         public async Task<IActionResult> Delete(int? id)
