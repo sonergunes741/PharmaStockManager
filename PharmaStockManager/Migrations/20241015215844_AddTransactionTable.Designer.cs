@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmaStockManager.Models;
 
@@ -11,9 +12,11 @@ using PharmaStockManager.Models;
 namespace PharmaStockManager.Migrations
 {
     [DbContext(typeof(PharmaContext))]
-    partial class PharmaContextModelSnapshot : ModelSnapshot
+    [Migration("20241015215844_AddTransactionTable")]
+    partial class AddTransactionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,7 +303,7 @@ namespace PharmaStockManager.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
+            modelBuilder.Entity("Transaction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -389,7 +392,7 @@ namespace PharmaStockManager.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
+            modelBuilder.Entity("Transaction", b =>
                 {
                     b.HasOne("PharmaStockManager.Models.Drug", "Drug")
                         .WithMany()

@@ -47,14 +47,38 @@
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+
+                    <!-- Stock In Form -->
                     <form asp-action="StockIn" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="@item.Id" />
-                        <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" />
+                        <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
+
+                        <!-- Expiry Date Input -->
+                        <input type="date" name="expiryDate" class="form-control" style="width: 150px; display: inline-block;" required />
+
+                        <!-- Drug Type Input -->
+                        <input type="text" name="type" class="form-control" placeholder="Type" style="width: 100px; display: inline-block;" required />
+
+                        <!-- Price Input -->
+                        <input type="number" name="price" class="form-control" placeholder="Price" style="width: 100px; display: inline-block;" step="0.01" required />
+
                         <button type="submit" class="btn btn-success">Stock In</button>
                     </form>
+
+                    <!-- Stock Out Form -->
                     <form asp-action="StockOut" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="@item.Id" />
-                        <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" />
+                        <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
+
+                        <!-- Expiry Date Input -->
+                        <input type="date" name="expiryDate" class="form-control" style="width: 150px; display: inline-block;" required />
+
+                        <!-- Drug Type Input -->
+                        <input type="text" name="type" class="form-control" placeholder="Type" style="width: 100px; display: inline-block;" required />
+
+                        <!-- Price Input -->
+                        <input type="number" name="price" class="form-control" placeholder="Price" style="width: 100px; display: inline-block;" step="0.01" required />
+
                         <button type="submit" class="btn btn-secondary">Stock Out</button>
                     </form>
                 </td>

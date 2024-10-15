@@ -1,0 +1,39 @@
+﻿@model IEnumerable<PharmaStockManager.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<h2>Transaction History</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Drug Name</th>
+            <th>Quantity</th>
+            <th>Transaction Type</th>
+            <th>Transaction Date</th>
+            <th>Expiry Date</th>
+            <th>Type</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.Drug.Name</td>
+                <td>@transaction.Quantity</td>
+                <td>@transaction.TransactionType</td>
+                <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
+                <td>@transaction.ExpiryDate.ToString("yyyy-MM-dd")</td>
+                <td>@transaction.Type</td>
+                <td>@transaction.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-3">
+    <a class="btn btn-primary" asp-controller="Drugs" asp-action="Index">Back to Drugs</a>
+</div>

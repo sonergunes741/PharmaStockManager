@@ -126,12 +126,27 @@ namespace PharmaStockManager.Controllers
 
         // POST: StockIn
         [HttpPost]
-        public async Task<IActionResult> StockIn(int id, int quantity)
+        public async Task<IActionResult> StockIn(int id, int quantity, DateTime expiryDate, string type, decimal price)
         {
             var drug = await _context.Drugs.FindAsync(id);
             if (drug != null)
             {
                 drug.Quantity += quantity;
+
+                // Transaction kaydı oluştur
+                var transaction = new Transaction
+                {
+                    DrugId = drug.Id,
+                    Quantity = quantity,
+                    TransactionType = "StockIn", // İşlem türü StockIn
+                    TransactionDate = DateTime.Now,
+                    ExpiryDate = expiryDate,
+                    Type = type, // İlacın türü
+                    Price = price
+                };
+
+                _context.Transactions.Add(transaction); // Transaction tablosuna ekle
+
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = $"{quantity} units added to {drug.Name}.";
             }
@@ -142,14 +157,30 @@ namespace PharmaStockManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         // POST: StockOut
         [HttpPost]
-        public async Task<IActionResult> StockOut(int id, int quantity)
+        public async Task<IActionResult> StockOut(int id, int quantity, DateTime expiryDate, string type, decimal price)
         {
             var drug = await _context.Drugs.FindAsync(id);
             if (drug != null && drug.Quantity >= quantity)
             {
                 drug.Quantity -= quantity;
+
+                // Transaction kaydı oluştur
+                var transaction = new Transaction
+                {
+                    DrugId = drug.Id,
+                    Quantity = quantity,
+                    TransactionType = "StockOut", // İşlem türü StockOut
+                    TransactionDate = DateTime.Now,
+                    ExpiryDate = expiryDate,
+                    Type = type, // İlacın türü
+                    Price = price
+                };
+
+                _context.Transactions.Add(transaction); // Transaction tablosuna ekle
+
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = $"{quantity} units removed from {drug.Name}.";
             }
@@ -159,6 +190,7 @@ namespace PharmaStockManager.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Drugs/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -196,6 +228,17 @@ namespace PharmaStockManager.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Drugs/TransactionHistory
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> TransactionHistory()
+        {
+            var transactions = await _context.Transactions
+                .Include(t => t.Drug) // Join with Drug table to get drug details
+                .ToListAsync();
+
+            return View(transactions);
         }
 
         private bool DrugExists(int id)
