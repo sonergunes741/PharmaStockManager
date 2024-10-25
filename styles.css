@@ -1,0 +1,262 @@
+/* Genel stiller ve koyu tema */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  line-height: 1.6;
+}
+
+header {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 1px solid #333;
+}
+
+.logo h1 {
+  font-size: 2.5em;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding-top: 10px;
+}
+
+nav ul li {
+  margin: 0 20px;
+}
+
+nav ul li a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+  background-color: #333;
+}
+
+/* Ana içerik */
+main {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+/* Kapsayıcılar */
+.signup-container,
+.login-container,
+.about-container,
+.contact-container {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #1e1e1e;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.signup-container h2,
+.login-container h2,
+.about-container h2,
+.contact-container h2 {
+  margin-bottom: 20px;
+  color: #e0e0e0;
+  font-size: 1.8em;
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #e0e0e0;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  font-size: 1em;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #6200ea;
+  box-shadow: 0 0 5px rgba(98, 0, 234, 0.5);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #6200ea;
+  color: #e0e0e0;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #3700b3;
+  transform: scale(1.05);
+}
+
+footer {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  text-align: center;
+  padding: 20px 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  border-top: 1px solid #333;
+}
+
+/* About ve Contact sayfaları için özel düzenlemeler */
+.about-container p,
+.contact-container p {
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  color: #b3b3b3;
+}
+
+textarea {
+  height: 150px;
+  resize: none;
+}
+
+/* Ekstra interaktif butonlar ve hover efektleri */
+nav ul li a.active,
+button.active {
+  background-color: #6200ea;
+}
+
+/* Hero alanı buton stili */
+.btn-primary {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #6200ea;
+  color: #fff;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(98, 0, 234, 0.5);
+}
+
+.btn-primary:hover {
+  background-color: #3700b3;
+  transform: translateY(-3px);
+}
+
+/* Temporary Buttons */
+.temporary-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000; /* Butonun her şeyin üstünde görünmesini sağlar */
+}
+
+.btn-secondary,
+.btn-red {
+  display: inline-block;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(98, 0, 234, 0.5);
+  z-index: 1000;
+}
+
+.btn-secondary {
+  background-color: #6200ea;
+}
+
+.btn-secondary:hover {
+  background-color: #3700b3;
+}
+
+.btn-red {
+  background-color: #ff4c4c;
+}
+
+.btn-red:hover {
+  background-color: #e60000;
+}
+
+/* Admin Panel Düzeni */
+.admin-dashboard {
+  display: flex;
+  padding: 20px;
+}
+
+.sidebar {
+  width: 30%;
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+h3 {
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.depo-list {
+  list-style: none;
+  padding: 0;
+}
+
+.depo-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  color: #e0e0e0;
+  border-bottom: 1px solid #333;
+}
+
+.btn-dots {
+  background-color: transparent;
+  color: #e0e0e0;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.admin-actions {
+  flex-grow: 1;
+  padding-left: 40px;
+}
+
+.admin-actions button {
+  display: block;
+  margin-bottom: 20px;
+  width: 100%;
+}
