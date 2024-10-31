@@ -28,8 +28,9 @@ namespace PharmaStockManager.Models
             // Seed data for Drugs
             modelBuilder.Entity<Drug>().HasData(
                 new Drug { Id = 1, Name = "Aspirin", Category = "Painkillers", Quantity = 50, UnitPrice = 10.0m },
-                new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 30, UnitPrice = 20.0m }
-            );
+                new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 30, UnitPrice = 20.0m },
+                new Drug { Id = 3, Name = "Paracetamol", Category = "Painkillers", Quantity = 100, UnitPrice = 8.0m }
+                );
         }
     }
 }

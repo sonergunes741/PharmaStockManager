@@ -300,6 +300,14 @@ namespace PharmaStockManager.Migrations
                             Name = "Amoxicillin",
                             Quantity = 30,
                             UnitPrice = 20.0m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "Painkillers",
+                            Name = "Paracetamol",
+                            Quantity = 100,
+                            UnitPrice = 8.0m
                         });
                 });
 
