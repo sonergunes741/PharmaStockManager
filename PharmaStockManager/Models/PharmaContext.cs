@@ -1,14 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using PharmaStockManager.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace PharmaStockManager.Models
 {
-    public class PharmaContext : IdentityDbContext<IdentityUser>
+    public class PharmaContext : IdentityDbContext<AppUser, AppRole, int>
     {
         public PharmaContext(DbContextOptions<PharmaContext> options) : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+            optionsBuilder.UseSqlServer();
         }
 
         public DbSet<Drug> Drugs { get; set; }
@@ -18,6 +27,7 @@ namespace PharmaStockManager.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
 
             // Seed data for Categories
             modelBuilder.Entity<Category>().HasData(

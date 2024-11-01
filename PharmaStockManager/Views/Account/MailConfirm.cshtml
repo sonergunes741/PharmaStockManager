@@ -1,0 +1,28 @@
+﻿@model PharmaStockManager.Models.Identity.MailConfirmViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container">
+    <br />
+    <br />
+    <form method="post">
+        <h2>Taşınan Mail Adresi: @ViewBag.v</h2>
+        <br />
+        <label>Kullanıcı ID Değeri</label>
+        <input type="text" class="form-control" asp-for="Email" value="@ViewBag.v" />
+        <br />
+        <label>Mail Adresinize Gelen 6 Haneli Kodu Giriniz</label>
+        <input type="text" class="form-control" asp-for="ConfirmCode" />
+        <br />
+        <button class="btn btn-primary">Hesabı Aktifleştir</button>
+    </form>
+    
+    <form asp-action="SendActivationCode" method="post">
+        <button type="submit" class="btn btn-secondary">Resend Activation Code</button>
+    </form>
+   
+</div>

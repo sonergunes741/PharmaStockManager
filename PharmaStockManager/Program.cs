@@ -1,19 +1,23 @@
 using PharmaStockManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PharmaStockManager.Filters;
+using PharmaStockManager.Models.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<EmailConfirmedFilter>();
+
 // Add DbContext and Identity to the services
 builder.Services.AddDbContext<PharmaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PharmaDatabase")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>()
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<PharmaContext>();
+builder.Services.AddIdentity<AppUser, AppRole>()
+    .AddEntityFrameworkStores<PharmaContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -21,32 +25,34 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
 
     // Create Admin role if it doesn't exist
     var adminRole = "Admin";
     if (!await roleManager.RoleExistsAsync(adminRole))
     {
-        await roleManager.CreateAsync(new IdentityRole(adminRole));
+        await roleManager.CreateAsync(new AppRole(adminRole));
     }
 
     // Create User role if it doesn't exist
     var userRole = "User";
     if (!await roleManager.RoleExistsAsync(userRole))
     {
-        await roleManager.CreateAsync(new IdentityRole(userRole));
+        await roleManager.CreateAsync(new AppRole(userRole));
     }
 
     // Create a default admin user if it doesn't exist
-    var adminEmail = "admin@example.com";
+    var adminEmail = "webwizardssol@gmail.com";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
     {
-        adminUser = new IdentityUser
+        adminUser = new AppUser
         {
+            ActiveUser = true,
             UserName = adminEmail,
-            Email = adminEmail
+            Email = adminEmail,
+            EmailConfirmed = true
         };
         await userManager.CreateAsync(adminUser, "Admin123!"); // Default password
         await userManager.AddToRoleAsync(adminUser, adminRole);
@@ -57,8 +63,9 @@ using (var scope = app.Services.CreateScope())
     var defaultUser = await userManager.FindByEmailAsync(userEmail);
     if (defaultUser == null)
     {
-        defaultUser = new IdentityUser
+        defaultUser = new AppUser
         {
+            ActiveUser = true,
             UserName = userEmail,
             Email = userEmail
         };
@@ -85,8 +92,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// Add this line to enable Identity Razor Pages
-app.MapRazorPages();
 
 app.Run();
