@@ -285,3 +285,5 @@ C:\Users\unals\Source\Repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8
 C:\Users\unals\Source\Repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8.0\PharmaStockManager.pdb
 C:\Users\unals\Source\Repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8.0\PharmaStockManager.genruntimeconfig.cache
 C:\Users\unals\Source\Repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8.0\ref\PharmaStockManager.dll
+C:\Users\unals\Source\Repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\unals\Source\Repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll

@@ -15,6 +15,7 @@ namespace PharmaStockManager.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; } // Yeni eklenen Transaction DbSet'i
 
+        public DbSet<Depos> Depos { get; set; } //Depo Dbset
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -30,6 +31,10 @@ namespace PharmaStockManager.Models
                 new Drug { Id = 1, Name = "Aspirin", Category = "Painkillers", Quantity = 50, UnitPrice = 10.0m },
                 new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 30, UnitPrice = 20.0m },
                 new Drug { Id = 3, Name = "Paracetamol", Category = "Painkillers", Quantity = 100, UnitPrice = 8.0m }
+                );
+            modelBuilder.Entity<Depos>().HasData(
+                new Depos { Id = 1, Name = "Depo A"},
+                new Depos { Id = 2 ,Name = "Depo B"}
                 );
         }
     }
