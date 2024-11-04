@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Services;
 using PharmaStockManager.ViewModels;
 

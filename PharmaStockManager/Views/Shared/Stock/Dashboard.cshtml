@@ -5,7 +5,7 @@
 <h1>@ViewBag.Title</h1>
 
 <div>
-    @Html.Partial("_StockList", Model.Stocks)
-    @Html.Partial("_StockChart", Model.ChartData)
-    @Html.Partial("_StockAlerts", Model.Alerts)
+    @Html.Partial("_StockList", (IEnumerable<Stock>)Model.Stocks)
+    @Html.Partial("_StockChart", (ChartData)Model.ChartData)
+    @Html.Partial("_StockAlerts", (IEnumerable<Alert>)Model.Alerts)
 </div>
