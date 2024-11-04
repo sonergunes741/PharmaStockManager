@@ -8451,11 +8451,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Baskan\\Documents\\pstock\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+      "projectUniqueName": "C:\\Users\\Baskan\\Desktop\\pharma_stock\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
       "projectName": "PharmaStockManager",
-      "projectPath": "C:\\Users\\Baskan\\Documents\\pstock\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+      "projectPath": "C:\\Users\\Baskan\\Desktop\\pharma_stock\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
       "packagesPath": "C:\\Users\\Baskan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Baskan\\Documents\\pstock\\PharmaStockManager\\PharmaStockManager\\obj\\",
+      "outputPath": "C:\\Users\\Baskan\\Desktop\\pharma_stock\\PharmaStockManager\\PharmaStockManager\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Baskan\\AppData\\Roaming\\NuGet\\NuGet.Config",

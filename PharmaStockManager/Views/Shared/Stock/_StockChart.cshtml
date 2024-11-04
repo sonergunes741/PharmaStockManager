@@ -1,0 +1,20 @@
+@model YourProject.Models.ChartData
+
+<h2>Stock Chart</h2>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var dataPoints = [];
+        @foreach (var point in Model.DataPoints)
+        {
+            @:dataPoints.push({ x: new Date("@point.Date"), y: @point.Price });
+        }
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: { text: "Stock Price History" },
+            data: [{ type: "line", dataPoints: dataPoints }]
+        });
+        chart.render();
+    }
+</script>

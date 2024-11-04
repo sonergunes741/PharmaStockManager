@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qxuteP/E1WY=",
+  "dgSpecHash": "8zdj3CGcmRc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Baskan\\Documents\\pstock\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+  "projectFilePath": "C:\\Users\\Baskan\\Desktop\\pharma_stock\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Baskan\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Baskan\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

@@ -1,0 +1,9 @@
+@model IEnumerable<PharmaStockManager.Models.Alert>
+
+<h2>Stock Alerts</h2>
+<ul>
+    @foreach (var alert in Model)
+    {
+        <li>@alert.Message</li>
+    }
+</ul>

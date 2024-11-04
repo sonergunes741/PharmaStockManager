@@ -1,0 +1,11 @@
+@{
+    ViewBag.Title = "Stock Monitoring Dashboard";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div>
+    @Html.Partial("_StockList", Model.Stocks)
+    @Html.Partial("_StockChart", Model.ChartData)
+    @Html.Partial("_StockAlerts", Model.Alerts)
+</div>
