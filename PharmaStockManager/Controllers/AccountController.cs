@@ -7,6 +7,8 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PharmaStockManager.Filters;
+using System.Text;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace StockManager.Controllers
 {
@@ -175,8 +177,34 @@ namespace StockManager.Controllers
         }
 
         [HttpGet]
+        public IActionResult Verify2faCode()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Verify2faCode(string code)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.TwoFactorSignInAsync("Authenticator", code, false, false);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index","Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid code.");
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Login()
         {
+
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser != null && User.Identity.IsAuthenticated)
             {
@@ -189,30 +217,29 @@ namespace StockManager.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
-            var activecheck = await _userManager.FindByEmailAsync(loginViewModel.Username);
-            if (activecheck != null && activecheck.ActiveUser)
+            if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, false, true);
-                if (result.Succeeded)
+                var user = await _userManager.FindByEmailAsync(loginViewModel.Username);
+
+                if (user != null && user.ActiveUser)
                 {
-                    var user = await _userManager.FindByNameAsync(loginViewModel.Username);
-                    if (user.EmailConfirmed == true)
+                    var result = await _signInManager.PasswordSignInAsync(user.UserName, loginViewModel.Password, false, lockoutOnFailure: true);
+
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToAction("Verify2faCode","Account");
+                    }
+
+                    if (result.Succeeded)
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Lütfen e-posta adresinizi onaylayın.");
-                    }
                 }
             }
-            
-            else
-            {
-                ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
-            }
-            return View();
+            ModelState.AddModelError("", "Invalid login attempt.");
+            return View(loginViewModel);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> MailConfirm()
@@ -323,6 +350,8 @@ namespace StockManager.Controllers
                     return View(viewModel);
                 }
 
+                Console.WriteLine("1: " + viewModel.ConfirmPassword + "\n" + "2: " + viewModel.NewPassword + "\n" + "3: " + viewModel.OldPassword);
+
                 var result = await _userManager.ChangePasswordAsync(user, viewModel.OldPassword, viewModel.NewPassword);
 
                 if (result.Succeeded)
@@ -338,6 +367,83 @@ namespace StockManager.Controllers
             }
             return View(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EnableAuthenticator()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
+            if (string.IsNullOrEmpty(unformattedKey))
+            {
+                await _userManager.ResetAuthenticatorKeyAsync(user);
+                unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
+            }
+
+            var formattedKey = FormatKey(unformattedKey);
+
+            var qrCodeUri = GenerateQrCodeUri(user.Email, unformattedKey);
+
+            ViewBag.AuthenticatorKey = formattedKey;
+            ViewBag.QrCodeUri = qrCodeUri;
+
+            return View();
+        }
+
+        private static string FormatKey(string unformattedKey)
+        {
+            const int chunkSize = 4;
+            int keyLength = unformattedKey.Length;
+
+            var sb = new StringBuilder();
+            for (int i = 0; i < keyLength; i += chunkSize)
+            {
+                if (i + chunkSize < keyLength)
+                {
+                    sb.Append(unformattedKey.Substring(i, chunkSize)).Append(" ");
+                }
+                else
+                {
+                    sb.Append(unformattedKey.Substring(i));
+                }
+            }
+            return sb.ToString().ToLowerInvariant();
+        }
+
+        private string GenerateQrCodeUri(string email, string unformattedKey)
+        {
+            var encodedEmail = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(email));
+            return $"otpauth://totp/PharmaStockManager:{encodedEmail}?secret={unformattedKey}&issuer=PharmaStockManager&digits=6";
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyAuthenticatorCode(string code)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, _userManager.Options.Tokens.AuthenticatorTokenProvider, code);
+            if (!isValid)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid code.");
+                return View("EnableAuthenticator");
+            }
+
+            user.TwoFactorEnabled = true;
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction("Manage", "Account");
+        }
+
+
+
 
     }
 }
