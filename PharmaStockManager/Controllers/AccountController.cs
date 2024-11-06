@@ -58,8 +58,6 @@ namespace StockManager.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
-        [ServiceFilter(typeof(EmailConfirmedFilter))]
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -87,7 +85,6 @@ namespace StockManager.Controllers
 
 
 
-        [ServiceFilter(typeof(EmailConfirmedFilter))]
         [HttpGet]
         public async Task<IActionResult> Register()
         {
@@ -129,7 +126,6 @@ namespace StockManager.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SendActivationCode()
         {
@@ -145,7 +141,6 @@ namespace StockManager.Controllers
             return RedirectToAction("MailConfirm");
         }
 
-        [ServiceFilter(typeof(EmailConfirmedFilter))]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel viewModel)
         {
@@ -219,7 +214,6 @@ namespace StockManager.Controllers
             return View();
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> MailConfirm()
         {
@@ -230,7 +224,6 @@ namespace StockManager.Controllers
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> MailConfirm(MailConfirmViewModel viewModel)
         {
@@ -255,21 +248,18 @@ namespace StockManager.Controllers
             return RedirectToAction("Login","Account");
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult TwoFactorAuthentication()
         {
             return View();
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult ChangeEmail()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel viewModel)
         {
@@ -315,14 +305,12 @@ namespace StockManager.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel viewModel)
         {
