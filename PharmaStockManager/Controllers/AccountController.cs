@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using PharmaStockManager.Filters;
 using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
+using QRCoder;
 
 namespace StockManager.Controllers
 {
@@ -85,8 +86,6 @@ namespace StockManager.Controllers
             }
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> Register()
         {
@@ -161,6 +160,7 @@ namespace StockManager.Controllers
                 var result = await _userManager.CreateAsync(appUser, viewModel.Password);
                 if (result.Succeeded)
                 {
+                    await _signInManager.PasswordSignInAsync(viewModel.Email,viewModel.Password,false,true);
                     await SendActivationCode(appUser);
                     return RedirectToAction("MailConfirm", "Account");
                 }

@@ -289,3 +289,4 @@ C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8.0\PharmaStockManager.pdb
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8.0\PharmaStockManager.genruntimeconfig.cache
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8.0\ref\PharmaStockManager.dll
+C:\Users\Hrist\Source\Repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\QRCoder.dll

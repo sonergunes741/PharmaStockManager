@@ -6,12 +6,7 @@
 <h2>Enable Two-Factor Authentication</h2>
 <p>To enable 2FA, scan the QR code below using an authenticator app (e.g., Google Authenticator).</p>
 
-@if (ViewBag.QrCodeUri != null)
-{
-    <div>
-        <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=@ViewBag.QrCodeUri" alt="QR Code for Authenticator App" />
-    </div>
-}
+<img src="@Model.QrCodeUrl" alt="QR Code for 2FA" />
 
 <p>Or, you can manually enter the following key into your authenticator app:</p>
 <code>@ViewBag.AuthenticatorKey</code>
