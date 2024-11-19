@@ -1,28 +1,91 @@
 ﻿@model PharmaStockManager.Models.Identity.MailConfirmViewModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pharma Stock Manager - Forgot Password</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <button id="scroll-button"
+                class="scroll-button"
+                aria-label="Scroll to bottom">
+            <svg class="scroll-arrow"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="M7 13l5 5 5-5" />
+                <path d="M7 6l5 5 5-5" />
+            </svg>
+        </button>
+    </div>
 
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="pill-icon"></div>
+                </div>
+                <span class="logo-text">Pharma Stock Manager</span>
+            </div>
+            <div class="nav-links">
+                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+            </div>
+        </nav>
 
-<div class="container">
-    <br />
-    <br />
-    <form method="post">
-        <h2>Taşınan Mail Adresi: @ViewBag.v</h2>
-        <br />
-        <label>Kullanıcı ID Değeri</label>
-        <input type="text" class="form-control" asp-for="Email" value="@ViewBag.v" />
-        <br />
-        <label>Mail Adresinize Gelen 6 Haneli Kodu Giriniz</label>
-        <input type="text" class="form-control" asp-for="ConfirmCode" />
-        <br />
-        <button class="btn btn-primary">Hesabı Aktifleştir</button>
-    </form>
-    
-    <form asp-action="SendActivationCode" method="post">
-        <button type="submit" class="btn btn-secondary">Resend Activation Code</button>
-    </form>
-   
-</div>
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Confirm your Email</h1>
+                    <form asp-action="MailConfirm" asp-controller="Account" method="post">
+                        <label>Email Adress</label>
+                        <input type="text" disabled class="form-control" value="@ViewBag.Email" />
+                        <div>
+                            <label asp-for="ConfirmCode">Confirm Code</label>
+                            <input asp-for="ConfirmCode" type="email" class="form-control" placeholder="Enter your 6-digit code here" required />
+                            <span asp-validation-for="ConfirmCode" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Confirm Email</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scroll to Bottom Script -->
+    <script>
+        document.getElementById("scroll-button").addEventListener("click", () => {
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+        });
+
+        // Hide scroll indicator when reaching the last section
+        window.addEventListener("scroll", () => {
+          const scrollIndicator = document.querySelector(".scroll-indicator");
+          const bottomReached =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 100;
+
+          scrollIndicator.style.opacity = bottomReached ? "0" : "1";
+          scrollIndicator.style.pointerEvents = bottomReached ? "none" : "all";
+        });
+    </script>
+</body>
+</html>

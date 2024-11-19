@@ -248,7 +248,6 @@ C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\browser-wasm\nativeassets\net8.0\e_sqlite3.a
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\linux-arm\native\libe_sqlite3.so
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\linux-arm64\native\libe_sqlite3.so
@@ -269,7 +268,6 @@ C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win-arm64\native\e_sqlite3.dll
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win-x86\native\e_sqlite3.dll
-C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
@@ -290,3 +288,4 @@ C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8.0\PharmaStockManager.genruntimeconfig.cache
 C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\obj\Debug\net8.0\ref\PharmaStockManager.dll
 C:\Users\Hrist\Source\Repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\QRCoder.dll
+C:\Users\Hrist\Source\Repos\PharmaStockManager\PharmaStockManager\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll

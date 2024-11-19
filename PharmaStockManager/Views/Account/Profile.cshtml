@@ -1,0 +1,47 @@
+﻿@model PharmaStockManager.Models.Identity.ProfileViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/styles.css">
+    <title>Profile - PharmaStockManager</title>
+    
+
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="pill-icon"></div>
+                </div>
+                <span class="logo-text">Pharma Stock Manager</span>
+            </div>
+            <div class="nav-links">
+                <a href="/Account/Logout" class="nav-link">Logout</a>
+                
+            </div>
+        </nav>
+        <header class="hero profile-hero">
+            <div class="hero-content">
+                <h1>Your Profile</h1>
+                <p>Update your information or manage your account settings.</p>
+            </div>
+        </header>
+
+        <footer>
+            <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

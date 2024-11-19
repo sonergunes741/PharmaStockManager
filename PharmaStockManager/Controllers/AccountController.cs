@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models.Identity;
 using System.Net.Mail;
+using System.Drawing;
 using MailKit.Net.Smtp;
 using MimeKit;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -18,11 +19,13 @@ namespace StockManager.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -40,7 +43,7 @@ namespace StockManager.Controllers
                 var user = await _userManager.FindByEmailAsync(viewModel.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    return RedirectToAction("ForgotPasswordConfirmation");
+                    return View();
                 }
 
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -53,10 +56,9 @@ namespace StockManager.Controllers
                     return BadRequest();
                 }
 
-
                 SendPasswordResetEmail(viewModel.Email, resetLink);
 
-                return RedirectToAction("ForgotPasswordConfirmation");
+                return RedirectToAction("Login","Account");
             }
             return View(viewModel);
         }
@@ -198,19 +200,17 @@ namespace StockManager.Controllers
                     ModelState.AddModelError("", "Invalid code.");
                 }
             }
-            return View();
+            return RedirectToAction("Login","Account");
         }
 
         [HttpGet]
         public async Task<IActionResult> Login()
         {
-
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser != null && User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
-
             return View();
         }
 
@@ -219,7 +219,7 @@ namespace StockManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(loginViewModel.Username);
+                var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
 
                 if (user != null && user.ActiveUser)
                 {
@@ -227,7 +227,8 @@ namespace StockManager.Controllers
 
                     if (result.RequiresTwoFactor)
                     {
-                        return RedirectToAction("Verify2faCode","Account");
+                        ViewData["RequiresTwoFactor"] = true;
+                        return View(loginViewModel); // Re-render the page with the 2FA form
                     }
 
                     if (result.Succeeded)
@@ -241,6 +242,7 @@ namespace StockManager.Controllers
         }
 
 
+
         [HttpGet]
         public async Task<IActionResult> MailConfirm()
         {
@@ -248,6 +250,8 @@ namespace StockManager.Controllers
             if (user != null && user.EmailConfirmed) { 
                 return RedirectToAction("Index", "Home");
             }
+
+            ViewBag.Email = user.Email;
             return View();
         }
 
@@ -385,14 +389,32 @@ namespace StockManager.Controllers
             }
 
             var formattedKey = FormatKey(unformattedKey);
+        //    var qrCodeUri = GenerateQrCodeUri("PharmaStockManager", user.Email, unformattedKey);
 
-            var qrCodeUri = GenerateQrCodeUri(user.Email, unformattedKey);
-
+            // Generate the QR code image as a base64 string
             ViewBag.AuthenticatorKey = formattedKey;
-            ViewBag.QrCodeUri = qrCodeUri;
+        //    ViewBag.QrCodeImage = GenerateQrCodeImage(qrCodeUri);
 
             return View();
         }
+
+        //private static string GenerateQrCodeUri(string issuer, string email, string unformattedKey)
+        //{
+        //    return $"otpauth://totp/{issuer}:{email}?secret={unformattedKey}&issuer={issuer}&digits=6";
+        //}
+
+        //private static string GenerateQrCodeImage(string qrCodeUri)
+        //{
+        //    using var qrGenerator = new QRCodeGenerator();
+        //    using var qrCodeData = qrGenerator.CreateQrCode(qrCodeUri, QRCodeGenerator.ECCLevel.Q);
+        //    using var qrCode = new QRCode(qrCodeData);
+        //    using var qrCodeImage = qrCode.GetGraphic(20);
+        //
+        //    using var ms = new MemoryStream();
+        //    qrCodeImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+        //    var byteArray = ms.ToArray();
+        //    return $"data:image/png;base64,{Convert.ToBase64String(byteArray)}";
+        //}
 
         private static string FormatKey(string unformattedKey)
         {
@@ -412,12 +434,6 @@ namespace StockManager.Controllers
                 }
             }
             return sb.ToString().ToLowerInvariant();
-        }
-
-        private string GenerateQrCodeUri(string email, string unformattedKey)
-        {
-            var encodedEmail = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(email));
-            return $"otpauth://totp/PharmaStockManager:{encodedEmail}?secret={unformattedKey}&issuer=PharmaStockManager&digits=6";
         }
 
         [HttpPost]
@@ -442,8 +458,61 @@ namespace StockManager.Controllers
             return RedirectToAction("Manage", "Account");
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
+            var model = new ProfileViewModel
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+            };
 
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            user.FullName = model.FullName;
+            user.PhoneNumber = model.PhoneNumber;
+
+            if (Request.Form.Files.Count > 0)
+            {
+                var file = Request.Form.Files[0];
+                var filePath = Path.Combine(_environment.WebRootPath, "uploads", file.FileName);
+        
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["Success"] = "Profile updated successfully!";
+                return RedirectToAction("Profile");
+            }
+
+            ModelState.AddModelError(string.Empty, "An error occurred while updating your profile.");
+            return View("Profile", model);
+        }
 
     }
 }

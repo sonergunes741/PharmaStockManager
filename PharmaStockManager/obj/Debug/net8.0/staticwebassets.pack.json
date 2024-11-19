@@ -9,8 +9,24 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\wwwroot\\css\\styles.css",
+      "PackagePath": "staticwebassets\\css\\styles.css"
+    },
+    {
       "Id": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\wwwroot\\icons\\icon-1.png",
+      "PackagePath": "staticwebassets\\icons\\icon-1.png"
+    },
+    {
+      "Id": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\wwwroot\\icons\\icon-2.png",
+      "PackagePath": "staticwebassets\\icons\\icon-2.png"
+    },
+    {
+      "Id": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\wwwroot\\icons\\icon-3.png",
+      "PackagePath": "staticwebassets\\icons\\icon-3.png"
     },
     {
       "Id": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\wwwroot\\js\\site.js",
@@ -243,6 +259,10 @@
     {
       "Id": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\wwwroot\\uploads\\qr.png",
+      "PackagePath": "staticwebassets\\uploads\\qr.png"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.PharmaStockManager.Microsoft.AspNetCore.StaticWebAssets.props",
