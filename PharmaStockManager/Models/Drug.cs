@@ -11,6 +11,20 @@ namespace PharmaStockManager.Models
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
+    
+        public string DrugType { get; set; } // "Commercial" or "Clinical"
+        public string ResearchNumber { get; set; } // Only for commercial drugs
+
+        
+         public string SendLocation { get; set; }
+        [Required]
+        public string NameSurname { get; set; }
+        [Required]
+        public string TelephoneNumber { get; set; }
+        [Required]
+        public string Email { get; set; }
+        [Required]
+        public string Address { get; set; }
 
         [Required]
         public string Category { get; set; }
@@ -28,5 +42,10 @@ namespace PharmaStockManager.Models
         public DateTime? ExpiryDate { get; set; } // Nullable çünkü bazı ilaçların son kullanma tarihi olmayabilir.
 
         public decimal TotalValue => Quantity * UnitPrice;
+
+
+      
+
+        
     }
 }

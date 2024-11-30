@@ -1,30 +1,23 @@
 ﻿@model IEnumerable<PharmaStockManager.Models.Drug>
-
 @{
     ViewData["Title"] = "Drugs List";
 }
-
 <h1>Drugs List</h1>
-
-<!-- Display success or error messages -->
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
         @TempData["SuccessMessage"]
     </div>
 }
-
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger">
         @TempData["ErrorMessage"]
     </div>
 }
-
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-
 <table class="table table-striped">
     <thead>
         <tr>
@@ -32,7 +25,14 @@
             <th>@Html.DisplayNameFor(model => model.Category)</th>
             <th>@Html.DisplayNameFor(model => model.Quantity)</th>
             <th>@Html.DisplayNameFor(model => model.UnitPrice)</th>
-            <th>Actions</th> <!-- New column for actions -->
+            <th>@Html.DisplayNameFor(model => model.DrugType)</th>
+            <th>@Html.DisplayNameFor(model => model.ResearchNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.SendLocation)</th>
+            <th>@Html.DisplayNameFor(model => model.NameSurname)</th>
+            <th>@Html.DisplayNameFor(model => model.TelephoneNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.Address)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -43,43 +43,17 @@
                 <td>@Html.DisplayFor(modelItem => item.Category)</td>
                 <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
                 <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                <td>@Html.DisplayFor(modelItem => item.DrugType)</td>
+                <td>@Html.DisplayFor(modelItem => item.ResearchNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.SendLocation)</td>
+                <td>@Html.DisplayFor(modelItem => item.NameSurname)</td>
+                <td>@Html.DisplayFor(modelItem => item.TelephoneNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Address)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-
-                    <div style="display: inline-block;">
-                        <!-- Stock In Form -->
-                        <form asp-action="StockIn" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
-
-                            <!-- Expiry Date Input -->
-                            <input type="date" name="expiryDate" class="form-control" style="width: 150px; display: inline-block;" required />
-
-                            <!-- Drug Type Dropdown -->
-                            <select name="type" class="form-control" style="width: 150px; display: inline-block;" required>
-                                <option value="">Select Type</option>
-                                @foreach (var category in ViewBag.Categories)
-                                {
-                                    <option value="@category">@category</option>
-                                }
-                            </select>
-
-                            <!-- Price Input -->
-                            <input type="number" name="price" class="form-control" placeholder="Price" style="width: 100px; display: inline-block;" step="0.01" required />
-
-                            <button type="submit" class="btn btn-success">Stock In</button>
-                        </form>
-
-                        <!-- Stock Out Form -->
-                        <form asp-action="StockOut" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
-
-                            <button type="submit" class="btn btn-secondary">Stock Out</button>
-                        </form>
-                    </div>
                 </td>
             </tr>
         }

@@ -55,7 +55,7 @@ namespace PharmaStockManager.Controllers
         // POST: Drugs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Category,Quantity,UnitPrice")] Drug drug)
+        public async Task<IActionResult> Create([Bind("Id,Name,Category,Quantity,UnitPrice,DrugType,ResearchNumber,SendLocation,NameSurname,TelephoneNumber,Email,Address")] Drug drug)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace PharmaStockManager.Controllers
         // POST: Drugs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Category,Quantity,UnitPrice")] Drug drug)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Category,Quantity,UnitPrice,DrugType,ResearchNumber,SendLocation,NameSurname,TelephoneNumber,Email,Address")] Drug drug)
         {
             if (id != drug.Id)
             {
@@ -190,8 +190,6 @@ namespace PharmaStockManager.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
-
 
         // GET: Drugs/Delete/5
         public async Task<IActionResult> Delete(int? id)
