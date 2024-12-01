@@ -16,6 +16,13 @@
             <th>Expiry Date</th>
             <th>Type</th>
             <th>Price</th>
+
+            <th>Drug Type</th>
+            <th>Send Location</th>
+            <th>Name Surname</th>
+            <th>Telephone Number</th>
+            <th>Email</th>
+            <th>Address</th>
         </tr>
     </thead>
     <tbody>
@@ -29,6 +36,13 @@
                 <td>@transaction.ExpiryDate.ToString("yyyy-MM-dd")</td>
                 <td>@transaction.Type</td>
                 <td>@transaction.Price</td>
+
+                <td>@transaction.DrugType</td>
+                <td>@transaction.SendLocation</td>
+                <td>@transaction.NameSurname</td>
+                <td>@transaction.TelephoneNumber</td>
+                <td>@transaction.Email</td>
+                <td>@transaction.Address</td>
             </tr>
         }
     </tbody>

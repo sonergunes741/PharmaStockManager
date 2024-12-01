@@ -143,7 +143,14 @@ namespace PharmaStockManager.Controllers
                     TransactionDate = DateTime.Now,
                     ExpiryDate = expiryDate,
                     Type = type, // İlacın türü
-                    Price = price
+                    Price = price,
+
+                    DrugType = drug.DrugType,
+                    SendLocation = drug.SendLocation,
+                    NameSurname = drug.NameSurname,
+                     TelephoneNumber = drug.TelephoneNumber,
+                    Email = drug.Email,
+                    Address = drug.Address
                 };
 
                 _context.Transactions.Add(transaction); // Transaction tablosuna ekle
@@ -176,7 +183,13 @@ namespace PharmaStockManager.Controllers
                     TransactionDate = DateTime.Now,
                     ExpiryDate = drug.ExpiryDate ?? DateTime.Now, // Null kontrolü yapıldı
                     Type = drug.Category, // Kategori türü
-                    Price = drug.UnitPrice
+                    Price = drug.UnitPrice,
+                    DrugType = drug.DrugType,
+                    SendLocation = drug.SendLocation,
+                    NameSurname = drug.NameSurname,
+                    TelephoneNumber = drug.TelephoneNumber,
+                    Email = drug.Email,
+                    Address = drug.Address
                 };
 
                 _context.Transactions.Add(transaction); // Transaction tablosuna ekle
