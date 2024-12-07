@@ -289,6 +289,25 @@ namespace StockManager.Controllers
 
                     if (result.Succeeded)
                     {
+                        var roles = await _userManager.GetRolesAsync(user);
+                        if (roles.Contains("Admin"))
+                        {
+                            return RedirectToAction("Dashboard", "Admin");
+                        }
+                        else if (roles.Contains("Employee"))
+                        {
+                            return RedirectToAction("Index", "Manager");
+                        }
+                        else if (roles.Contains("Customer"))
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else if (roles.Contains("SuperAdmin"))
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+
+                        // Default fallback
                         return RedirectToAction("Index", "Home");
                     }
                 }
