@@ -56,23 +56,19 @@ public class UserPanelController : Controller
         var drug = _context.Drugs.FirstOrDefault(d => d.Id == drugId);
         if (drug != null)
         {
-            // Stok kontrolü: Kullanıcının talep ettiği miktarın mevcut stoku aşmamasını kontrol ediyoruz.
-            if (quantity > drug.Quantity)
+            var request = new Request
             {
-                TempData["ErrorMessage"] = $"Requested quantity exceeds available stock for {drug.Name}.";
-            }
-            else
-            {
-                TempData["SuccessMessage"] = $"You have requested {quantity} units of {drug.Name}.";
+                UserName = User.Identity.Name,
+                DrugId = drug.Id,
+                Quantity = quantity,
+                RequestDate = DateTime.Now,
+                IsApproved = false
+            };
 
-                // Stok miktarını güncelle:
-                drug.Quantity -= quantity;
-                _context.SaveChanges();
+            _context.Requests.Add(request);
+            _context.SaveChanges();
 
-                // İşlemi logluyoruz
-                _logger.LogInformation("User {User} requested {Quantity} units of {Drug} on {Date}.",
-                                        User.Identity.Name, quantity, drug.Name, DateTime.Now);
-            }
+            TempData["SuccessMessage"] = $"Your request for {quantity} units of {drug.Name} has been submitted.";
         }
         else
         {

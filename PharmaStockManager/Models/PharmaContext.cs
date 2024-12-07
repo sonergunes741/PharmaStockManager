@@ -14,6 +14,7 @@ namespace PharmaStockManager.Models
         public DbSet<Drug> Drugs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; } // Yeni eklenen Transaction DbSet'i
+        public DbSet<Request> Requests { get; set; } //Requests DbSet
 
         public DbSet<Depos> Depos { get; set; } //Depo Dbset
         protected override void OnModelCreating(ModelBuilder modelBuilder)
