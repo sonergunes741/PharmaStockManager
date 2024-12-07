@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Register - PharmaStockManager</title>
+    <style>
+        .register-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+            .register-link a {
+                color: var(--primary-blue);
+                text-decoration: underline;
+            }
+
+        .register-hero {
+            background-color: var(--gray-light);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+            .register-hero h1 {
+                font-size: 2.5rem;
+                color: var(--primary-blue);
+            }
+
+            .register-hero p {
+                font-size: 1.2rem;
+                color: var(--text);
+                margin-top: 1rem;
+                opacity: 0.8;
+            }
+
+        .register-form {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            .register-form form {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .register-form label {
+                margin-top: 1rem;
+                font-weight: bold;
+            }
+
+            .register-form input {
+                padding: 0.75rem;
+                margin-top: 0.5rem;
+                border: 1px solid var(--gray-hover);
+                border-radius: 6px;
+            }
+
+        .form-actions button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-blue);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .form-actions button:hover {
+                background-color: var(--primary-blue-hover);
+            }
+        .hero.register-hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* Center the text horizontally */
+            background-color: #f4f4f4; /* Optional, adjust according to your design */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                  <div class="logo-circle">
+                    <div class="pill-icon"></div>
+                  </div>
+                <a>
+                <span class="logo-text">Pharma Stock Manager</span>
+              </div>
+            <div class="nav-links">
+                <a href="About.html" class="nav-link">About Us</a>
+                <a href="Contact.html" class="nav-link">Contact</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="Register.html" <button class="button button-primary">Sign Up</button></a>
+            </div>
+        </nav>
+
+        <header class="hero register-hero">
+            <div class="hero-content">
+                <h1>Register</h1>
+            </div>
+        </header>
+
+        <section class="register-form">
+            <form action="index.html" method="get">
+                <div>
+                    <label asp-for="FirstName">First Name</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Enter your full name" required />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="LastName">Surname</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Enter your full name" required />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter a secure password" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="ConfirmPassword">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Enter a secure password" required />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="RefCode">Reference Code</label>
+                    <input asp-for="RefCode" class="form-control" placeholder="Reference Code" required />
+                    <span asp-validation-for="RefCode" class="text-danger"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Register</button>
+                </div>
+            </form>
+
+            <div class="login-link">
+                <p>Already have an account? <a href="login.html">Login here</a></p>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Çalışan Yönetimi - Pharmacy</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #fff;
+        --gray-light: #e8eaed;
+        --gray-hover: #ddd;
+        --success-green: #4caf50;
+        --warning-red: #ff5252;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+      }
+
+      .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-blue) 33%,
+          var(--mint-green) 33% 66%,
+          var(--lavender) 66%
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+      }
+
+      .nav-menu {
+        list-style: none;
+      }
+
+      .nav-item {
+        margin: 0.5rem 0;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        transform: translateX(5px);
+      }
+
+      .nav-link i {
+        width: 20px;
+        margin-right: 1rem;
+      }
+
+      /* Main Content Styles */
+      .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        background-color: var(--white);
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      h1, h2 {
+        color: var(--text);
+        font-size: 1.5rem;
+      }
+
+      /* Table Styles */
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--white);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .table th,
+      .table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-light);
+      }
+
+      .table th {
+        background-color: var(--lavender);
+        color: var(--white);
+        font-weight: 500;
+      }
+
+      .table tbody tr:hover {
+        background-color: var(--gray-light);
+      }
+
+      /* Button Styles */
+      .button {
+        padding: 0.75rem 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-right: 0.5rem;
+      }
+
+      .button-edit {
+        background-color: var(--primary-blue);
+        color: var(--white);
+      }
+
+      .button-delete {
+        background-color: var(--warning-red);
+        color: var(--white);
+      }
+
+      .button-add {
+        background-color: var(--success-green);
+        color: var(--white);
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: var(--white);
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .modal-content form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .modal-content input {
+        padding: 0.75rem;
+        border: 1px solid var(--gray-light);
+        border-radius: 6px;
+        font-size: 0.875rem;
+      }
+
+      .modal-content label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+      }
+
+      .close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text);
+      }
+
+      /* Switch Styles */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--gray-light);
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: var(--white);
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: var(--success-green);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease;
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+
+        .modal-content {
+          width: 95%;
+          margin: 10% auto;
+        }
+
+        .button {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.75rem;
+        }
+
+        .table th,
+        .table td {
+          padding: 0.75rem;
+          font-size: 0.875rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-circle">
+            <div class="pill-icon"></div>
+          </div>
+          <span class="logo-text">Pharma Stock Manager</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="dashboard.html" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="stock_management.html" class="nav-link">
+              <i class="fas fa-pills"></i>
+              Envanter
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="orders_management.html" class="nav-link">
+              <i class="fas fa-shopping-cart"></i>
+              Siparişler
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="user_management.html" class="nav-link">
+              <i class="fas fa-users"></i>
+              Müşteriler
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="category_management.html" class="nav-link">
+              <i class="fas fa-chart-bar"></i>
+              Kategori
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="employee_management.html" class="nav-link active">
+              <i class="fas fa-cog"></i>
+              Çalışanlar
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="transaction_history.html" class="nav-link">
+              <i class="fas fa-history"></i>
+              İşlemler
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <header>
+          <h1>Çalışan Yönetimi</h1>
+        </header>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Çalışan Adı</th>
+              <th>Pozisyon</th>
+              <th>İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="employee-table-body">
+            <tr data-id="1">
+              <td>1</td>
+              <td>Fatma Demir</td>
+              <td>Yönetici</td>
+              <td>
+                <button class="button button-edit" onclick="viewEmployeeDetails(this)">
+                  <i class="fas fa-eye"></i> Görüntüle
+                </button>
+                <button class="button button-edit" onclick="openPermissionModal(this)">
+                  <i class="fas fa-key"></i> İzinler
+                </button>
+                <button class="button button-delete" onclick="deleteEmployee(this)">
+                  <i class="fas fa-trash"></i> Sil
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Çalışan Detay Modalı -->
+      <div id="detailsModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('detailsModal')">&times;</span>
+          <h2>Çalışan Bilgileri</h2>
+
+          <!-- Görüntüleme Modu -->
+          <div id="employee-view">
+            <p><strong>Adı:</strong> <span id="detail-name"></span></p>
+            <p><strong>Pozisyon:</strong> <span id="detail-position"></span></p>
+            <p><strong>Telefon:</strong> <span id="detail-phone"></span></p>
+            <p><strong>Email:</strong> <span id="detail-email"></span></p>
+            <ul id="detail-permissions"></ul>
+            <button class="button button-add" onclick="toggleEditMode(true)">
+              <i class="fas fa-edit"></i> Düzenle
+            </button>
+          </div>
+
+          <!-- Düzenleme Modu -->
+          <div id="employee-edit" style="display: none">
+            <form id="edit-form">
+              <div class="form-group">
+                <label for="edit-name">Adı:</label>
+                <input type="text" id="edit-name" required />
+              </div>
+              <div class="form-group">
+                <label for="edit-position">Pozisyon:</label>
+                <input type="text" id="edit-position" required />
+              </div>
+              <div class="form-group">
+                <label for="edit-phone">Telefon:</label>
+                <input type="tel" id="edit-phone" required />
+              </div>
+              <div class="form-group">
+                <label for="edit-email">Email:</label>
+                <input type="email" id="edit-email" required />
+              </div>
+
+              <div class="button-group">
+                <button type="button" class="button button-add" onclick="saveEditChanges()">
+                  <i class="fas fa-save"></i> Kaydet
+                </button>
+                <button type="button" class="button button-delete" onclick="toggleEditMode(false)">
+                  <i class="fas fa-times"></i> İptal
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- İzinler Modalı -->
+      <div id="permissionsModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('permissionsModal')">&times;</span>
+          <h2>İzinler</h2>
+          <form id="permissions-form">
+            <div class="permission-group">
+              <label class="switch">
+                <input type="checkbox" id="permission-edit" name="permission-edit" />
+                <span class="slider"></span>
+              </label>
+              <span>Düzenleme</span>
+            </div>
+
+            <div class="permission-group">
+              <label class="switch">
+                <input type="checkbox" id="permission-delete" name="permission-delete" />
+                <span class="slider"></span>
+              </label>
+              <span>Silme</span>
+            </div>
+
+            <button type="submit" class="button button-add">
+              <i class="fas fa-save"></i> Kaydet
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function viewEmployeeDetails(button) {
+        const row = button.closest("tr");
+        const name = row.cells[1].innerText;
+        const position = row.cells[2].innerText;
+
+        // Example data - in a real application, this would come from a database
+        const phone = "555-123-4567";
+        const email = "fatma.demir@example.com";
+
+        document.getElementById("detail-name").innerText = name;
+        document.getElementById("detail-position").innerText = position;
+        document.getElementById("detail-phone").innerText = phone;
+        document.getElementById("detail-email").innerText = email;
+
+        document.getElementById("detailsModal").style.display = "flex";
+      }
+
+      function toggleEditMode(editMode) {
+        document.getElementById("employee-view").style.display = editMode ? "none" : "block";
+        document.getElementById("employee-edit").style.display = editMode ? "block" : "none";
+
+        if (editMode) {
+          // Transfer data from view mode to edit mode
+          document.getElementById("edit-name").value = document.getElementById("detail-name").innerText;
+          document.getElementById("edit-position").value = document.getElementById("detail-position").innerText;
+          document.getElementById("edit-phone").value = document.getElementById("detail-phone").innerText;
+          document.getElementById("edit-email").value = document.getElementById("detail-email").innerText;
+        }
+      }
+
+      function saveEditChanges() {
+        const updatedName = document.getElementById("edit-name").value;
+        const updatedPosition = document.getElementById("edit-position").value;
+        const updatedPhone = document.getElementById("edit-phone").value;
+        const updatedEmail = document.getElementById("edit-email").value;
+
+        if (!updatedName || !updatedPosition || !updatedPhone || !updatedEmail) {
+          alert("Lütfen tüm alanları doldurun!");
+          return;
+        }
+
+        // Update view mode
+        document.getElementById("detail-name").innerText = updatedName;
+        document.getElementById("detail-position").innerText = updatedPosition;
+        document.getElementById("detail-phone").innerText = updatedPhone;
+        document.getElementById("detail-email").innerText = updatedEmail;
+
+        // Update table
+        const currentRow = document.querySelector('tr[data-id="1"]');
+        if (currentRow) {
+          currentRow.cells[1].innerText = updatedName;
+          currentRow.cells[2].innerText = updatedPosition;
+        }
+
+        toggleEditMode(false);
+        alert("Çalışan bilgileri başarıyla güncellendi!");
+      }
+
+      function openPermissionModal(button) {
+        const row = button.closest("tr");
+
+        // Example permissions - in a real application, these would come from a database
+        const stockPermission = true;
+        const editPermission = true;
+        const deletePermission = false;
+
+        document.getElementById("permission-stock").checked = stockPermission;
+        document.getElementById("permission-edit").checked = editPermission;
+        document.getElementById("permission-delete").checked = deletePermission;
+
+        document.getElementById("permissionsModal").style.display = "flex";
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+
+      function deleteEmployee(button) {
+        if (confirm("Bu çalışanı silmek istediğinize emin misiniz?")) {
+          const row = button.closest("tr");
+          row.remove();
+          alert("Çalışan başarıyla silindi!");
+        }
+      }
+
+      // Permissions form submit handler
+      document.getElementById("permissions-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        const permissions = {
+          stock: document.getElementById("permission-stock").checked,
+          edit: document.getElementById("permission-edit").checked,
+          delete: document.getElementById("permission-delete").checked
+        };
+
+        alert("İzinler başarıyla güncellendi!");
+        closeModal("permissionsModal");
+      });
+
+      // Close modals when clicking outside
+      window.onclick = function(event) {
+        if (event.target.classList.contains("modal")) {
+          event.target.style.display = "none";
+        }
+      };
+
+      // Mobile sidebar toggle functionality
+      function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('active');
+      }
+
+      // Initialize when document is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add any additional initialization code here
+      });
+    </script>
+  </body>
+</html>

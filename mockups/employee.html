@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>İlaç Stok Yönetimi</title>
+    <style>
+      :root {
+        --text: #333;
+        --gray-light: #f5f5f5;
+        --gray-hover: #ddd;
+        --white: #fff;
+        --mint-green: #4caf50;
+        --primary-blue: #007bff;
+        --lavender: #6c63ff;
+        --filter-bg: #f9f9f9;
+        --filter-border: #ccc;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--gray-light);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: var(--white);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      h1,
+      h2 {
+        color: var(--text);
+        margin-bottom: 1rem;
+      }
+
+      .button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .button-add {
+        background-color: var(--lavender);
+        color: var(--white);
+        margin-bottom: 1rem;
+      }
+
+      .button-add:hover {
+        background-color: #5a54d4;
+      }
+
+      .filter-form {
+        background: var(--filter-bg);
+        padding: 1rem;
+        border: 1px solid var(--filter-border);
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+      }
+
+      .filter-form input,
+      .filter-form select,
+      .filter-form button {
+        padding: 0.5rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid var(--filter-border);
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+
+      .filter-form input,
+      .filter-form select {
+        width: calc(25% - 0.5rem);
+      }
+
+      .filter-form button {
+        background-color: var(--primary-blue);
+        color: var(--white);
+        cursor: pointer;
+      }
+
+      .filter-form button:hover {
+        background-color: #0056b3;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-content input {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid var(--gray-light);
+        border-radius: 8px;
+      }
+
+      .modal-content button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .close {
+        background-color: var(--primary-blue);
+        color: var(--white);
+      }
+
+      .save {
+        background-color: var(--mint-green);
+        color: var(--white);
+      }
+
+      table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+  }
+
+  table thead {
+    background-color: var(--lavender);
+    color: var(--white);
+  }
+
+  table th, table td {
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--gray-hover);
+  }
+
+  table tbody tr:hover {
+    background-color: var(--gray-hover);
+  }
+
+  table tbody tr:nth-child(even) {
+    background-color: var(--gray-light);
+  }
+
+  table tbody tr:nth-child(odd) {
+    background-color: var(--white);
+  }
+
+  table th {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .button-edit {
+    background-color: var(--mint-green);
+    color: var(--white);
+  }
+
+  .button-edit:hover {
+    background-color: #45a049;
+  }
+
+  .button-delete {
+    background-color: var(--primary-blue);
+    color: var(--white);
+  }
+
+  .button-delete:hover {
+    background-color: #0056b3;
+  }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>İlaç Stok Yönetimi</h1>
+
+      <button class="button button-add" onclick="openAddModal('Ticari')">
+        Ticari İlaç Ekle
+      </button>
+      <button class="button button-add" onclick="openAddModal('Klinik')">
+        Klinik İlaç Ekle
+      </button>
+
+      <form id="filter-form" class="filter-form">
+        <input type="text" id="filter-name" placeholder="İlaç Adı" />
+        <select id="filter-type">
+          <option value="">İlaç Tipi</option>
+          <option value="Ticari">Ticari</option>
+          <option value="Klinik">Klinik</option>
+        </select>
+        <input type="text" id="filter-category" placeholder="Kategori" />
+        <input
+          type="date"
+          id="filter-expiry-date"
+          placeholder="Son Kullanma Tarihi"
+        />
+        <button type="button" onclick="applyFilter()">Filtrele</button>
+      </form>
+
+      <!-- İlaç Listesi -->
+<section class="all-medicines">
+    <h2>Tüm İlaçlar</h2>
+    <table class="medicine-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>İlaç Adı</th>
+          <th>İlaç Tipi</th>
+          <th>Stok</th>
+          <th>Kategori</th>
+          <th>Fiyat</th>
+          <th>Son Kullanma Tarihi</th>
+          <th>İşlemler</th>
+        </tr>
+      </thead>
+      <tbody id="medicine-table-body">
+        <tr data-id="1">
+          <td>1</td>
+          <td>Aspirin</td>
+          <td>Ticari</td>
+          <td>150</td>
+          <td>Ağrı Kesici</td>
+          <td>20</td>
+          <td>2025-12-31</td>
+          <td>
+            <button class="button button-edit" onclick="openEditModal(this)">Stok Güncelle</button>
+            <button class="button button-delete" onclick="deleteRow(this)">Sil</button>
+          </td>
+        </tr>
+        <tr data-id="2">
+          <td>2</td>
+          <td>Parol</td>
+          <td>Klinik</td>
+          <td>200</td>
+          <td>Ateş Düşürücü</td>
+          <td>15</td>
+          <td>2024-06-15</td>
+          <td>
+            <button class="button button-edit" onclick="openEditModal(this)">Stok Güncelle</button>
+            <button class="button button-delete" onclick="deleteRow(this)">Sil</button>
+          </td>
+        </tr>
+        <tr data-id="3">
+          <td>3</td>
+          <td>Voltaren</td>
+          <td>Ticari</td>
+          <td>80</td>
+          <td>Kas Gevşetici</td>
+          <td>50</td>
+          <td>2026-01-01</td>
+          <td>
+            <button class="button button-edit" onclick="openEditModal(this)">Stok Güncelle</button>
+            <button class="button button-delete" onclick="deleteRow(this)">Sil</button>
+          </td>
+        </tr>
+        <tr data-id="4">
+          <td>4</td>
+          <td>Arveles</td>
+          <td>Ticari</td>
+          <td>120</td>
+          <td>Ağrı Kesici</td>
+          <td>25</td>
+          <td>2024-12-15</td>
+          <td>
+            <button class="button button-edit" onclick="openEditModal(this)">Stok Güncelle</button>
+            <button class="button button-delete" onclick="deleteRow(this)">Sil</button>
+          </td>
+        </tr>
+        <tr data-id="5">
+          <td>5</td>
+          <td>Dekort</td>
+          <td>Klinik</td>
+          <td>60</td>
+          <td>Anti-inflamatuar</td>
+          <td>150</td>
+          <td>2023-11-30</td>
+          <td>
+            <button class="button button-edit" onclick="openEditModal(this)">Stok Güncelle</button>
+            <button class="button button-delete" onclick="deleteRow(this)">Sil</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  
+
+    <!-- Modal for Adding Medicine -->
+    <div id="add-modal" class="modal">
+      <div class="modal-content">
+        <h2 id="add-modal-title">İlaç Ekle</h2>
+        <form id="add-form" onsubmit="saveMedicine(event)">
+          <input
+            type="text"
+            id="add-medicine-name"
+            placeholder="İlaç Adı"
+            required
+          />
+          <input
+            type="number"
+            id="add-stock"
+            placeholder="Stok Adeti"
+            required
+          />
+          <input
+            type="text"
+            id="add-category"
+            placeholder="Kategori"
+            required
+          />
+          <input
+            type="number"
+            id="add-price"
+            placeholder="Fiyat"
+            required
+          />
+          <input type="date" id="add-expiry-date" required />
+          <button type="button" class="close" onclick="closeModal()">
+            Kapat
+          </button>
+          <button type="submit" class="save">Kaydet</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+        let medicineIdCounter = 6; // Başlangıç ID'si (var olan verilere göre)
+      
+        function openAddModal(type) {
+          document.getElementById("add-modal").style.display = "flex";
+          document.getElementById(
+            "add-modal-title"
+          ).textContent = `${type} İlaç Ekle`;
+      
+          // İlaç tipi bilgisini kaydetmek için bir data attribute ekliyoruz
+          document.getElementById("add-form").dataset.type = type;
+        }
+      
+        function saveMedicine(event) {
+          event.preventDefault();
+      
+          // Formdan veri alımı
+          const name = document.getElementById("add-medicine-name").value;
+          const stock = document.getElementById("add-stock").value;
+          const category = document.getElementById("add-category").value;
+          const price = document.getElementById("add-price").value;
+          const expiryDate = document.getElementById("add-expiry-date").value;
+          const type = document.getElementById("add-form").dataset.type; // İlaç tipi
+      
+          // Yeni satır oluşturma
+          const tbody = document.getElementById("medicine-table-body");
+          const row = document.createElement("tr");
+          row.setAttribute("data-id", medicineIdCounter);
+      
+          row.innerHTML = `
+            <td>${medicineIdCounter}</td>
+            <td>${name}</td>
+            <td>${type}</td>
+            <td>${stock}</td>
+            <td>${category}</td>
+            <td>${price}</td>
+            <td>${expiryDate}</td>
+            <td>
+              <button class="button button-edit" onclick="openEditModal(this)">Stok Güncelle</button>
+              <button class="button button-delete" onclick="deleteRow(this)">Sil</button>
+            </td>`;
+      
+          tbody.appendChild(row);
+      
+          // ID sayacını artırma
+          medicineIdCounter++;
+      
+          // Modalı kapatma
+          closeModal();
+        }
+      
+        function closeModal() {
+          document.querySelectorAll(".modal").forEach((modal) => {
+            modal.style.display = "none";
+          });
+        }
+      
+        function deleteRow(button) {
+          if (confirm("Bu ilacı silmek istediğinize emin misiniz?")) {
+            button.closest("tr").remove();
+          }
+        }
+      
+        function applyFilter() {
+          const name = document.getElementById("filter-name").value.toLowerCase();
+          const rows = document.querySelectorAll("#medicine-table-body tr");
+          rows.forEach((row) => {
+            row.style.display = row.innerHTML.toLowerCase().includes(name)
+              ? ""
+              : "none";
+          });
+        }
+
+        // Global değişken: Düzenleme yapılacak satır
+let editingRow = null;
+
+// Stok Güncelleme Modal'ını Açma
+function openEditModal(button) {
+  const row = button.closest("tr"); // İlgili satırı seç
+  const id = row.querySelector("td:nth-child(1)").textContent;
+  const name = row.querySelector("td:nth-child(2)").textContent;
+  const type = row.querySelector("td:nth-child(3)").textContent;
+  const stock = row.querySelector("td:nth-child(4)").textContent;
+  const category = row.querySelector("td:nth-child(5)").textContent;
+  const price = row.querySelector("td:nth-child(6)").textContent;
+  const expiryDate = row.querySelector("td:nth-child(7)").textContent;
+
+  // Modal içindeki inputları doldur
+  document.getElementById("add-medicine-name").value = name;
+  document.getElementById("add-stock").value = stock;
+  document.getElementById("add-category").value = category;
+  document.getElementById("add-price").value = price;
+  document.getElementById("add-expiry-date").value = expiryDate;
+
+  // Güncelleme işlemi için modalın başlığını ve ID'sini sakla
+  document.getElementById("add-modal-title").textContent = "İlaç Güncelle";
+  document.getElementById("add-form").dataset.updateId = id; // Güncellenecek ID'yi sakla
+
+  // Modalı aç
+  document.getElementById("add-modal").style.display = "flex";
+}
+
+// Güncellenen Değerleri Kaydetme
+function saveMedicine(event) {
+  event.preventDefault();
+
+  if (editingRow) {
+    // Güncelleme işlemi
+    const stock = document.getElementById("add-stock").value;
+    editingRow.children[3].textContent = stock;
+
+    editingRow = null; // Düzenleme işlemini sıfırla
+  } else {
+    // Yeni ilaç ekleme işlemi
+    const name = document.getElementById("add-medicine-name").value;
+    const stock = document.getElementById("add-stock").value;
+    const category = document.getElementById("add-category").value;
+    const price = document.getElementById("add-price").value;
+    const expiryDate = document.getElementById("add-expiry-date").value;
+    const type = document.getElementById("add-form").dataset.type;
+
+    const tbody = document.getElementById("medicine-table-body");
+    const row = document.createElement("tr");
+    row.setAttribute("data-id", medicineIdCounter);
+
+    row.innerHTML = `
+      <td>${medicineIdCounter}</td>
+      <td>${name}</td>
+      <td>${type}</td>
+      <td>${stock}</td>
+      <td>${category}</td>
+      <td>${price}</td>
+      <td>${expiryDate}</td>
+      <td>
+        <button class="button button-edit" onclick="openEditModal(this)">Stok Güncelle</button>
+        <button class="button button-delete" onclick="deleteRow(this)">Sil</button>
+      </td>`;
+
+    tbody.appendChild(row);
+    medicineIdCounter++;
+  }
+
+  closeModal();
+}
+
+// Filtreleme İşlevi
+function applyFilter() {
+  const name = document.getElementById("filter-name").value.toLowerCase();
+  const type = document.getElementById("filter-type").value;
+  const category = document.getElementById("filter-category").value.toLowerCase();
+  const expiryDate = document.getElementById("filter-expiry-date").value;
+
+  const rows = document.querySelectorAll("#medicine-table-body tr");
+  rows.forEach((row) => {
+    const rowName = row.children[1].textContent.toLowerCase();
+    const rowType = row.children[2].textContent;
+    const rowCategory = row.children[4].textContent.toLowerCase();
+    const rowExpiryDate = row.children[6].textContent;
+
+    const matchName = rowName.includes(name);
+    const matchType = type === "" || rowType === type;
+    const matchCategory = rowCategory.includes(category);
+    const matchExpiryDate =
+      expiryDate === "" || new Date(rowExpiryDate) <= new Date(expiryDate);
+
+    row.style.display = matchName && matchType && matchCategory && matchExpiryDate ? "" : "none";
+  });
+}
+      </script>
+      
+  </body>
+</html>

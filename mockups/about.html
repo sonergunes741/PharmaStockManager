@@ -1,67 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>About Us - Pharma Stock Manager</title>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .about-hero {
+        background-color: var(--gray-light);
+        padding: 4rem 2rem;
+        text-align: center;
+        border-radius: 12px;
+      }
+
+      .about-hero h1 {
+        font-size: 2.5rem;
+        color: var(--primary-blue);
+      }
+
+      .about-hero p {
+        font-size: 1.2rem;
+        color: var(--text);
+        margin-top: 1rem;
+        opacity: 0.8;
+      }
+
+      .team {
+        text-align: center;
+        padding: 4rem 0;
+      }
+
+      .team h2 {
+        font-size: 2rem;
+        color: var(--text);
+        margin-bottom: 2rem;
+      }
+    </style>
+    <title>About Us</title>
   </head>
   <body>
-    <header>
-      <div class="logo">
-        <h1>Pharma Stock Manager</h1>
-      </div>
+    <div class="container">
       <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="login.html">Login</a></li>
-          <li><a href="signup.html">Sign Up</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
+        <div class="logo">
+          <div class="logo-circle">
+            <div class="pill-icon"></div>
+          </div>
+          <span class="logo-text">PharmaStockManager</span>
+        </div>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="about.html" class="nav-link">About Us</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+        </div>
       </nav>
-    </header>
 
-    <main>
-      <section class="about-container">
-        <h2>About Us</h2>
-        <p>
-          <strong>Pharma Stock Manager</strong> is a leading software platform
-          designed specifically for pharmaceutical companies to manage their
-          inventory efficiently and accurately.
-        </p>
+      <header class="hero about-hero">
+        <div class="hero-content">
+          <h1>About Us</h1>
+        </div>
+      </header>
 
-        <h3>Who We Are</h3>
-        <p>
-          We are a team of experienced professionals in the healthcare and
-          software development industry. Our mission is to revolutionize the way
-          pharmaceutical companies handle their inventory, ensuring they can
-          focus more on patient care and less on logistical challenges.
-        </p>
-
-        <h3>What We Do</h3>
-        <p>
-          We provide a comprehensive and easy-to-use platform for pharmaceutical
-          companies, helping them:
-        </p>
-        <ul>
-          <li>Track and manage their stock with precision.</li>
-          <li>Maintain compliance with industry regulations.</li>
-          <li>Improve efficiency in the supply chain.</li>
-          <li>Reduce operational costs and minimize wastage.</li>
-        </ul>
-
-        <p>
-          Our platform is customizable to fit the unique needs of each client,
-          whether they are a large-scale distributor or a small pharmacy. We are
-          committed to providing excellent customer support and continuous
-          innovation in our software solutions.
-        </p>
+      <section class="features">
+        <div class="feature-card">
+          <h3>Who we are ?</h3>
+          <p>
+            We are a dedicated team of students from Gebze Technical University,
+            creating innovative solutions in the field of pharmacy and
+            healthcare. With diverse backgrounds in software development,
+            project management, and product design, we collaborate to provide
+            impactful tools for the pharmaceutical industry.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>What is our purpose ?</h3>
+          <p>
+            Our goal is to develop a user-friendly, efficient, and secure
+            web-based stock management system tailored specifically for pharmacy
+            warehouses. By streamlining inventory processes and improving stock
+            visibility, we aim to empower pharmacies with the tools they need to
+            optimize operations and ensure the availability of essential
+            medicines.
+          </p>
+        </div>
       </section>
-    </main>
 
-    <footer>
-      <p>&copy; 2024 Pharma Stock Manager. All Rights Reserved.</p>
-    </footer>
+      <section class="team">
+        <h2>Meet Our Team</h2>
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon"></div>
+            <h3>Ahmet Sadri Güler</h3>
+            <p>Product Owner</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"></div>
+            <h3>Soner Güneş</h3>
+            <p>Project Manager</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"></div>
+            <h3>Ünal Sarıemir</h3>
+            <p>Developer</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"></div>
+            <h3>Hüseyin Çetin</h3>
+            <p>Developer</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"></div>
+            <h3>Yavuz Selman Haltaş</h3>
+            <p>Developer</p>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
+      </footer>
+    </div>
   </body>
 </html>

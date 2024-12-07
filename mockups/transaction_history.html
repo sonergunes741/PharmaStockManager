@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>İşlem Geçmişi - Pharmacy</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #fff;
+        --gray-light: #e8eaed;
+        --gray-hover: #ddd;
+        --warning-red: #ff5252;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+      }
+
+      .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-blue) 33%,
+          var(--mint-green) 33% 66%,
+          var(--lavender) 66%
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+      }
+
+      .nav-menu {
+        list-style: none;
+      }
+
+      .nav-item {
+        margin: 0.5rem 0;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        transform: translateX(5px);
+      }
+
+      .nav-link i {
+        width: 20px;
+        margin-right: 1rem;
+      }
+
+      /* Main Content Styles */
+      .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        background-color: var(--white);
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      h1, h2 {
+        color: var(--text);
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      /* Filter Form Styles */
+      .filter-form {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .filter-form input,
+      .filter-form select {
+        padding: 0.75rem;
+        border: 1px solid var(--gray-light);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .filter-form button {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .button-primary {
+        background-color: var(--primary-blue);
+        color: var(--white);
+      }
+
+      .button-secondary {
+        background-color: var(--gray-light);
+        color: var(--text);
+      }
+
+      /* Table Styles */
+      .transaction-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--white);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .transaction-table th,
+      .transaction-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-light);
+      }
+
+      .transaction-table th {
+        background-color: var(--lavender);
+        color: var(--white);
+        font-weight: 500;
+      }
+
+      .transaction-table tbody tr:hover {
+        background-color: var(--gray-light);
+      }
+
+      /* Button Styles */
+      .button {
+        padding: 0.75rem 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .button-details {
+        background-color: var(--primary-blue);
+        color: var(--white);
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .modal-content p {
+        margin: 1rem 0;
+      }
+
+      .close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text);
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease;
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+
+        .filter-form {
+          flex-direction: column;
+        }
+
+        .filter-form input,
+        .filter-form select,
+        .filter-form button {
+          width: 100%;
+        }
+
+        .transaction-table {
+          font-size: 0.875rem;
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+          padding: 0.75rem;
+        }
+
+        .modal-content {
+          width: 95%;
+          margin: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-circle">
+            <div class="pill-icon"></div>
+          </div>
+          <span class="logo-text">Pharma Stock Manager</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="dashboard.html" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="stock_management.html" class="nav-link">
+              <i class="fas fa-pills"></i>
+              Envanter
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="orders_management.html" class="nav-link">
+              <i class="fas fa-shopping-cart"></i>
+              Siparişler
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="user_management.html" class="nav-link">
+              <i class="fas fa-users"></i>
+              Müşteriler
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="category_management.html" class="nav-link">
+              <i class="fas fa-chart-bar"></i>
+              Kategori
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="employee_management.html" class="nav-link">
+              <i class="fas fa-cog"></i>
+              Çalışanlar
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="transaction_history.html" class="nav-link active">
+              <i class="fas fa-history"></i>
+              İşlemler
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <header>
+          <h1>İşlem Geçmişi</h1>
+        </header>
+
+        <!-- Filtreleme Formu -->
+        <form class="filter-form" id="filter-form">
+          <input type="text" id="filter-customer" placeholder="Müşteri Adı" />
+          <input type="text" id="filter-medicine" placeholder="İlaç Adı" />
+          <input type="date" id="filter-start-date" placeholder="Başlangıç Tarihi" />
+          <input type="date" id="filter-end-date" placeholder="Bitiş Tarihi" />
+          <button type="button" class="button button-primary" onclick="applyFilters()">
+            <i class="fas fa-search"></i> Filtrele
+          </button>
+          <button type="reset" class="button button-secondary" onclick="resetFilters()">
+            <i class="fas fa-undo"></i> Temizle
+          </button>
+        </form>
+
+        <!-- İşlem Geçmişi Tablosu -->
+        <table class="transaction-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Müşteri Adı</th>
+              <th>İlaç Adı</th>
+              <th>Miktar</th>
+              <th>Gönderim Tarihi</th>
+              <th>Adres</th>
+              <th>İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="transaction-table-body">
+            <tr>
+              <td>1</td>
+              <td>Ahmet Yılmaz</td>
+              <td>Aspirin</td>
+              <td>20</td>
+              <td>2024-11-14</td>
+              <td>İstanbul, Türkiye</td>
+              <td>
+                <button class="button button-details" onclick="viewDetails(1)">
+                  <i class="fas fa-eye"></i> Detaylar
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Elif Demir</td>
+              <td>Parol</td>
+              <td>15</td>
+              <td>2024-11-10</td>
+              <td>Ankara, Türkiye</td>
+              <td>
+                <button class="button button-details" onclick="viewDetails(2)">
+                  <i class="fas fa-eye"></i> Detaylar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Detaylar Modalı -->
+        <div id="detailsModal" class="modal">
+          <div class="modal-content">
+            <span class="close" onclick="closeModal('detailsModal')">&times;</span>
+            <h2>İşlem Detayları</h2>
+            <p><strong>Müşteri:</strong> <span id="modal-customer"></span></p>
+            <p><strong>İlaç:</strong> <span id="modal-medicine"></span></p>
+            <p><strong>Miktar:</strong> <span id="modal-quantity"></span></p>
+            <p><strong>Tarih:</strong> <span id="modal-date"></span></p>
+            <p><strong>Adres:</strong> <span id="modal-address"></span></p>
+            <p><strong>Notlar:</strong> <span id="modal-notes"></span></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function applyFilters() {
+        const customerFilter = document.getElementById("filter-customer").value.toLowerCase();
+        const medicineFilter = document.getElementById("filter-medicine").value.toLowerCase();
+        const startDate = document.getElementById("filter-start-date").value;
+        const endDate = document.getElementById("filter-end-date").value;
+
+        const rows = document.querySelectorAll("#transaction-table-body tr");
+
+        rows.forEach((row) => {
+          const customerName = row.children[1].textContent.toLowerCase();
+          const medicineName = row.children[2].textContent.toLowerCase();
+          const date = row.children[4].textContent;
+
+          const matchCustomer = customerFilter ? customerName.includes(customerFilter) : true;
+          const matchMedicine = medicineFilter ? medicineName.includes(medicineFilter) : true;
+          const matchDate = startDate || endDate
+            ? new Date(date) >= new Date(startDate || "1970-01-01") &&
+              new Date(date) <= new Date(endDate || "3000-01-01")
+            : true;
+
+            row.style.display = matchCustomer && matchMedicine && matchDate ? "" : "none";
+        });
+      }
+
+      function resetFilters() {
+        document.getElementById("filter-form").reset();
+        const rows = document.querySelectorAll("#transaction-table-body tr");
+        rows.forEach(row => {
+          row.style.display = "";
+        });
+      }
+
+      function viewDetails(transactionId) {
+        const transactions = {
+          1: {
+            customer: "Ahmet Yılmaz",
+            medicine: "Aspirin",
+            quantity: 20,
+            date: "2024-11-14",
+            address: "İstanbul, Türkiye",
+            notes: "Acil teslimat yapılmıştır."
+          },
+          2: {
+            customer: "Elif Demir",
+            medicine: "Parol",
+            quantity: 15,
+            date: "2024-11-10",
+            address: "Ankara, Türkiye",
+            notes: "Normal gönderim süresinde teslim edilmiştir."
+          }
+        };
+
+        const transaction = transactions[transactionId];
+        if (transaction) {
+          document.getElementById("modal-customer").textContent = transaction.customer;
+          document.getElementById("modal-medicine").textContent = transaction.medicine;
+          document.getElementById("modal-quantity").textContent = transaction.quantity;
+          document.getElementById("modal-date").textContent = transaction.date;
+          document.getElementById("modal-address").textContent = transaction.address;
+          document.getElementById("modal-notes").textContent = transaction.notes;
+
+          document.getElementById("detailsModal").style.display = "flex";
+        } else {
+          alert("İşlem detayları bulunamadı!");
+        }
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+        if (event.target.classList.contains("modal")) {
+          event.target.style.display = "none";
+        }
+      };
+
+      // Mobile sidebar toggle functionality
+      function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('active');
+      }
+
+      // Initialize when document is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        // Format dates in the table to be more readable
+        const dateElements = document.querySelectorAll("#transaction-table-body td:nth-child(5)");
+        dateElements.forEach(element => {
+          const date = new Date(element.textContent);
+          element.textContent = date.toLocaleDateString('tr-TR');
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,47 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Contact Us - Pharma Stock Manager</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header>
-      <div class="logo">
-        <h1>Pharma Stock Manager</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="signup.html">Sign Up</a></li>
-          <li><a href="login.html">Login</a></li>
-        </ul>
-      </nav>
-    </header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Contact Us</title>
+    <style>
+        .contact-hero {
+            background-color: var(--gray-light);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 12px;
+        }
 
-    <main>
-      <section class="contact-container">
-        <h2>Contact Us</h2>
-        <form action="#">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required />
+            .contact-hero h1 {
+                font-size: 2.5rem;
+                color: var(--primary-blue);
+            }
 
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required />
+            .contact-hero p {
+                font-size: 1.2rem;
+                color: var(--text);
+                margin-top: 1rem;
+                opacity: 0.8;
+            }
 
-          <label for="message">Message:</label>
-          <textarea id="message" name="message" rows="5" required></textarea>
+        .contact-details {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
 
-          <button type="submit">Send Message</button>
-        </form>
-      </section>
-    </main>
+            .contact-details h2 {
+                font-size: 2rem;
+                color: var(--text);
+                margin-bottom: 2rem;
+            }
 
-    <footer>
-      <p>&copy; 2024 Pharma Stock Manager. All Rights Reserved.</p>
-    </footer>
-  </body>
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background-color: var(--gray-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            .info-card h3 {
+                font-size: 1.2rem;
+                color: var(--primary-blue);
+                margin-bottom: 0.5rem;
+            }
+
+        .contact-form {
+            padding: 4rem 2rem;
+        }
+
+            .contact-form h2 {
+                font-size: 2rem;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .contact-form form {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .contact-form label {
+                display: block;
+                margin-top: 1rem;
+                font-weight: bold;
+            }
+
+            .contact-form input,
+            .contact-form textarea {
+                width: 100%;
+                padding: 0.75rem;
+                margin-top: 0.5rem;
+                border: 1px solid var(--gray-hover);
+                border-radius: 6px;
+            }
+
+            .contact-form button {
+                margin-top: 1.5rem;
+                padding: 0.75rem 1.5rem;
+                background-color: var(--primary-blue);
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+                .contact-form button:hover {
+                    background-color: var(--primary-blue-hover);
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="pill-icon"></div>
+                </div>
+                <span class="logo-text">PharmaStockManager</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+        </nav>
+
+        <header class="hero contact-hero">
+            <div class="hero-content">
+                <h1>Contact Us</h1>
+            </div>
+        </header>
+
+        <section class="contact-details">
+            <h2>Get in Touch</h2>
+            <div class="contact-info">
+                <div class="info-card">
+                    <h3>Email</h3>
+                    <p><a href="mailto:webwizardssol@gmail.com">webwizardssol@gmail.com</a></p>
+                </div>
+                <div class="info-card">
+                    <h3>Phone</h3>
+                    <p><a>+1 234 567 890</a></p>
+                </div>
+                <div class="info-card">
+                    <h3>Address</h3>
+                    <p>Gebze Technical University</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-form">
+            <h2>Send Us a Message</h2>
+            <form>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="6" placeholder="Your Message" required></textarea>
+
+                <button type="submit" class="btn-primary">Send Message</button>
+            </form>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
 </html>

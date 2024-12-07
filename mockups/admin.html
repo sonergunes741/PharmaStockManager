@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <div class="logo">
+          <div class="logo-circle">
+            <i class="fas fa-capsules pill-icon"></i>
+          </div>
+          <span class="logo-text">Admin Panel</span>
+        </div>
+        <div class="nav-links">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="#" class="nav-link">Logout</a>
+        </div>
+      </nav>
+
+      <main>
+        <section class="admin-dashboard">
+          <!-- Stok Yönetimi -->
+          <div
+            class="dashboard-card"
+            onclick="location.href='stock_management.html'"
+          >
+            <div class="dashboard-icon">
+              <i class="fas fa-boxes"></i>
+            </div>
+            <h3>İlaç Stok Yönetimi</h3>
+            <p>Stokları yönet, kontrol et ve rapor al.</p>
+          </div>
+
+          <!-- Kullanıcı Yönetimi -->
+          <div
+            class="dashboard-card"
+            onclick="location.href='user_management.html'"
+          >
+            <div class="dashboard-icon">
+              <i class="fas fa-user-cog"></i>
+            </div>
+            <h3>Kullanıcı Yönetimi</h3>
+            <p>Kullanıcı hesaplarını ve yetkilerini düzenle.</p>
+          </div>
+
+          <!-- Kategori Yönetimi -->
+          <div
+            class="dashboard-card"
+            onclick="location.href='category_management.html'"
+          >
+            <div class="dashboard-icon">
+              <i class="fas fa-folder-open"></i>
+            </div>
+            <h3>Kategori Yönetimi</h3>
+            <p>Kategoriler oluştur, düzenle veya sil.</p>
+          </div>
+
+          <!-- Transaction History -->
+          <div
+            class="dashboard-card"
+            onclick="location.href='transaction_history.html'"
+          >
+            <div class="dashboard-icon">
+              <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+            <h3>Transaction History</h3>
+            <p>Geçmiş işlemleri incele ve rapor al.</p>
+          </div>
+
+          <!-- Siparişler Yönetimi -->
+          <div
+            class="dashboard-card"
+            onclick="location.href='orders_management.html'"
+          >
+            <div class="dashboard-icon">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h3>Siparişler Yönetimi</h3>
+            <p>Siparişleri incele, onayla ve yönet.</p>
+          </div>
+
+          <!-- Çalışan Yönetimi -->
+          <div
+            class="dashboard-card"
+            onclick="location.href='employee_management.html'"
+          >
+            <div class="dashboard-icon">
+              <i class="fas fa-briefcase"></i>
+            </div>
+            <h3>Çalışan Yönetimi</h3>
+            <p>Çalışan bilgilerini görüntüle ve düzenle.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  </body>
+</html>

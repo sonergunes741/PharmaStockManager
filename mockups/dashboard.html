@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pharma Stock Manager - Dashboard</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #ffffff;
+        --gray-light: #e8eaed;
+        --gray-hover: #dfe1e5;
+
+        /* Professional status colors */
+        --status-green: rgba(139, 195, 174, 0.12);
+        --status-yellow: rgba(255, 193, 7, 0.12);
+        --status-blue: rgba(184, 161, 204, 0.12);
+        --status-red: rgba(230, 92, 92, 0.12);
+
+        /* Subtle shadow colors */
+        --shadow-green: rgba(139, 195, 174, 0.25);
+        --shadow-yellow: rgba(255, 193, 7, 0.25);
+        --shadow-blue: rgba(184, 161, 204, 0.25);
+        --shadow-red: rgba(230, 92, 92, 0.25);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+      }
+
+      .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-blue) 33%,
+          var(--mint-green) 33% 66%,
+          var(--lavender) 66%
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+      }
+
+      .nav-menu {
+        list-style: none;
+      }
+
+      .nav-item {
+        margin: 0.5rem 0;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        transform: translateX(5px);
+      }
+
+      .nav-link i {
+        width: 20px;
+        margin-right: 1rem;
+      }
+
+      .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+      }
+
+      .header {
+        background: var(--white);
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        transition: transform 0.3s ease;
+      }
+
+      .welcome-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .welcome-text {
+        color: var(--text);
+      }
+
+      .welcome-text h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .welcome-text p {
+        color: var(--text);
+        opacity: 0.8;
+      }
+
+      .daily-summary {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 0.5rem;
+      }
+
+      .summary-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .summary-item i {
+        color: var(--primary-blue);
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      #current-time {
+        margin-right: 1rem;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .stat-card.status-green {
+        background: linear-gradient(135deg, var(--white), var(--status-green));
+        box-shadow: 0 4px 20px var(--shadow-green);
+      }
+
+      .stat-card.status-yellow {
+        background: linear-gradient(135deg, var(--white), var(--status-yellow));
+        box-shadow: 0 4px 20px var(--shadow-yellow);
+      }
+
+      .stat-card.status-blue {
+        background: linear-gradient(135deg, var(--white), var(--status-blue));
+        box-shadow: 0 4px 20px var(--shadow-blue);
+      }
+
+      .stat-card.status-red {
+        background: linear-gradient(135deg, var(--white), var(--status-red));
+        box-shadow: 0 4px 20px var(--shadow-red);
+      }
+
+      .stat-card.status-red.clicked {
+        background: linear-gradient(135deg, var(--white), rgba(230, 176, 170, 0.12));
+        box-shadow: 0 4px 20px rgba(230, 176, 170, 0.25);
+      }
+
+      .status-red.clicked .stat-icon {
+        background: linear-gradient(135deg, #e6b0aa, #f0c1bc);
+      }
+
+      .stat-card.status-yellow.clicked {
+        background: linear-gradient(135deg, var(--white), rgba(250, 201, 154, 0.12));
+        box-shadow: 0 4px 20px rgba(250, 201, 154, 0.25);
+      }
+
+      .status-yellow.clicked .stat-icon {
+        background: linear-gradient(135deg, #fac99a, #ffd7b5);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+      }
+
+      .status-green .stat-icon {
+        background: linear-gradient(135deg, #88b8a5, #9ecfbb);
+      }
+
+      .status-yellow .stat-icon {
+        background: linear-gradient(135deg, #ffc107, #ffd54f);
+      }
+
+      .status-blue .stat-icon {
+        background: linear-gradient(135deg, #a68cb1, #b99fc8);
+      }
+
+      .status-red .stat-icon {
+        background: linear-gradient(135deg, #e65c5c, #f08080);
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 1rem 0;
+        color: var(--text);
+      }
+
+      .stat-label {
+        color: var(--text);
+        opacity: 0.8;
+        font-size: 0.875rem;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .detail-card {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+      }
+
+      .detail-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(111, 195, 255, 0.1);
+      }
+
+      .detail-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: var(--text);
+      }
+
+      .detail-card p {
+        color: var(--text);
+        opacity: 0.8;
+        margin: 0.5rem 0;
+      }
+
+      .button {
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+        color: var(--white);
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease;
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+
+        .sidebar.active {
+          transform: translateX(0);
+        }
+
+        .daily-summary {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <form
+          action="index.html"
+          method="get"
+          style="display: flex; align-items: center; gap: 1rem"
+        >
+          <button
+            type="submit"
+            style="
+              all: unset;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+            "
+          >
+            <div class="logo-circle">
+              <div class="pill-icon"></div>
+            </div>
+            <span class="logo-text">Pharma Stock Manager</span>
+          </button>
+        </form>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="fas fa-chart-line"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="stock_management.html" class="nav-link">
+              <i class="fas fa-pills"></i>
+              Inventory
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="orders_management.html" class="nav-link">
+              <i class="fas fa-shopping-cart"></i>
+              Orders
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="user_management.html" class="nav-link">
+              <i class="fas fa-users"></i>
+              Customers
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="category_management.html" class="nav-link">
+              <i class="fas fa-chart-bar"></i>
+              Category
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="employee_management.html" class="nav-link">
+              <i class="fas fa-cog"></i>
+              Employee
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="transaction_history.html" class="nav-link">
+              <i class="fas fa-history"></i>
+              Transaction
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <div class="welcome-section">
+          <div class="welcome-text">
+            <h1>Welcome back, Admin!</h1>
+            <p>Here's your pharmacy's daily summary</p>
+            <div class="daily-summary">
+              <div class="summary-item">
+                <i class="fas fa-capsules"></i>
+                <span>12 New Orders</span>
+              </div>
+              <div class="summary-item">
+                <i class="fas fa-bell"></i>
+                <span>3 Alerts</span>
+              </div>
+              <div class="summary-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Sales +15%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-menu">
+          <span id="current-time"></span>
+          <button class="button">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <div class="stats-grid">
+        <div class="stat-card status-green">
+          <div class="stat-header">
+            <h3>Total Inventory</h3>
+            <div class="stat-icon">
+              <i class="fas fa-box"></i>
+            </div>
+          </div>
+          <div class="stat-value">1,234</div>
+          <div class="stat-label">Items in stock</div>
+        </div>
+        <div class="stat-card status-blue">
+          <div class="stat-header">
+            <h3>Revenue</h3>
+            <div class="stat-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+          </div>
+          <div class="stat-value">$45,670</div>
+          <div class="stat-label">Last 30 days</div>
+        </div>
+        <div class="stat-card status-yellow">
+          <div class="stat-header">
+            <h3>Low Stock Alert</h3>
+            <div class="stat-icon">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+          </div>
+          <div class="stat-value">8</div>
+          <div class="stat-label">Items need reorder</div>
+        </div>
+        <div class="stat-card status-red">
+          <div class="stat-header">
+            <h3>Expired Items</h3>
+            <div class="stat-icon">
+              <i class="fas fa-calendar-times"></i>
+            </div>
+          </div>
+          <div class="stat-value">3</div>
+          <div class="stat-label">Need immediate attention</div>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-card">
+          <h3>Recent Orders</h3>
+          <p>Total Orders: 156</p>
+          <p>Pending: 12</p>
+          <p>Completed: 144</p>
+          <form action="view_all_orders.html" method="get">
+            <button type="submit" class="button">View All Orders</button>
+          </form>
+        </div>
+        <div class="detail-card">
+          <h3>Top Selling Medicines</h3>
+          <p>1. Paracetamol - 500 units</p>
+          <p>2. Amoxicillin - 350 units</p>
+          <p>3. Omeprazole - 280 units</p>
+          <form action="view_full_report.html" method="get">
+            <button type="submit" class="button">View Full Report</button>
+          </form>
+        </div>
+        <div class="detail-card">
+          <h3>System Status</h3>
+          <p>Last Backup: 2 hours ago</p>
+          <p>System Health: Good</p>
+          <p>Updates Available: None</p>
+          <button class="button">System Settings</button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Stat cards click handler
+      document.querySelectorAll(".stat-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          card.classList.toggle("clicked");
+
+          // Yellow card (Low Stock Alert)
+          if (card.classList.contains("status-yellow")) {
+            const valueElement = card.querySelector(".stat-value");
+            const labelElement = card.querySelector(".stat-label");
+            if (card.classList.contains("clicked")) {
+              valueElement.textContent = "None";
+              labelElement.textContent = "All stocks normal";
+            } else {
+              valueElement.textContent = "8";
+              labelElement.textContent = "Items need reorder";
+            }
+          }
+
+          // Red card (Expired Items)
+          if (card.classList.contains("status-red")) {
+            const valueElement = card.querySelector(".stat-value");
+            const labelElement = card.querySelector(".stat-label");
+            if (card.classList.contains("clicked")) {
+              valueElement.textContent = "0";
+              labelElement.textContent = "No expired items";
+            } else {
+              valueElement.textContent = "3";
+              labelElement.textContent = "Need immediate attention";
+            }
+          }
+        });
+      });
+
+      // Current time update function
+      function updateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        };
+
+        const formattedDateTime = new Intl.DateTimeFormat(
+          "en-US",
+          options
+        ).format(now);
+        document.getElementById("current-time").textContent = formattedDateTime;
+      }
+
+      // Update time every second
+      setInterval(updateTime, 1000);
+      updateTime();
+    </script>
+  </body>
+</html>

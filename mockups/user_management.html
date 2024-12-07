@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kullanıcı Yönetimi - Pharmacy</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #fff;
+        --gray-light: #e8eaed;
+        --gray-hover: #ddd;
+        --warning-red: #ff5252;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+      }
+
+      .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-blue) 33%,
+          var(--mint-green) 33% 66%,
+          var(--lavender) 66%
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+      }
+
+      .nav-menu {
+        list-style: none;
+      }
+
+      .nav-item {
+        margin: 0.5rem 0;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        transform: translateX(5px);
+      }
+
+      .nav-link i {
+        width: 20px;
+        margin-right: 1rem;
+      }
+
+      /* Main Content Styles */
+      .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section {
+        background-color: var(--white);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h1, h2 {
+        color: var(--text);
+        margin-bottom: 1.5rem;
+      }
+
+      /* Table Styles */
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+        background-color: var(--white);
+      }
+
+      .table th,
+      .table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-light);
+      }
+
+      .table th {
+        background-color: var(--lavender);
+        color: var(--white);
+        font-weight: 500;
+      }
+
+      .table tbody tr:hover {
+        background-color: var(--gray-light);
+      }
+
+      /* Button Styles */
+      .button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        margin-right: 0.5rem;
+      }
+
+      .button-assign-customer {
+        background-color: var(--lavender);
+        color: var(--white);
+      }
+
+      .button-assign-customer:hover {
+        background-color: #5a54d4;
+      }
+
+      .button-assign-employee {
+        background-color: var(--primary-blue);
+        color: var(--white);
+      }
+
+      .button-assign-employee:hover {
+        background-color: #4a8ec0;
+      }
+
+      .button-delete {
+        background-color: var(--warning-red);
+        color: var(--white);
+      }
+
+      .button-delete:hover {
+        background-color: #d32f2f;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 500px;
+      }
+
+      .modal-content p {
+        margin: 1rem 0;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease;
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+
+        .button {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.75rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .table th,
+        .table td {
+          padding: 0.75rem;
+          font-size: 0.875rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-circle">
+            <div class="pill-icon"></div>
+          </div>
+          <span class="logo-text">Pharma Stock Manager</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="dashboard.html" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="stock_management.html" class="nav-link">
+              <i class="fas fa-pills"></i>
+              Envanter
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="orders_management.html" class="nav-link">
+              <i class="fas fa-shopping-cart"></i>
+              Siparişler
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="user_management.html" class="nav-link active">
+              <i class="fas fa-users"></i>
+              Müşteriler
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="category_management.html" class="nav-link">
+              <i class="fas fa-chart-bar"></i>
+              Kategori
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="employee_management.html" class="nav-link">
+              <i class="fas fa-cog"></i>
+              Çalışanlar
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="transaction_history.html" class="nav-link">
+              <i class="fas fa-history"></i>
+              İşlemler
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <div class="section">
+          <h1>Kullanıcı Yönetimi</h1>
+
+          <!-- Yeni Kaydolmuş Kullanıcılar -->
+          <div class="section">
+            <h2>Yeni Kaydolmuş Kullanıcılar</h2>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Ad Soyad</th>
+                  <th>E-posta</th>
+                  <th>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody id="new-user-table-body">
+                <tr data-id="1">
+                  <td>1</td>
+                  <td>Ali Veli</td>
+                  <td>ali@example.com</td>
+                  <td>
+                    <button class="button button-assign-customer" onclick="assignRole(this, 'Müşteri')">
+                      <i class="fas fa-user"></i> Müşteri Yap
+                    </button>
+                    <button class="button button-assign-employee" onclick="assignRole(this, 'Çalışan')">
+                      <i class="fas fa-user-tie"></i> Çalışan Yap
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Kullanıcılar -->
+          <div class="section">
+            <h2>Kullanıcılar</h2>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Ad Soyad</th>
+                  <th>E-posta</th>
+                  <th>Tür</th>
+                  <th>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody id="user-table-body">
+                <tr data-id="2" data-address="İstanbul, Türkiye" data-phone="555-123-4567">
+                  <td>2</td>
+                  <td>Fatma Demir</td>
+                  <td>fatma@example.com</td>
+                  <td>Müşteri</td>
+                  <td>
+                    <button class="button button-delete" onclick="deleteRow(this)">
+                      <i class="fas fa-trash"></i> Sil
+                    </button>
+                    <button class="button button-assign-customer" onclick="showDetails(this)">
+                      <i class="fas fa-info-circle"></i> Detaylar
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div id="details-modal" class="modal">
+        <div class="modal-content">
+          <h2>Kullanıcı Detayları</h2>
+          <p><strong>Ad Soyad:</strong> <span id="detail-name"></span></p>
+          <p><strong>E-posta:</strong> <span id="detail-email"></span></p>
+          <p><strong>Adres:</strong> <span id="detail-address"></span></p>
+          <p><strong>Telefon:</strong> <span id="detail-phone"></span></p>
+          <button class="button button-assign-customer" onclick="closeModal()">Kapat</button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function assignRole(button, role) {
+        const row = button.closest("tr");
+        const name = row.children[1].textContent;
+        const email = row.children[2].textContent;
+
+        const userTableBody = document.getElementById("user-table-body");
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+          <td>${row.dataset.id}</td>
+          <td>${name}</td>
+          <td>${email}</td>
+          <td>${role}</td>
+          <td>
+            <button class="button button-delete" onclick="deleteRow(this)">
+              <i class="fas fa-trash"></i> Sil
+            </button>
+            <button class="button button-assign-customer" onclick="showDetails(this)">
+              <i class="fas fa-info-circle"></i> Detaylar
+            </button>
+          </td>
+        `;
+        userTableBody.appendChild(newRow);
+        row.remove();
+      }
+
+      function deleteRow(button) {
+        if (confirm("Bu kullanıcıyı silmek istediğinize emin misiniz?")) {
+          const row = button.closest("tr");
+          row.remove();
+        }
+      }
+
+      function showDetails(button) {
+        const row = button.closest("tr");
+        const name = row.children[1].textContent;
+        const email = row.children[2].textContent;
+        const address = row.dataset.address;
+        const phone = row.dataset.phone;
+
+        document.getElementById("detail-name").textContent = name;
+        document.getElementById("detail-email").textContent = email;
+        document.getElementById("detail-address").textContent = address;
+        document.getElementById("detail-phone").textContent = phone;
+
+        document.getElementById("details-modal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("details-modal").style.display = "none";
+      }
+
+      // Mobile sidebar toggle functionality
+      function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('active');
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add any additional initialization code here
+      });
+    </script>
+  </body>
+</html>

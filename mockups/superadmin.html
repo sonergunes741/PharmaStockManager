@@ -3,78 +3,132 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Super Admin Panel - Pharma Stock Manager</title>
-    <link rel="stylesheet" href="superadmin.css" />
-    <!-- Google Fonts for improved typography -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
+    <title>Pharma Stock Management - Super Admin</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        background: linear-gradient(
+            rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0.8)
+          ),
+          url("https://www.transparenttextures.com/patterns/dark-mosaic.png");
+        background-size: cover;
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .footer {
+        background-color: var(--gray-hover);
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-top: 2rem;
+        color: var(--text);
+        font-size: 0.9rem;
+      }
+
+      .footer a {
+        color: var(--primary-blue);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      .scroll-to-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 50px;
+        height: 50px;
+        background-color: var(--primary-blue);
+        color: var(--white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .scroll-to-top:hover {
+        background-color: var(--mid-tone);
+        transform: scale(1.1);
+      }
+    </style>
   </head>
   <body>
-    <header>
-      <div class="logo">
-        <h1>Super Admin Panel</h1>
-      </div>
-    </header>
+    <div class="container">
+      <nav>
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          <div class="logo-circle">
+            <div class="pill-icon"></div>
+          </div>
+          <div class="logo-text">Pharma Stock Manager</div>
+        </a>
+        <div class="nav-links">
+          <a href="warehouse.html" class="nav-link">Warehouses</a>
+          <a href="#" class="nav-link">Users</a>
+          <a href="#" class="nav-link">Settings</a>
+        </div>
+      </nav>
 
-    <main class="admin-dashboard">
-      <div class="sidebar">
-        <h3>Ecza Depoları</h3>
-        <ul class="depo-list">
-          <li>
-            <span>İstanbul Deposu</span>
-            <button class="btn-dots">⋮</button>
-            <div class="depo-details">
-              <p><strong>Address:</strong> Zeytinburnu, İstanbul</p>
-              <p><strong>Manager:</strong> Ahmet Yılmaz</p>
-              <p><strong>Phone:</strong> +90 212 555 5555</p>
-              <p><strong>Email:</strong> istanbul.depo@example.com</p>
-              <p><strong>Client since:</strong> 01/01/2022</p>
-            </div>
-          </li>
-          <li>
-            <span>İzmir Deposu</span>
-            <button class="btn-dots">⋮</button>
-            <div class="depo-details">
-              <p><strong>Address:</strong> Bornova, İzmir</p>
-              <p><strong>Manager:</strong> Ayşe Kaya</p>
-              <p><strong>Phone:</strong> +90 232 555 5555</p>
-              <p><strong>Email:</strong> izmir.depo@example.com</p>
-              <p><strong>Client since:</strong> 15/06/2023</p>
-            </div>
-          </li>
-          <li>
-            <span>Ankara Deposu</span>
-            <button class="btn-dots">⋮</button>
-            <div class="depo-details">
-              <p><strong>Address:</strong> Çankaya, Ankara</p>
-              <p><strong>Manager:</strong> Mehmet Demir</p>
-              <p><strong>Phone:</strong> +90 312 555 5555</p>
-              <p><strong>Email:</strong> ankara.depo@example.com</p>
-              <p><strong>Client since:</strong> 05/03/2024</p>
-            </div>
-          </li>
-        </ul>
-      </div>
+      <div class="admin-dashboard">
+        <div class="dashboard-card" onclick="location.href='warehouse.html'">
+          <div class="dashboard-icon">
+            <i class="fas fa-warehouse"></i>
+          </div>
+          <h3>Manage Warehouses</h3>
+          <p>View, add, and update warehouse information.</p>
+        </div>
 
-      <div class="admin-actions">
-        <h3>Actions</h3>
-        <div class="action-grid">
-          <button class="action-card">Add New Depo</button>
-          <button class="action-card">Update Depo</button>
-          <button class="action-card">Delete Depo</button>
+        <div class="dashboard-card" onclick="location.href='manageusers.html'">
+          <div class="dashboard-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Manage Users</h3>
+          <p>Add, edit, and remove user accounts.</p>
+        </div>
+
+        <div
+          class="dashboard-card"
+          onclick="location.href='systemsettings.html'"
+        >
+          <div class="dashboard-icon">
+            <i class="fas fa-cog"></i>
+          </div>
+          <h3>System Settings</h3>
+          <p>Configure system-wide preferences.</p>
         </div>
       </div>
-    </main>
-
-    <!-- Geçici Buton: Home Ekranına Dön -->
-    <div class="temporary-buttons">
-      <a href="index.html" class="btn-red">Home Screen</a>
     </div>
 
-    <footer>
-      <p>&copy; 2024 Pharma Stock Manager. All Rights Reserved.</p>
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        Need help? Contact our <a href="support.html">support team</a> or visit
+        our <a href="faq.html">FAQ page </a>. <br />email: webwizards@gmail.com
+      </p>
+      <p>&copy; 2024 Pharma Stock Management. All rights reserved.</p>
     </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" onclick="scrollToTop()">
+      <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    </script>
   </body>
 </html>

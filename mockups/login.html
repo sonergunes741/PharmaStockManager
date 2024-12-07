@@ -1,53 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Login - Pharma Stock Manager</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header>
-      <div class="logo">
-        <h1>Pharma Stock Manager</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-          <li><a href="signup.html">Sign Up</a></li>
-        </ul>
-      </nav>
-    </header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .form-actions button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-blue);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    <main>
-      <section class="login-container">
-        <h2>Login</h2>
-        <form action="#">
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required />
-          </div>
+            .form-actions button:hover {
+                background-color: var(--primary-blue-hover);
+            }
 
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required />
-          </div>
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
 
-          <div class="form-group">
-            <label for="2fa-code">Two-Factor Authentication Code:</label>
-            <input type="text" id="2fa-code" name="2fa-code" required />
-          </div>
+            .login-link a {
+                color: var(--primary-blue);
+                text-decoration: underline;
+            }
 
-          <button type="submit">Login</button>
-        </form>
-      </section>
-    </main>
+        .hero.login-hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* Center the text horizontally */
+            background-color: #f4f4f4; /* Optional, adjust according to your design */
+        }
+        .hero-content {
+            max-width: 500px;
+            z-index: 2;
+            margin-right: 2rem;
+        }
+        .login-form {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    <footer>
-      <p>&copy; 2024 Pharma Stock Manager. All Rights Reserved.</p>
-    </footer>
-  </body>
+            .login-form form {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .login-form label {
+                margin-top: 1rem;
+                font-weight: bold;
+            }
+
+            .login-form input {
+                padding: 0.75rem;
+                margin-top: 0.5rem;
+                border: 1px solid var(--gray-hover);
+                border-radius: 6px;
+            }
+
+    </style>
+    <title>Login - PharmaStockManager</title>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                  <div class="logo-circle">
+                    <div class="pill-icon"></div>
+                  </div>
+                <a>
+                <span class="logo-text">Pharma Stock Manager</span>
+              </div>
+            <div class="nav-links">
+                <a href="About.html" class="nav-link">About Us</a>
+                <a href="Contact.html" class="nav-link">Contact</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="Register.html" <button class="button button-primary">Sign Up</button></a>
+            </div>
+        </nav>
+
+        <header class="hero login-hero">
+            <div class="hero-content">
+                <h1>Login</h1>
+                <p>Welcome back! Please log in to access your account.</p>
+            </div>
+        </header>
+
+        <section class="login-form">
+            <!-- Regular Login Form -->
+            <form action="index.html" method="get">
+                <div>
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="Enter your email" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Login</button>
+                    <a href="ForgotPassword.html" class="link-secondary">Forgot Password?</a>
+                </div>
+            </form>
+            
+
+            <div class="register-link">
+                <p>Don't have an account? <a href="Register.html">Sign up</a></p>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+</body>
 </html>
