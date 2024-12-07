@@ -1,142 +1,51 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pharma Stock Manager</title>
-    <link rel="stylesheet" href="/css/styles2.css" />
-    <style>
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
 
-        .super-admin-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: red;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-family: inherit;
-            z-index: 1000;
-            transition: background-color 0.3s ease;
-        }
+<h1>Dashboard</h1>
 
-            .super-admin-button:hover {
-                background-color: darkred;
-            }
-    </style>
-</head>
-<body>
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator">
-        <button id="scroll-button"
-                class="scroll-button"
-                aria-label="Scroll to bottom">
-            <svg class="scroll-arrow"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
-                <path d="M7 13l5 5 5-5" />
-                <path d="M7 6l5 5 5-5" />
-            </svg>
-        </button>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Drugs</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var drug in Model.Drugs)
+                {
+                    <tr>
+                        <td>@drug.Name</td>
+                        <td>@drug.Category</td>
+                        <td>@drug.Quantity</td>
+                        <td>@drug.UnitPrice</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h2>Categories</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model.Categories)
+                {
+                    <tr>
+                        <td>@category.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 
-    <div class="container">
-        
-
-        <main>
-            <section class="hero">
-                <div class="hero-content">
-                    <h1>Pharmaceutical Warehouse Stock Management</h1>
-                    <p>
-                        Optimize and streamline your warehouse operations with a smart
-                        system designed to manage pharmaceutical stocks efficiently.
-                    </p>
-                    <div class="cta-buttons">
-                        <button class="button button-primary">Get Started</button>
-                        <button class="button button-secondary">Watch Demo</button>
-                    </div>
-                </div>
-                <div class="hero-circles">
-                    <!-- Manager Icon -->
-                    <div class="circle circle-1">
-                        <button class="circle-button"
-                                onclick="location.href='dashboard.html'">
-                            <img src="/icons/icon-1.png" alt="Manager Icon" class="role-icon" />
-                            <div class="role-text">Manager</div>
-                        </button>
-                    </div>
-
-                    <!-- Employee Icon -->
-                    <div class="circle circle-2">
-                        <button class="circle-button"
-                                onclick="location.href='employee.html'">
-                            <img src="/icons/icon-2.png" alt="Employee Icon" class="role-icon" />
-                            <div class="role-text">Employee</div>
-                        </button>
-                    </div>
-
-                    <!-- Customer Icon -->
-                    <div class="circle circle-3">
-                        <button class="circle-button"
-                                onclick="location.href='user_dashboard.html'">
-                            <img src="/icons/icon-3.png" alt="Customer Icon" class="role-icon" />
-                            <div class="role-text">Customer</div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="features">
-                <div class="feature-card">
-                    <div class="feature-icon"></div>
-                    <h3>Inventory Tracking</h3>
-                    <p>Real-time monitoring of your pharmaceutical stock levels</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"></div>
-                    <h3>Smart Analytics</h3>
-                    <p>Data-driven insights for better inventory decisions</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"></div>
-                    <h3>Enhanced User Experience</h3>
-                    <p>
-                        User-focused design for easy navigation and efficient task
-                        management.
-                    </p>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Scroll to Bottom Script -->
-    <script>
-        document.getElementById("scroll-button").addEventListener("click", () => {
-          window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: "smooth",
-          });
-        });
-
-        // Hide scroll indicator when reaching the last section
-        window.addEventListener("scroll", () => {
-          const scrollIndicator = document.querySelector(".scroll-indicator");
-          const bottomReached =
-            window.innerHeight + window.scrollY >=
-            document.documentElement.scrollHeight - 100;
-
-          scrollIndicator.style.opacity = bottomReached ? "0" : "1";
-          scrollIndicator.style.pointerEvents = bottomReached ? "none" : "all";
-        });
-    </script>
-
-    <!-- Super Admin Button -->
-    <a href="superadmin.html" class="super-admin-button">Super Admin</a>
-</body>
-</html>
+</div>
