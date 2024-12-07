@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {}
+    "C:\\Users\\soner\\Masaüstü\\proje\\PharmaStockManager\\PharmaStockManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {
+    "C:\\Users\\soner\\Masaüstü\\proje\\PharmaStockManager\\PharmaStockManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+        "projectUniqueName": "C:\\Users\\soner\\Masaüstü\\proje\\PharmaStockManager\\PharmaStockManager.csproj",
         "projectName": "PharmaStockManager",
-        "projectPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
-        "packagesPath": "C:\\Users\\Hrist\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\obj\\",
+        "projectPath": "C:\\Users\\soner\\Masaüstü\\proje\\PharmaStockManager\\PharmaStockManager.csproj",
+        "packagesPath": "C:\\Users\\soner\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\soner\\Masaüstü\\proje\\PharmaStockManager\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Hrist\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\soner\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -108,7 +108,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.402/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
