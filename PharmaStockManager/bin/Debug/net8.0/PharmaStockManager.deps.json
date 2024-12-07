@@ -14,12 +14,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.8",
           "Microsoft.EntityFrameworkCore.Sqlite": "8.0.8",
           "Microsoft.EntityFrameworkCore.Tools": "8.0.8",
-<<<<<<< HEAD
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "8.0.5",
-          "NETCore.MailKit": "2.1.0"
-=======
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "8.0.6"
->>>>>>> unals
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "8.0.6",
+          "NETCore.MailKit": "2.1.0",
+          "QRCoder": "1.6.0",
+          "System.Drawing.Common": "9.0.0"
         },
         "runtime": {
           "PharmaStockManager.dll": {}
@@ -31,13 +29,8 @@
           "System.Diagnostics.DiagnosticSource": "6.0.1",
           "System.Memory.Data": "1.0.2",
           "System.Numerics.Vectors": "4.5.0",
-<<<<<<< HEAD
-          "System.Text.Encodings.Web": "8.0.0",
-          "System.Text.Json": "8.0.4",
-=======
           "System.Text.Encodings.Web": "7.0.0",
           "System.Text.Json": "7.0.3",
->>>>>>> unals
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "runtime": {
@@ -54,11 +47,7 @@
           "Microsoft.Identity.Client.Extensions.Msal": "4.56.0",
           "System.Memory": "4.5.4",
           "System.Security.Cryptography.ProtectedData": "7.0.0",
-<<<<<<< HEAD
-          "System.Text.Json": "8.0.4",
-=======
           "System.Text.Json": "7.0.3",
->>>>>>> unals
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "runtime": {
@@ -608,7 +597,6 @@
           }
         }
       },
-<<<<<<< HEAD
       "MailKit/3.2.0": {
         "dependencies": {
           "MimeKit": "3.2.0"
@@ -620,8 +608,6 @@
           }
         }
       },
-=======
->>>>>>> unals
       "Microsoft.AspNetCore.Cryptography.Internal/8.0.8": {
         "runtime": {
           "lib/net8.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {
@@ -955,11 +941,7 @@
           "Microsoft.CodeAnalysis.Scripting.Common": "4.8.0",
           "Microsoft.CodeAnalysis.Workspaces.Common": "4.8.0",
           "Microsoft.DiaSymReader": "2.0.0",
-<<<<<<< HEAD
-          "System.Text.Json": "8.0.4"
-=======
           "System.Text.Json": "7.0.3"
->>>>>>> unals
         },
         "runtime": {
           "lib/net7.0/Microsoft.CodeAnalysis.Features.dll": {
@@ -1146,11 +1128,7 @@
           "System.Security.Cryptography.Cng": "5.0.0",
           "System.Security.Principal.Windows": "5.0.0",
           "System.Text.Encoding.CodePages": "6.0.0",
-<<<<<<< HEAD
-          "System.Text.Encodings.Web": "8.0.0"
-=======
           "System.Text.Encodings.Web": "7.0.0"
->>>>>>> unals
         },
         "runtime": {
           "lib/net6.0/Microsoft.Data.SqlClient.dll": {
@@ -1216,21 +1194,6 @@
           }
         }
       },
-<<<<<<< HEAD
-      "Microsoft.DotNet.Scaffolding.Shared/8.0.5": {
-        "dependencies": {
-          "Humanizer": "2.14.1",
-          "Microsoft.CodeAnalysis.CSharp.Features": "4.8.0",
-          "Microsoft.Extensions.DependencyModel": "8.0.1",
-          "Mono.TextTemplating": "2.3.1",
-          "Newtonsoft.Json": "13.0.3",
-          "NuGet.ProjectModel": "6.11.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.DotNet.Scaffolding.Shared.dll": {
-            "assemblyVersion": "8.0.5.0",
-            "fileVersion": "8.0.524.45501"
-=======
       "Microsoft.DotNet.Scaffolding.Shared/8.0.6": {
         "dependencies": {
           "Humanizer": "2.14.1",
@@ -1245,7 +1208,6 @@
           "lib/netstandard2.0/Microsoft.DotNet.Scaffolding.Shared.dll": {
             "assemblyVersion": "8.0.6.0",
             "fileVersion": "8.0.624.50704"
->>>>>>> unals
           }
         }
       },
@@ -1277,11 +1239,7 @@
           "Humanizer.Core": "2.14.1",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.8.0",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.8",
-<<<<<<< HEAD
-          "Microsoft.Extensions.DependencyModel": "8.0.1",
-=======
           "Microsoft.Extensions.DependencyModel": "8.0.2",
->>>>>>> unals
           "Mono.TextTemplating": "2.3.1"
         },
         "runtime": {
@@ -1313,11 +1271,7 @@
         "dependencies": {
           "Microsoft.Data.Sqlite.Core": "8.0.8",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.8",
-<<<<<<< HEAD
-          "Microsoft.Extensions.DependencyModel": "8.0.1"
-=======
           "Microsoft.Extensions.DependencyModel": "8.0.2"
->>>>>>> unals
         },
         "runtime": {
           "lib/net8.0/Microsoft.EntityFrameworkCore.Sqlite.dll": {
@@ -1351,11 +1305,7 @@
       "Microsoft.Extensions.Caching.Memory/8.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Caching.Abstractions": "8.0.0",
-<<<<<<< HEAD
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
-=======
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2",
->>>>>>> unals
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
           "Microsoft.Extensions.Options": "8.0.2",
           "Microsoft.Extensions.Primitives": "8.0.0"
@@ -1366,23 +1316,6 @@
           "Microsoft.Extensions.Primitives": "8.0.0"
         }
       },
-<<<<<<< HEAD
-      "Microsoft.Extensions.DependencyInjection/8.0.0": {
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {},
-      "Microsoft.Extensions.DependencyModel/8.0.1": {
-        "dependencies": {
-          "System.Text.Encodings.Web": "8.0.0",
-          "System.Text.Json": "8.0.4"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.DependencyModel.dll": {
-            "assemblyVersion": "8.0.0.1",
-            "fileVersion": "8.0.724.31311"
-=======
       "Microsoft.Extensions.DependencyInjection/8.0.1": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2"
@@ -1407,7 +1340,6 @@
           "lib/net8.0/Microsoft.Extensions.DependencyModel.dll": {
             "assemblyVersion": "8.0.0.2",
             "fileVersion": "8.0.1024.46610"
->>>>>>> unals
           }
         }
       },
@@ -1455,31 +1387,19 @@
       },
       "Microsoft.Extensions.Logging/8.0.0": {
         "dependencies": {
-<<<<<<< HEAD
-          "Microsoft.Extensions.DependencyInjection": "8.0.0",
-=======
           "Microsoft.Extensions.DependencyInjection": "8.0.1",
->>>>>>> unals
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
           "Microsoft.Extensions.Options": "8.0.2"
         }
       },
       "Microsoft.Extensions.Logging.Abstractions/8.0.0": {
         "dependencies": {
-<<<<<<< HEAD
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
-=======
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2"
->>>>>>> unals
         }
       },
       "Microsoft.Extensions.Options/8.0.2": {
         "dependencies": {
-<<<<<<< HEAD
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
-=======
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2",
->>>>>>> unals
           "Microsoft.Extensions.Primitives": "8.0.0"
         },
         "runtime": {
@@ -1526,13 +1446,8 @@
         "dependencies": {
           "Microsoft.IdentityModel.Tokens": "6.35.0",
           "System.Text.Encoding": "4.3.0",
-<<<<<<< HEAD
-          "System.Text.Encodings.Web": "8.0.0",
-          "System.Text.Json": "8.0.4"
-=======
           "System.Text.Encodings.Web": "7.0.0",
           "System.Text.Json": "7.0.3"
->>>>>>> unals
         },
         "runtime": {
           "lib/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
@@ -1607,24 +1522,6 @@
           }
         }
       },
-<<<<<<< HEAD
-      "Microsoft.VisualStudio.Web.CodeGeneration/8.0.5": {
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection": "8.0.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore": "8.0.5"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.dll": {
-            "assemblyVersion": "8.0.5.0",
-            "fileVersion": "8.0.524.45501"
-          }
-        }
-      },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Core/8.0.5": {
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection": "8.0.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "8.0.5",
-=======
       "Microsoft.VisualStudio.Web.CodeGeneration/8.0.6": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "8.0.1",
@@ -1641,43 +1538,10 @@
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "8.0.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "8.0.6",
->>>>>>> unals
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
           "lib/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll": {
-<<<<<<< HEAD
-            "assemblyVersion": "8.0.5.0",
-            "fileVersion": "8.0.524.45501"
-          }
-        }
-      },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design/8.0.5": {
-        "dependencies": {
-          "Microsoft.DotNet.Scaffolding.Shared": "8.0.5",
-          "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "8.0.5"
-        },
-        "runtime": {
-          "lib/net8.0/dotnet-aspnet-codegenerator-design.dll": {
-            "assemblyVersion": "8.0.5.0",
-            "fileVersion": "8.0.524.45501"
-          }
-        }
-      },
-      "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/8.0.5": {
-        "dependencies": {
-          "Microsoft.DotNet.Scaffolding.Shared": "8.0.5",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Core": "8.0.5"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll": {
-            "assemblyVersion": "8.0.5.0",
-            "fileVersion": "8.0.524.45501"
-          }
-        }
-      },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Templating/8.0.5": {
-=======
             "assemblyVersion": "8.0.6.0",
             "fileVersion": "8.0.624.50704"
           }
@@ -1708,27 +1572,10 @@
         }
       },
       "Microsoft.VisualStudio.Web.CodeGeneration.Templating/8.0.6": {
->>>>>>> unals
         "dependencies": {
           "Microsoft.AspNetCore.Razor.Language": "6.0.24",
           "Microsoft.CodeAnalysis.CSharp": "4.8.0",
           "Microsoft.CodeAnalysis.Razor": "6.0.24",
-<<<<<<< HEAD
-          "Microsoft.VisualStudio.Web.CodeGeneration.Utils": "8.0.5"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll": {
-            "assemblyVersion": "8.0.5.0",
-            "fileVersion": "8.0.524.45501"
-          }
-        }
-      },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Utils/8.0.5": {
-        "dependencies": {
-          "Microsoft.Build": "17.8.3",
-          "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.8.0",
-          "Microsoft.DotNet.Scaffolding.Shared": "8.0.5",
-=======
           "Microsoft.VisualStudio.Web.CodeGeneration.Utils": "8.0.6"
         },
         "runtime": {
@@ -1743,27 +1590,10 @@
           "Microsoft.Build": "17.8.3",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.8.0",
           "Microsoft.DotNet.Scaffolding.Shared": "8.0.6",
->>>>>>> unals
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
           "lib/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll": {
-<<<<<<< HEAD
-            "assemblyVersion": "8.0.5.0",
-            "fileVersion": "8.0.524.45501"
-          }
-        }
-      },
-      "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/8.0.5": {
-        "dependencies": {
-          "Microsoft.DotNet.Scaffolding.Shared": "8.0.5",
-          "Microsoft.VisualStudio.Web.CodeGeneration": "8.0.5"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll": {
-            "assemblyVersion": "8.0.5.0",
-            "fileVersion": "8.0.524.45501"
-=======
             "assemblyVersion": "8.0.6.0",
             "fileVersion": "8.0.624.50704"
           }
@@ -1778,27 +1608,25 @@
           "lib/net8.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll": {
             "assemblyVersion": "8.0.6.0",
             "fileVersion": "8.0.624.50704"
->>>>>>> unals
           }
         }
       },
-      "Microsoft.Win32.SystemEvents/7.0.0": {
+      "Microsoft.Win32.SystemEvents/9.0.0": {
         "runtime": {
-          "lib/net7.0/Microsoft.Win32.SystemEvents.dll": {
-            "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.22.51805"
+          "lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
           }
         },
         "runtimeTargets": {
-          "runtimes/win/lib/net7.0/Microsoft.Win32.SystemEvents.dll": {
+          "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
             "rid": "win",
             "assetType": "runtime",
-            "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.22.51805"
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
           }
         }
       },
-<<<<<<< HEAD
       "MimeKit/3.2.0": {
         "dependencies": {
           "Portable.BouncyCastle": "1.9.0",
@@ -1811,8 +1639,6 @@
           }
         }
       },
-=======
->>>>>>> unals
       "Mono.TextTemplating/2.3.1": {
         "dependencies": {
           "System.CodeDom": "5.0.0"
@@ -1824,11 +1650,10 @@
           }
         }
       },
-<<<<<<< HEAD
       "NETCore.MailKit/2.1.0": {
         "dependencies": {
           "MailKit": "3.2.0",
-          "Microsoft.Extensions.DependencyInjection": "8.0.0"
+          "Microsoft.Extensions.DependencyInjection": "8.0.1"
         },
         "runtime": {
           "lib/netstandard2.1/NETCore.MailKit.dll": {
@@ -1837,8 +1662,6 @@
           }
         }
       },
-=======
->>>>>>> unals
       "Newtonsoft.Json/13.0.3": {
         "runtime": {
           "lib/net6.0/Newtonsoft.Json.dll": {
@@ -1947,7 +1770,6 @@
           }
         }
       },
-<<<<<<< HEAD
       "Portable.BouncyCastle/1.9.0": {
         "runtime": {
           "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
@@ -1956,8 +1778,14 @@
           }
         }
       },
-=======
->>>>>>> unals
+      "QRCoder/1.6.0": {
+        "runtime": {
+          "lib/net6.0/QRCoder.dll": {
+            "assemblyVersion": "1.6.0.0",
+            "fileVersion": "1.6.0.0"
+          }
+        }
+      },
       "SQLitePCLRaw.bundle_e_sqlite3/2.1.6": {
         "dependencies": {
           "SQLitePCLRaw.lib.e_sqlite3": "2.1.6",
@@ -2185,30 +2013,22 @@
         }
       },
       "System.Diagnostics.EventLog/7.0.0": {},
-      "System.Drawing.Common/7.0.0": {
+      "System.Drawing.Common/9.0.0": {
         "dependencies": {
-          "Microsoft.Win32.SystemEvents": "7.0.0"
+          "Microsoft.Win32.SystemEvents": "9.0.0"
         },
         "runtime": {
-          "lib/net7.0/System.Drawing.Common.dll": {
-            "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.22.51805"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net7.0/System.Drawing.Common.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.22.51805"
+          "lib/net8.0/System.Drawing.Common.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52901"
+          },
+          "lib/net8.0/System.Private.Windows.Core.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52901"
           }
         }
       },
-<<<<<<< HEAD
-      "System.Formats.Asn1/6.0.0": {},
-=======
       "System.Formats.Asn1/8.0.1": {},
->>>>>>> unals
       "System.IdentityModel.Tokens.Jwt/6.35.0": {
         "dependencies": {
           "Microsoft.IdentityModel.JsonWebTokens": "6.35.0",
@@ -2231,13 +2051,8 @@
       "System.Memory/4.5.4": {},
       "System.Memory.Data/1.0.2": {
         "dependencies": {
-<<<<<<< HEAD
-          "System.Text.Encodings.Web": "8.0.0",
-          "System.Text.Json": "8.0.4"
-=======
           "System.Text.Encodings.Web": "7.0.0",
           "System.Text.Json": "7.0.3"
->>>>>>> unals
         },
         "runtime": {
           "lib/netstandard2.0/System.Memory.Data.dll": {
@@ -2298,20 +2113,12 @@
       },
       "System.Security.Cryptography.Cng/5.0.0": {
         "dependencies": {
-<<<<<<< HEAD
-          "System.Formats.Asn1": "6.0.0"
-=======
           "System.Formats.Asn1": "8.0.1"
->>>>>>> unals
         }
       },
       "System.Security.Cryptography.Pkcs/6.0.4": {
         "dependencies": {
-<<<<<<< HEAD
-          "System.Formats.Asn1": "6.0.0"
-=======
           "System.Formats.Asn1": "8.0.1"
->>>>>>> unals
         }
       },
       "System.Security.Cryptography.ProtectedData/7.0.0": {
@@ -2354,17 +2161,10 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
       },
-<<<<<<< HEAD
-      "System.Text.Encodings.Web/8.0.0": {},
-      "System.Text.Json/8.0.4": {
-        "dependencies": {
-          "System.Text.Encodings.Web": "8.0.0"
-=======
       "System.Text.Encodings.Web/7.0.0": {},
       "System.Text.Json/7.0.3": {
         "dependencies": {
           "System.Text.Encodings.Web": "7.0.0"
->>>>>>> unals
         }
       },
       "System.Threading.Channels/7.0.0": {},
@@ -2372,7 +2172,7 @@
       "System.Threading.Tasks.Extensions/4.5.4": {},
       "System.Windows.Extensions/7.0.0": {
         "dependencies": {
-          "System.Drawing.Common": "7.0.0"
+          "System.Drawing.Common": "9.0.0"
         },
         "runtime": {
           "lib/net7.0/System.Windows.Extensions.dll": {
@@ -2761,7 +2561,6 @@
       "path": "humanizer.core.zh-hant/2.14.1",
       "hashPath": "humanizer.core.zh-hant.2.14.1.nupkg.sha512"
     },
-<<<<<<< HEAD
     "MailKit/3.2.0": {
       "type": "package",
       "serviceable": true,
@@ -2769,8 +2568,6 @@
       "path": "mailkit/3.2.0",
       "hashPath": "mailkit.3.2.0.nupkg.sha512"
     },
-=======
->>>>>>> unals
     "Microsoft.AspNetCore.Cryptography.Internal/8.0.8": {
       "type": "package",
       "serviceable": true,
@@ -2939,21 +2736,12 @@
       "path": "microsoft.diasymreader/2.0.0",
       "hashPath": "microsoft.diasymreader.2.0.0.nupkg.sha512"
     },
-<<<<<<< HEAD
-    "Microsoft.DotNet.Scaffolding.Shared/8.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-JTPBNbKKjzV4nw2WpS9i5+MCAQqWhe1QA8zsVJTUzR2RIEzqJSM9SyQZckKTfY4tJYGpO44hzAm14uhU0Z2zEA==",
-      "path": "microsoft.dotnet.scaffolding.shared/8.0.5",
-      "hashPath": "microsoft.dotnet.scaffolding.shared.8.0.5.nupkg.sha512"
-=======
     "Microsoft.DotNet.Scaffolding.Shared/8.0.6": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-b8pT7zwT2Fy1DVMdYO2whegbOnXW3OzfudI91QEg7yZTQch4nNH/xoMOamQR/UzESJjdkpouFEnAxGYv0aSAIQ==",
       "path": "microsoft.dotnet.scaffolding.shared/8.0.6",
       "hashPath": "microsoft.dotnet.scaffolding.shared.8.0.6.nupkg.sha512"
->>>>>>> unals
     },
     "Microsoft.EntityFrameworkCore/8.0.8": {
       "type": "package",
@@ -3039,28 +2827,6 @@
       "path": "microsoft.extensions.configuration.abstractions/8.0.0",
       "hashPath": "microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512"
     },
-<<<<<<< HEAD
-    "Microsoft.Extensions.DependencyInjection/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-V8S3bsm50ig6JSyrbcJJ8bW2b9QLGouz+G1miK3UTaOWmMtFwNNNzUf4AleyDWUmTrWMLNnFSLEQtxmxgNQnNQ==",
-      "path": "microsoft.extensions.dependencyinjection/8.0.0",
-      "hashPath": "microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-cjWrLkJXK0rs4zofsK4bSdg+jhDLTaxrkXu4gS6Y7MAlCvRyNNgwY/lJi5RDlQOnSZweHqoyvgvbdvQsRIW+hg==",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/8.0.0",
-      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.DependencyModel/8.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-5Ou6varcxLBzQ+Agfm0k0pnH7vrEITYlXMDuE6s7ZHlZHz6/G8XJ3iISZDr5rfwfge6RnXJ1+Wc479mMn52vjA==",
-      "path": "microsoft.extensions.dependencymodel/8.0.1",
-      "hashPath": "microsoft.extensions.dependencymodel.8.0.1.nupkg.sha512"
-=======
     "Microsoft.Extensions.DependencyInjection/8.0.1": {
       "type": "package",
       "serviceable": true,
@@ -3081,7 +2847,6 @@
       "sha512": "sha512-mUBDZZRgZrSyFOsJ2qJJ9fXfqd/kXJwf3AiDoqLD9m6TjY5OO/vLNOb9fb4juC0487eq4hcGN/M2Rh/CKS7QYw==",
       "path": "microsoft.extensions.dependencymodel/8.0.2",
       "hashPath": "microsoft.extensions.dependencymodel.8.0.2.nupkg.sha512"
->>>>>>> unals
     },
     "Microsoft.Extensions.FileProviders.Abstractions/8.0.0": {
       "type": "package",
@@ -3223,56 +2988,6 @@
       "path": "microsoft.sqlserver.server/1.0.0",
       "hashPath": "microsoft.sqlserver.server.1.0.0.nupkg.sha512"
     },
-<<<<<<< HEAD
-    "Microsoft.VisualStudio.Web.CodeGeneration/8.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-EffwYVdPlMAoqPCkoezF2nIyBSvgOViz+pK77IBvKWUjPAELxJtMQpYj07soK6igUvCRU1wC91a2YuTNXMqurA==",
-      "path": "microsoft.visualstudio.web.codegeneration/8.0.5",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.8.0.5.nupkg.sha512"
-    },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Core/8.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-7zvFlCdJESRyv2JKqaygC5eH/5VsLhX792h1dW2NoUt12oQ7RHCmANq7Y0xOUA1hcdxoTySbz4pY6FRCgw1NPw==",
-      "path": "microsoft.visualstudio.web.codegeneration.core/8.0.5",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.core.8.0.5.nupkg.sha512"
-    },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Design/8.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-HvLrIbZDPXD4n6kyk44O1nnzpQ6lExP/2zwl/Hj+Bpefrvl/l7QcsZKZXG6w4iDSSzseTKcIsOKBiQRua2WPtw==",
-      "path": "microsoft.visualstudio.web.codegeneration.design/8.0.5",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.design.8.0.5.nupkg.sha512"
-    },
-    "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/8.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-qd6RAfT95rPUHJ70IswMcPYJYeeey9ZhkRGJ5LV9UE0hxmEo57sBny+X1SFOdtEH8sVQykkMJNtFAl+DPrLb0A==",
-      "path": "microsoft.visualstudio.web.codegeneration.entityframeworkcore/8.0.5",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.entityframeworkcore.8.0.5.nupkg.sha512"
-    },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Templating/8.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-PGAjxJA2HOJg2RyJwaK63I4nFEnhrfJ0AG7zhm4fCKa7fYezgV/VmZxv+sTcoYDk3V5etlHYY2OeEoLL6cs1Bg==",
-      "path": "microsoft.visualstudio.web.codegeneration.templating/8.0.5",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.templating.8.0.5.nupkg.sha512"
-    },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Utils/8.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-V7uAdZ+geRgojDkNzvijiIrJlZQWn5ZYktM1KK/C6gQWyBd7y5TNxINqx+vTZ1I9LDMLd5qkzsOQVI/5PXBjGw==",
-      "path": "microsoft.visualstudio.web.codegeneration.utils/8.0.5",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.utils.8.0.5.nupkg.sha512"
-    },
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/8.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-/5vTiByG62vaoyKh2/+Jho0R45pr8yBQj3kybIsLRRm0ieQp4SDlhKWwIF1C/xSs9MvjNa0cEnoXzNGcGPz0nQ==",
-      "path": "microsoft.visualstudio.web.codegenerators.mvc/8.0.5",
-      "hashPath": "microsoft.visualstudio.web.codegenerators.mvc.8.0.5.nupkg.sha512"
-=======
     "Microsoft.VisualStudio.Web.CodeGeneration/8.0.6": {
       "type": "package",
       "serviceable": true,
@@ -3321,16 +3036,14 @@
       "sha512": "sha512-ZuW+GFb9dod2CiGgQJ+zPD7/kJdUsKw1cB8b5auhIXyGl2Yf9dCQ7vqTNWYjqQ7GKEf8mBeqZgqGY7JQ+5b4bg==",
       "path": "microsoft.visualstudio.web.codegenerators.mvc/8.0.6",
       "hashPath": "microsoft.visualstudio.web.codegenerators.mvc.8.0.6.nupkg.sha512"
->>>>>>> unals
     },
-    "Microsoft.Win32.SystemEvents/7.0.0": {
+    "Microsoft.Win32.SystemEvents/9.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2nXPrhdAyAzir0gLl8Yy8S5Mnm/uBSQQA7jEsILOS1MTyS7DbmV1NgViMtvV1sfCD1ebITpNwb1NIinKeJgUVQ==",
-      "path": "microsoft.win32.systemevents/7.0.0",
-      "hashPath": "microsoft.win32.systemevents.7.0.0.nupkg.sha512"
+      "sha512": "sha512-z8FfGIaoeALdD+KF44A2uP8PZIQQtDGiXsOLuN8nohbKhkyKt7zGaZb+fKiCxTuBqG22Q7myIAioSWaIcOOrOw==",
+      "path": "microsoft.win32.systemevents/9.0.0",
+      "hashPath": "microsoft.win32.systemevents.9.0.0.nupkg.sha512"
     },
-<<<<<<< HEAD
     "MimeKit/3.2.0": {
       "type": "package",
       "serviceable": true,
@@ -3338,8 +3051,6 @@
       "path": "mimekit/3.2.0",
       "hashPath": "mimekit.3.2.0.nupkg.sha512"
     },
-=======
->>>>>>> unals
     "Mono.TextTemplating/2.3.1": {
       "type": "package",
       "serviceable": true,
@@ -3347,7 +3058,6 @@
       "path": "mono.texttemplating/2.3.1",
       "hashPath": "mono.texttemplating.2.3.1.nupkg.sha512"
     },
-<<<<<<< HEAD
     "NETCore.MailKit/2.1.0": {
       "type": "package",
       "serviceable": true,
@@ -3355,8 +3065,6 @@
       "path": "netcore.mailkit/2.1.0",
       "hashPath": "netcore.mailkit.2.1.0.nupkg.sha512"
     },
-=======
->>>>>>> unals
     "Newtonsoft.Json/13.0.3": {
       "type": "package",
       "serviceable": true,
@@ -3427,7 +3135,6 @@
       "path": "nuget.versioning/6.11.0",
       "hashPath": "nuget.versioning.6.11.0.nupkg.sha512"
     },
-<<<<<<< HEAD
     "Portable.BouncyCastle/1.9.0": {
       "type": "package",
       "serviceable": true,
@@ -3435,8 +3142,13 @@
       "path": "portable.bouncycastle/1.9.0",
       "hashPath": "portable.bouncycastle.1.9.0.nupkg.sha512"
     },
-=======
->>>>>>> unals
+    "QRCoder/1.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XmPA81eo+oRxBuyVdswsSkTGTE1d3thfF11Z1PdD7oB56A6HU4G4AAOdySmGRMb/cljwlFTMWUtosGEnwpS6GA==",
+      "path": "qrcoder/1.6.0",
+      "hashPath": "qrcoder.1.6.0.nupkg.sha512"
+    },
     "SQLitePCLRaw.bundle_e_sqlite3/2.1.6": {
       "type": "package",
       "serviceable": true,
@@ -3549,28 +3261,19 @@
       "path": "system.diagnostics.eventlog/7.0.0",
       "hashPath": "system.diagnostics.eventlog.7.0.0.nupkg.sha512"
     },
-    "System.Drawing.Common/7.0.0": {
+    "System.Drawing.Common/9.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-KIX+oBU38pxkKPxvLcLfIkOV5Ien8ReN78wro7OF5/erwcmortzeFx+iBswlh2Vz6gVne0khocQudGwaO1Ey6A==",
-      "path": "system.drawing.common/7.0.0",
-      "hashPath": "system.drawing.common.7.0.0.nupkg.sha512"
+      "sha512": "sha512-uoozjI3+dlgKh2onFJcz8aNLh6TRCPlLSh8Dbuljc8CdvqXrxHOVysJlrHvlsOCqceqGBR1wrMPxlnzzhynktw==",
+      "path": "system.drawing.common/9.0.0",
+      "hashPath": "system.drawing.common.9.0.0.nupkg.sha512"
     },
-<<<<<<< HEAD
-    "System.Formats.Asn1/6.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-T6fD00dQ3NTbPDy31m4eQUwKW84s03z0N2C8HpOklyeaDgaJPa/TexP4/SkORMSOwc7WhKifnA6Ya33AkzmafA==",
-      "path": "system.formats.asn1/6.0.0",
-      "hashPath": "system.formats.asn1.6.0.0.nupkg.sha512"
-=======
     "System.Formats.Asn1/8.0.1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-XqKba7Mm/koKSjKMfW82olQdmfbI5yqeoLV/tidRp7fbh5rmHAQ5raDI/7SU0swTzv+jgqtUGkzmFxuUg0it1A==",
       "path": "system.formats.asn1/8.0.1",
       "hashPath": "system.formats.asn1.8.0.1.nupkg.sha512"
->>>>>>> unals
     },
     "System.IdentityModel.Tokens.Jwt/6.35.0": {
       "type": "package",
@@ -3705,21 +3408,6 @@
       "path": "system.text.encoding.codepages/6.0.0",
       "hashPath": "system.text.encoding.codepages.6.0.0.nupkg.sha512"
     },
-<<<<<<< HEAD
-    "System.Text.Encodings.Web/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-yev/k9GHAEGx2Rg3/tU6MQh4HGBXJs70y7j1LaM1i/ER9po+6nnQ6RRqTJn1E7Xu0fbIFK80Nh5EoODxrbxwBQ==",
-      "path": "system.text.encodings.web/8.0.0",
-      "hashPath": "system.text.encodings.web.8.0.0.nupkg.sha512"
-    },
-    "System.Text.Json/8.0.4": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-bAkhgDJ88XTsqczoxEMliSrpijKZHhbJQldhAmObj/RbrN3sU5dcokuXmWJWsdQAhiMJ9bTayWsL1C9fbbCRhw==",
-      "path": "system.text.json/8.0.4",
-      "hashPath": "system.text.json.8.0.4.nupkg.sha512"
-=======
     "System.Text.Encodings.Web/7.0.0": {
       "type": "package",
       "serviceable": true,
@@ -3733,7 +3421,6 @@
       "sha512": "sha512-AyjhwXN1zTFeIibHimfJn6eAsZ7rTBib79JQpzg8WAuR/HKDu9JGNHTuu3nbbXQ/bgI+U4z6HtZmCHNXB1QXrQ==",
       "path": "system.text.json/7.0.3",
       "hashPath": "system.text.json.7.0.3.nupkg.sha512"
->>>>>>> unals
     },
     "System.Threading.Channels/7.0.0": {
       "type": "package",

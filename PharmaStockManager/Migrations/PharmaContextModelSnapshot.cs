@@ -242,11 +242,7 @@ namespace PharmaStockManager.Migrations
                         });
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("PharmaStockManager.Models.Identity.AppRole", b =>
-=======
-            modelBuilder.Entity("PharmaStockManager.Models.Request", b =>
->>>>>>> unals
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -254,7 +250,6 @@ namespace PharmaStockManager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -355,7 +350,43 @@ namespace PharmaStockManager.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-=======
+                });
+
+            modelBuilder.Entity("PharmaStockManager.Models.Permissions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("EditStocks")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StockIn")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StockOut")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("PharmaStockManager.Models.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("DrugId")
                         .HasColumnType("int");
 
@@ -378,7 +409,6 @@ namespace PharmaStockManager.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Requests");
->>>>>>> unals
                 });
 
             modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
@@ -470,6 +500,17 @@ namespace PharmaStockManager.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Permissions", b =>
+                {
+                    b.HasOne("PharmaStockManager.Models.Identity.AppUser", "User")
+                        .WithMany("Permissions")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
                 {
                     b.HasOne("PharmaStockManager.Models.Drug", "Drug")
@@ -479,6 +520,11 @@ namespace PharmaStockManager.Migrations
                         .IsRequired();
 
                     b.Navigation("Drug");
+                });
+
+            modelBuilder.Entity("PharmaStockManager.Models.Identity.AppUser", b =>
+                {
+                    b.Navigation("Permissions");
                 });
 #pragma warning restore 612, 618
         }

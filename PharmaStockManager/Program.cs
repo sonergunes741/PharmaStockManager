@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddScoped<EmailConfirmedFilter>();
 
 // Add DbContext and Identity to the services

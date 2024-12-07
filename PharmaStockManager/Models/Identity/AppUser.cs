@@ -9,5 +9,7 @@ namespace PharmaStockManager.Models.Identity
         public string? RefCode { get; set; }
         public int? ActivationCode { get; set; }
         public string? FullName { get; set; }
+
+        public ICollection<Permissions> Permissions { get; set; }
     }
 }

@@ -1,43 +1,125 @@
 ﻿@model PharmaStockManager.Models.Identity.LoginViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
-
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
- 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/styles.css">
+    <style>
+        .form-actions button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-blue);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .form-actions button:hover {
+                background-color: var(--primary-blue-hover);
+            }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+            .login-link a {
+                color: var(--primary-blue);
+                text-decoration: underline;
+            }
+
+        .hero.login-hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* Center the text horizontally */
+            background-color: #f4f4f4; /* Optional, adjust according to your design */
+        }
+    </style>
+    <title>Login - PharmaStockManager</title>
 </head>
 <body>
-    
-    <article class="mb-4">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    @using (Html.BeginForm())
-                    {
-                        <div class="mb-3">
-                            <label for="Title" class="form-label">Kullanıcı Adı</label>
-                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @id = "username", @required = "required" , @type = "email"})
-                            @Html.ValidationMessageFor(m => m.Username)
-                        </div>
-                        <div class="mb-3">
-                            <label for="Subtitle" class="form-label">şifre</label>
-                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @id = "password", @required = "required", @type = "password" })
-                            @Html.ValidationMessageFor(m => m.Password)
-                        </div>
-                        <div class="mb-3">
-                            <button type="submit" class="btn btn-primary">Giriş Yap</button>
-                        </div>
-                    }
-                    <div class="mb-3">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ForgotPassword">Şifremi unuttum</a>
-                    </div>
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="pill-icon"></div>
                 </div>
+                <span class="logo-text">Pharma Stock Manager</span>
             </div>
-        </div>
-    </article>
+            <div class="nav-links">
+                <a class="nav-links" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                <a class="nav-links" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                <a class="nav-links" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                <a class="nav-links" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+            </div>
+        </nav>
+
+        <header class="hero login-hero">
+            <div class="hero-content">
+                <h1>Login</h1>
+                <p>Welcome back! Please log in to access your account.</p>
+            </div>
+        </header>
+
+        <section class="login-form">
+            @if (ViewData["RequiresTwoFactor"] != null && (bool)ViewData["RequiresTwoFactor"])
+            {
+                <!-- 2FA Code Form -->
+                <form asp-action="Verify2faCode" asp-controller="Account" method="post">
+                    <div>
+                        <label for="code">Enter your 2FA code:</label>
+                        <input type="text" id="code" name="code" class="form-control" placeholder="Enter 6-digit code" required />
+                        <span class="text-danger">@ViewData["ErrorMessage"]</span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Verify Code</button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <!-- Regular Login Form -->
+                <form asp-action="Login" asp-controller="Account" method="post">
+                    <div>
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Enter your email" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" required />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Login</button>
+                        <a href="/Account/ForgotPassword" class="link-secondary">Forgot Password?</a>
+                    </div>
+                </form>
+            }
+
+            <div class="register-link">
+                <p>Don't have an account? <a href="/Account/Register">Sign up</a></p>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>

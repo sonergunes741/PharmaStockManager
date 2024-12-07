@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {}
+    "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {
+    "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+        "projectUniqueName": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
         "projectName": "PharmaStockManager",
-        "projectPath": "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
-        "packagesPath": "C:\\Users\\unals\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\obj\\",
+        "projectPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+        "packagesPath": "C:\\Users\\Hrist\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\unals\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Hrist\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -75,6 +75,18 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.6, )"
+            },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "QRCoder": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             }
           },
           "imports": [
@@ -96,7 +108,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

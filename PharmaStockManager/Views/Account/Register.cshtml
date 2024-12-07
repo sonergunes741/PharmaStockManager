@@ -1,53 +1,83 @@
 ﻿@model PharmaStockManager.Models.Identity.RegisterViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
-
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/styles.css">
+    <title>Register - PharmaStockManager</title>
 </head>
 <body>
-    <article class="mb-4">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    @using (Html.BeginForm())
-                    {
-                        <div class="mb-3">
-                            <label for="Title" class="form-label">Kullanıcı Adı</label>
-                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", @id = "username", @required = "required" })
-                            @Html.ValidationMessageFor(m => m.FullName)
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="Subtitle" class="form-label">Şifre</label>
-                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @id = "password", @required = "required", @type = "password" })
-                            @Html.ValidationMessageFor(m => m.Password)
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="Title" class="form-label">Eposta</label>
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "email", @type = "email" })
-                            @Html.ValidationMessageFor(m => m.Email)
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="Title" class="form-label">RefCode</label>
-                            @Html.TextBoxFor(m => m.RefCode, new { @class = "form-control", @id = "refcode"})
-                            @Html.ValidationMessageFor(m => m.RefCode)
-                        </div>
-
-                        <div class="mb-3">
-                            <button type="submit" class="btn btn-primary">Kayıt Ol</button>
-                        </div>
-                    }
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="pill-icon"></div>
                 </div>
+                <span class="logo-text">Pharma Stock Manager</span>
             </div>
-        </div>
-    </article>
+            <div class="nav-links">
+                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+            </div>
+        </nav>
+
+        <header class="hero register-hero">
+            <div class="hero-content">
+                <h1>Register</h1>
+            </div>
+        </header>
+
+        <section class="register-form">
+            <form asp-action="Register" asp-controller="Account" method="post">
+                <div>
+                    <label asp-for="FullName">Name</label>
+                    <input asp-for="FullName" class="form-control" placeholder="Enter your full name" required />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter a secure password" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="RefCode"></label>
+                    <input asp-for="RefCode" class="form-control" placeholder="Reference Code" required />
+                    <span asp-validation-for="RefCode" class="text-danger"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Register</button>
+                </div>
+            </form>
+
+            <div class="login-link">
+                <p>Already have an account? <a href="/Account/Login">Login here</a></p>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>

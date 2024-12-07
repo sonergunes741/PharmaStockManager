@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PharmaStockManager.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class mainpush : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,6 +72,19 @@ namespace PharmaStockManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Depos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Depos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Drugs",
                 columns: table => new
                 {
@@ -86,6 +99,24 @@ namespace PharmaStockManager.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Drugs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DrugId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    IsRejected = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -195,6 +226,28 @@ namespace PharmaStockManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Permissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EditStocks = table.Column<bool>(type: "bit", nullable: false),
+                    StockIn = table.Column<bool>(type: "bit", nullable: false),
+                    StockOut = table.Column<bool>(type: "bit", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Permissions_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
@@ -229,12 +282,22 @@ namespace PharmaStockManager.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Depos",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Depo A" },
+                    { 2, "Depo B" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Drugs",
                 columns: new[] { "Id", "Category", "ExpiryDate", "Name", "Quantity", "UnitPrice" },
                 values: new object[,]
                 {
                     { 1, "Painkillers", null, "Aspirin", 50, 10.0m },
-                    { 2, "Antibiotics", null, "Amoxicillin", 30, 20.0m }
+                    { 2, "Antibiotics", null, "Amoxicillin", 30, 20.0m },
+                    { 3, "Painkillers", null, "Paracetamol", 100, 8.0m }
                 });
 
             migrationBuilder.CreateIndex(
@@ -277,6 +340,11 @@ namespace PharmaStockManager.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Permissions_UserID",
+                table: "Permissions",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_DrugId",
                 table: "Transactions",
                 column: "DrugId");
@@ -302,6 +370,15 @@ namespace PharmaStockManager.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Depos");
+
+            migrationBuilder.DropTable(
+                name: "Permissions");
+
+            migrationBuilder.DropTable(
+                name: "Requests");
 
             migrationBuilder.DropTable(
                 name: "Transactions");

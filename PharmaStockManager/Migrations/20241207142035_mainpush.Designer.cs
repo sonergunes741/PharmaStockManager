@@ -12,8 +12,8 @@ using PharmaStockManager.Models;
 namespace PharmaStockManager.Migrations
 {
     [DbContext(typeof(PharmaContext))]
-    [Migration("20241104135836_123123545")]
-    partial class _123123545
+    [Migration("20241207142035_mainpush")]
+    partial class mainpush
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,36 @@ namespace PharmaStockManager.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Depos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Depos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Depo A"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Depo B"
+                        });
+                });
+
             modelBuilder.Entity("PharmaStockManager.Models.Drug", b =>
                 {
                     b.Property<int>("Id")
@@ -204,6 +234,14 @@ namespace PharmaStockManager.Migrations
                             Name = "Amoxicillin",
                             Quantity = 30,
                             UnitPrice = 20.0m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "Painkillers",
+                            Name = "Paracetamol",
+                            Quantity = 100,
+                            UnitPrice = 8.0m
                         });
                 });
 
@@ -317,6 +355,65 @@ namespace PharmaStockManager.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Permissions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("EditStocks")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StockIn")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StockOut")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("PharmaStockManager.Models.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DrugId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRejected")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Requests");
+                });
+
             modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
                 {
                     b.Property<int>("Id")
@@ -406,6 +503,17 @@ namespace PharmaStockManager.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Permissions", b =>
+                {
+                    b.HasOne("PharmaStockManager.Models.Identity.AppUser", "User")
+                        .WithMany("Permissions")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
                 {
                     b.HasOne("PharmaStockManager.Models.Drug", "Drug")
@@ -415,6 +523,11 @@ namespace PharmaStockManager.Migrations
                         .IsRequired();
 
                     b.Navigation("Drug");
+                });
+
+            modelBuilder.Entity("PharmaStockManager.Models.Identity.AppUser", b =>
+                {
+                    b.Navigation("Permissions");
                 });
 #pragma warning restore 612, 618
         }
