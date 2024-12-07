@@ -11,7 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pharma Stock Manager - Change Password</title>
     <link rel="stylesheet" href="~/css/styles.css" />
-    
 
 </head>
 <body>
@@ -74,7 +73,7 @@
                     <div>
                         <h3>Enable Two-Factor Authentication</h3>
                         <p>Scan the following QR code in your authenticator app:</p>
-                        <img src="~/uploads/qr.png" alt="QR Code" />
+                        <img src="@ViewBag.QrCodeImage" alt="Two-Factor Authentication QR Code" height="180px" width="180px" />
                         <p>Or enter this key manually:<br></br> <strong>@ViewBag.AuthenticatorKey</strong></br>
                     </div>
                     <form asp-action="VerifyAuthenticatorCode" asp-controller="Account" method="post">
@@ -89,22 +88,25 @@
 
     <!-- Scroll to Bottom Script -->
     <script>
-        document.getElementById("scroll-button").addEventListener("click", () => {
-          window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: "smooth",
-          });
+        document.getElementById("scroll-button").addEventListener("mousedown", (e) => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth",
+            });
+
+            // Ensure button remains visible during click
+            e.target.style.opacity = "1";
         });
 
-        // Hide scroll indicator when reaching the last section
+        // Existing scroll event listener remains the same
         window.addEventListener("scroll", () => {
-          const scrollIndicator = document.querySelector(".scroll-indicator");
-          const bottomReached =
-            window.innerHeight + window.scrollY >=
-            document.documentElement.scrollHeight - 100;
+            const scrollIndicator = document.querySelector(".scroll-indicator");
+            const bottomReached =
+                window.innerHeight + window.scrollY >=
+                document.documentElement.scrollHeight - 100;
 
-          scrollIndicator.style.opacity = bottomReached ? "0" : "1";
-          scrollIndicator.style.pointerEvents = bottomReached ? "none" : "all";
+            scrollIndicator.style.opacity = bottomReached ? "0" : "1";
+            scrollIndicator.style.pointerEvents = bottomReached ? "none" : "all";
         });
     </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

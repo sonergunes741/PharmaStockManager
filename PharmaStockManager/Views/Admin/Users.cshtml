@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+﻿@model IEnumerable<PharmaStockManager.Models.Identity.AppUser>
 
 @{
     ViewData["Title"] = "User Management";
@@ -21,7 +21,7 @@
                 <td>@user.Email</td>
                 <td>@user.UserName</td>
                 <td>
-                    <a class="btn btn-warning" asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
+                    <a class="btn btn-warning" asp-controller="Admin" asp-action="EditPermissions" asp-route-id="@user.Id">Edit</a>
                     <a class="btn btn-danger" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.Id">Delete</a>
                 </td>
             </tr>

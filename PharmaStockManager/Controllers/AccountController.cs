@@ -11,21 +11,28 @@ using PharmaStockManager.Filters;
 using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
 using QRCoder;
+using PharmaStockManager.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 namespace StockManager.Controllers
 {
-    
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IWebHostEnvironment _environment;
+        private readonly PharmaContext _dbContext;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IWebHostEnvironment environment)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+            IWebHostEnvironment environment, PharmaContext dbContext, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _environment = environment;
+            _dbContext = dbContext;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -37,11 +44,10 @@ namespace StockManager.Controllers
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel viewModel)
         {
-            
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(viewModel.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
                     return View();
                 }
@@ -68,21 +74,50 @@ namespace StockManager.Controllers
             return View();
         }
 
-        private static void SendPasswordResetEmail(string email, string resetLink)
+        private string SetResetLinkButton(string resetLink)
+        {
+            return $@"
+                <div style='padding: 20px; text-align: center;'>
+                <a href='{resetLink}' 
+                               target='_blank' 
+                               style='background-color: #007bff; 
+                                      color: #ffffff; 
+                                      padding: 12px 30px; 
+                                      text-decoration: none; 
+                                      border-radius: 4px; 
+                                      font-family: Arial, sans-serif; 
+                                      font-size: 16px; 
+                                      font-weight: bold; 
+                                      display: inline-block;
+                                      line-height: 1.5;
+                                      margin: 10px 0;
+                                      border: 1px solid #0056b3;'>
+                                Go to Link
+                </a>
+                </div>";
+        }
+
+
+        private void SendPasswordResetEmail(string email, string resetLink)
         {
             MimeMessage mimeMessage = new MimeMessage();
             mimeMessage.From.Add(new MailboxAddress("Admin", "webwizardssol@gmail.com"));
             mimeMessage.To.Add(new MailboxAddress("User", email));
-
             var bodyBuilder = new BodyBuilder();
-            bodyBuilder.TextBody = $"Şifrenizi Sıfırlamak için linke tıklayınız: {resetLink}";
+
+            var link = SetResetLinkButton(resetLink);
+            bodyBuilder.HtmlBody = $"<div style='font-family: Arial, sans-serif;'>Şifrenizi Sıfırlamak için linke tıklayınız:<br/><br/>{link}</div>"; // Değişen kısım
             mimeMessage.Body = bodyBuilder.ToMessageBody();
             mimeMessage.Subject = "Reset Password";
-
+            // Kalan kısım aynı kalacak
             using (var client = new MailKit.Net.Smtp.SmtpClient())
             {
-                client.Connect("smtp.gmail.com", 587, false);
-                client.Authenticate("webwizardssol@gmail.com", "wrhrfryczskuksyc");
+                var sendermail = _configuration["MailInfos:EmailAddress"];
+                var senderkey = _configuration["MailInfos:EmailKey"];
+                var host = _configuration["MailInfos:Host"];
+                var port = int.Parse(_configuration["MailInfos:Port"]);
+                client.Connect(host, port, false);
+                client.Authenticate(sendermail, senderkey);
                 client.Send(mimeMessage);
                 client.Disconnect(true);
             }
@@ -98,7 +133,6 @@ namespace StockManager.Controllers
             }
             return View();
         }
-
         private async Task SendActivationCode(AppUser appUser)
         {
             Random random = new Random();
@@ -122,10 +156,20 @@ namespace StockManager.Controllers
 
             using (var client = new MailKit.Net.Smtp.SmtpClient())
             {
-                client.Connect("smtp.gmail.com", 587, false);
-                client.Authenticate("webwizardssol@gmail.com", "wrhrfryczskuksyc"); //email and app password
-                client.Send(mimeMessage);
-                client.Disconnect(true);
+                try
+                {
+                    var sendermail = _configuration["MailInfos:EmailAddress"];
+                    var senderkey = _configuration["MailInfox:EmailKey"];
+                    var host = _configuration["MailInfos:Host"];
+                    var port = int.Parse(_configuration["MailInfos:Port"]);
+                    client.Connect(host, port, false);
+                    client.Authenticate(sendermail, senderkey);
+                    client.Send(mimeMessage);
+                    client.Disconnect(true);
+                }
+                catch (Exception ex) { 
+                    Console.WriteLine(ex.ToString());
+                }             
             }
         }
 
@@ -149,6 +193,7 @@ namespace StockManager.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 AppUser appUser = new AppUser()
                 {
                     UserName = viewModel.Email,
@@ -162,6 +207,17 @@ namespace StockManager.Controllers
                 var result = await _userManager.CreateAsync(appUser, viewModel.Password);
                 if (result.Succeeded)
                 {
+                    Permissions permissions = new Permissions()
+                    {
+                        EditStocks = false,
+                        StockIn = false,
+                        StockOut = false,
+                        UserID = appUser.Id
+                    };
+
+                    _dbContext.Permissions.Add(permissions);
+                    await _dbContext.SaveChangesAsync();
+
                     await _signInManager.PasswordSignInAsync(viewModel.Email,viewModel.Password,false,true);
                     await SendActivationCode(appUser);
                     return RedirectToAction("MailConfirm", "Account");
@@ -211,8 +267,10 @@ namespace StockManager.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
@@ -240,8 +298,6 @@ namespace StockManager.Controllers
             ModelState.AddModelError("", "Invalid login attempt.");
             return View(loginViewModel);
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> MailConfirm()
@@ -380,47 +436,38 @@ namespace StockManager.Controllers
             {
                 return RedirectToAction("Login");
             }
-
             var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             if (string.IsNullOrEmpty(unformattedKey))
             {
                 await _userManager.ResetAuthenticatorKeyAsync(user);
                 unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             }
-
             var formattedKey = FormatKey(unformattedKey);
-        //    var qrCodeUri = GenerateQrCodeUri("PharmaStockManager", user.Email, unformattedKey);
+            var qrCodeUri = GenerateQrCodeUri("PharmaStockManager", user.Email, unformattedKey);
 
-            // Generate the QR code image as a base64 string
             ViewBag.AuthenticatorKey = formattedKey;
-        //    ViewBag.QrCodeImage = GenerateQrCodeImage(qrCodeUri);
-
+            ViewBag.QrCodeImage = GenerateQrCodeImage(qrCodeUri);
             return View();
         }
 
-        //private static string GenerateQrCodeUri(string issuer, string email, string unformattedKey)
-        //{
-        //    return $"otpauth://totp/{issuer}:{email}?secret={unformattedKey}&issuer={issuer}&digits=6";
-        //}
+        private static string GenerateQrCodeUri(string issuer, string email, string unformattedKey)
+        {
+            return $"otpauth://totp/{issuer}:{email}?secret={unformattedKey}&issuer={issuer}&digits=6";
+        }
 
-        //private static string GenerateQrCodeImage(string qrCodeUri)
-        //{
-        //    using var qrGenerator = new QRCodeGenerator();
-        //    using var qrCodeData = qrGenerator.CreateQrCode(qrCodeUri, QRCodeGenerator.ECCLevel.Q);
-        //    using var qrCode = new QRCode(qrCodeData);
-        //    using var qrCodeImage = qrCode.GetGraphic(20);
-        //
-        //    using var ms = new MemoryStream();
-        //    qrCodeImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-        //    var byteArray = ms.ToArray();
-        //    return $"data:image/png;base64,{Convert.ToBase64String(byteArray)}";
-        //}
+        private static string GenerateQrCodeImage(string qrCodeUri)
+        {
+            using var qrGenerator = new QRCodeGenerator();
+            using var qrCodeData = qrGenerator.CreateQrCode(qrCodeUri, QRCodeGenerator.ECCLevel.Q);
+            using var qrCode = new Base64QRCode(qrCodeData);
+            var qrCodeImageBase64 = qrCode.GetGraphic(20);
+            return $"data:image/png;base64,{qrCodeImageBase64}";
+        }
 
         private static string FormatKey(string unformattedKey)
         {
             const int chunkSize = 4;
             int keyLength = unformattedKey.Length;
-
             var sb = new StringBuilder();
             for (int i = 0; i < keyLength; i += chunkSize)
             {
@@ -444,74 +491,15 @@ namespace StockManager.Controllers
             {
                 return RedirectToAction("Login");
             }
-
             var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, _userManager.Options.Tokens.AuthenticatorTokenProvider, code);
             if (!isValid)
             {
                 ModelState.AddModelError(string.Empty, "Invalid code.");
                 return View("EnableAuthenticator");
             }
-
             user.TwoFactorEnabled = true;
             await _userManager.UpdateAsync(user);
-
             return RedirectToAction("Manage", "Account");
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Profile()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var model = new ProfileViewModel
-            {
-                FullName = user.FullName,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            user.FullName = model.FullName;
-            user.PhoneNumber = model.PhoneNumber;
-
-            if (Request.Form.Files.Count > 0)
-            {
-                var file = Request.Form.Files[0];
-                var filePath = Path.Combine(_environment.WebRootPath, "uploads", file.FileName);
-        
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-            }
-
-            var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
-            {
-                TempData["Success"] = "Profile updated successfully!";
-                return RedirectToAction("Profile");
-            }
-
-            ModelState.AddModelError(string.Empty, "An error occurred while updating your profile.");
-            return View("Profile", model);
         }
 
     }

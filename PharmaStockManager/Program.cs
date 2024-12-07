@@ -8,16 +8,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddScoped<EmailConfirmedFilter>();
 
 // Add DbContext and Identity to the services
 builder.Services.AddDbContext<PharmaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PharmaDatabase")));
 
-builder.Services.AddIdentity<AppUser, AppRole>()
-    .AddEntityFrameworkStores<PharmaContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
+{
+    // Optional: Configure Identity options
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+})
+.AddEntityFrameworkStores<PharmaContext>()
+.AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -27,6 +35,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+    var dbContext = services.GetRequiredService<PharmaContext>();
 
     // Create Admin role if it doesn't exist
     var adminRole = "Admin";
@@ -54,8 +63,31 @@ using (var scope = app.Services.CreateScope())
             Email = adminEmail,
             EmailConfirmed = true
         };
-        await userManager.CreateAsync(adminUser, "Admin123!"); // Default password
-        await userManager.AddToRoleAsync(adminUser, adminRole);
+
+        var createResult = await userManager.CreateAsync(adminUser, "Admin123!");
+        if (createResult.Succeeded)
+        {
+            var permissions = new Permissions
+            {
+                EditStocks = true,
+                StockIn = true,
+                StockOut = true,
+                UserID = adminUser.Id
+            };
+
+            dbContext.Permissions.Add(permissions);
+            await dbContext.SaveChangesAsync();
+
+            await userManager.AddToRoleAsync(adminUser, adminRole);
+        }
+        else
+        {
+            // Log or handle user creation errors
+            foreach (var error in createResult.Errors)
+            {
+                Console.WriteLine($"User creation error: {error.Description}");
+            }
+        }
     }
 
     // Create a default user if it doesn't exist
@@ -67,10 +99,34 @@ using (var scope = app.Services.CreateScope())
         {
             ActiveUser = true,
             UserName = userEmail,
-            Email = userEmail
+            Email = userEmail,
+            EmailConfirmed = true
         };
-        await userManager.CreateAsync(defaultUser, "User123!"); // Default password
-        await userManager.AddToRoleAsync(defaultUser, userRole);
+
+        var createResult = await userManager.CreateAsync(defaultUser, "User123!");
+        if (createResult.Succeeded)
+        {
+            var permissions = new Permissions
+            {
+                EditStocks = false,
+                StockIn = false,
+                StockOut = false,
+                UserID = defaultUser.Id
+            };
+
+            dbContext.Permissions.Add(permissions);
+            await dbContext.SaveChangesAsync();
+
+            await userManager.AddToRoleAsync(defaultUser, userRole);
+        }
+        else
+        {
+            // Log or handle user creation errors
+            foreach (var error in createResult.Errors)
+            {
+                Console.WriteLine($"User creation error: {error.Description}");
+            }
+        }
     }
 }
 
@@ -83,11 +139,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-app.UseStaticFiles();
-
-app.UseAuthentication(); // Add authentication
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

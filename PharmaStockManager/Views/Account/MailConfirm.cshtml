@@ -55,7 +55,7 @@
                         <input type="text" disabled class="form-control" value="@ViewBag.Email" />
                         <div>
                             <label asp-for="ConfirmCode">Confirm Code</label>
-                            <input asp-for="ConfirmCode" type="email" class="form-control" placeholder="Enter your 6-digit code here" required />
+                            <input asp-for="ConfirmCode" type="text" class="form-control" placeholder="Enter your 6-digit code here" required />
                             <span asp-validation-for="ConfirmCode" class="text-danger"></span>
                         </div>
                         <div>

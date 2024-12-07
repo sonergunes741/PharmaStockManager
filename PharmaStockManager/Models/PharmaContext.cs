@@ -23,6 +23,7 @@ namespace PharmaStockManager.Models
         public DbSet<Drug> Drugs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; } // Yeni eklenen Transaction DbSet'i
+        public DbSet<Permissions> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +41,7 @@ namespace PharmaStockManager.Models
                 new Drug { Id = 1, Name = "Aspirin", Category = "Painkillers", Quantity = 50, UnitPrice = 10.0m },
                 new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 30, UnitPrice = 20.0m }
             );
+
         }
     }
 }

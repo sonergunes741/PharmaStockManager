@@ -314,6 +314,33 @@ namespace PharmaStockManager.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Permissions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("EditStocks")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StockIn")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StockOut")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
                 {
                     b.Property<int>("Id")
@@ -403,6 +430,17 @@ namespace PharmaStockManager.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Permissions", b =>
+                {
+                    b.HasOne("PharmaStockManager.Models.Identity.AppUser", "User")
+                        .WithMany("Permissions")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
                 {
                     b.HasOne("PharmaStockManager.Models.Drug", "Drug")
@@ -412,6 +450,11 @@ namespace PharmaStockManager.Migrations
                         .IsRequired();
 
                     b.Navigation("Drug");
+                });
+
+            modelBuilder.Entity("PharmaStockManager.Models.Identity.AppUser", b =>
+                {
+                    b.Navigation("Permissions");
                 });
 #pragma warning restore 612, 618
         }
