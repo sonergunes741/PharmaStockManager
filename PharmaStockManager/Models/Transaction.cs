@@ -16,10 +16,6 @@ namespace PharmaStockManager.Models
 
           //Sonradan Eklenen alanlar
         public string DrugType { get; set; }
-        public string SendLocation { get; set; }
-        public string NameSurname { get; set; }
-        public string TelephoneNumber { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
+
     }
 }

@@ -27,11 +27,7 @@
             <th>@Html.DisplayNameFor(model => model.UnitPrice)</th>
             <th>@Html.DisplayNameFor(model => model.DrugType)</th>
             <th>@Html.DisplayNameFor(model => model.ResearchNumber)</th>
-            <th>@Html.DisplayNameFor(model => model.SendLocation)</th>
-            <th>@Html.DisplayNameFor(model => model.NameSurname)</th>
-            <th>@Html.DisplayNameFor(model => model.TelephoneNumber)</th>
-            <th>@Html.DisplayNameFor(model => model.Email)</th>
-            <th>@Html.DisplayNameFor(model => model.Address)</th>
+          
             <th>Actions</th>
         </tr>
     </thead>
@@ -45,11 +41,7 @@
                 <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
                 <td>@Html.DisplayFor(modelItem => item.DrugType)</td>
                 <td>@Html.DisplayFor(modelItem => item.ResearchNumber)</td>
-                <td>@Html.DisplayFor(modelItem => item.SendLocation)</td>
-                <td>@Html.DisplayFor(modelItem => item.NameSurname)</td>
-                <td>@Html.DisplayFor(modelItem => item.TelephoneNumber)</td>
-                <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
