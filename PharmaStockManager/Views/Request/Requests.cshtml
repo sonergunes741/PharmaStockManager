@@ -1,0 +1,94 @@
+﻿<h2>User Requests</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Drug Name</th>
+            <th>Quantity</th>
+            <th>User</th>
+            <th>Request Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.DrugName</td>
+                <td>@request.Quantity</td>
+                <td>@request.UserName</td>
+                <td>@request.RequestDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    @if (request.IsApproved)
+                    {
+                        <span class="badge bg-success">Approved</span>
+                    }
+                    else if (request.IsRejected)
+                    {
+                        <span class="badge bg-danger">Rejected</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning">Pending</span>
+                    }
+                </td>
+                <td>
+                    @if (!request.IsApproved && !request.IsRejected)
+                    {
+                        <button class="btn btn-primary btn-sm approve-btn" data-id="@request.Id" data-quantity="@request.Quantity" data-drugname="@request.DrugName">
+                            Approve
+                        </button>
+                        <button class="btn btn-danger btn-sm reject-btn" data-id="@request.Id">
+                            Reject
+                        </button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Onayla butonu
+        $('.approve-btn').click(function () {
+            const requestId = $(this).data('id');
+            const drugName = $(this).data('drugname');
+            const quantity = $(this).data('quantity');
+            
+            $.ajax({
+                url: '/Request/Approve',
+                type: 'POST',
+                data: { id: requestId, drugName: drugName, quantity: quantity },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Request approved successfully!');
+                        location.reload();
+                    } else {
+                        alert('Failed to approve request.');
+                    }
+                }
+            });
+        });
+
+        // Reddet butonu
+        $('.reject-btn').click(function () {
+            const requestId = $(this).data('id');
+            
+            $.ajax({
+                url: '/Request/Reject',
+                type: 'POST',
+                data: { id: requestId },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Request rejected successfully!');
+                        location.reload();
+                    } else {
+                        alert('Failed to reject request.');
+                    }
+                }
+            });
+        });
+    });
+</script>

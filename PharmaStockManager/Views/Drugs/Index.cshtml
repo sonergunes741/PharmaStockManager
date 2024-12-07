@@ -76,9 +76,17 @@
                         <form asp-action="StockOut" method="post" style="display:inline;">
                             <input type="hidden" name="id" value="@item.Id" />
                             <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
-
                             <button type="submit" class="btn btn-secondary">Stock Out</button>
                         </form>
+
+                        <!-- Depos Type Dropdown -->
+                        <select name="type" class="form-control" style="width: 150px; display: inline-block;" required>
+                                <option value="">Select Depos</option>
+   @*                              @foreach (var depos in ViewBag.Depos)
+                                {
+                                    <option value="@depos">@depos</option>
+                                } *@
+                        </select>
                     </div>
                 </td>
             </tr>

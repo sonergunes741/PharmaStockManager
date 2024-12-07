@@ -155,6 +155,36 @@ namespace PharmaStockManager.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Depos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Depos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Depo A"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Depo B"
+                        });
+                });
+
             modelBuilder.Entity("PharmaStockManager.Models.Drug", b =>
                 {
                     b.Property<int>("Id")
@@ -201,10 +231,22 @@ namespace PharmaStockManager.Migrations
                             Name = "Amoxicillin",
                             Quantity = 30,
                             UnitPrice = 20.0m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "Painkillers",
+                            Name = "Paracetamol",
+                            Quantity = 100,
+                            UnitPrice = 8.0m
                         });
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("PharmaStockManager.Models.Identity.AppRole", b =>
+=======
+            modelBuilder.Entity("PharmaStockManager.Models.Request", b =>
+>>>>>>> unals
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -212,6 +254,7 @@ namespace PharmaStockManager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+<<<<<<< HEAD
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -312,6 +355,30 @@ namespace PharmaStockManager.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+=======
+                    b.Property<int>("DrugId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRejected")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Requests");
+>>>>>>> unals
                 });
 
             modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>

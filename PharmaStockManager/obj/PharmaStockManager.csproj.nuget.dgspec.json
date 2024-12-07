@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {}
+    "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {
+    "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+        "projectUniqueName": "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
         "projectName": "PharmaStockManager",
-        "projectPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
-        "packagesPath": "C:\\Users\\Hrist\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\obj\\",
+        "projectPath": "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+        "packagesPath": "C:\\Users\\unals\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\unals\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Hrist\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\unals\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -78,11 +74,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[8.0.5, )"
-            },
-            "NETCore.MailKit": {
-              "target": "Package",
-              "version": "[2.1.0, )"
+              "version": "[8.0.6, )"
             }
           },
           "imports": [
@@ -104,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
