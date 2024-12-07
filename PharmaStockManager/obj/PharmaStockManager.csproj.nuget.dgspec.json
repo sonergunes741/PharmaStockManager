@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {}
+    "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {
+    "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+        "projectUniqueName": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
         "projectName": "PharmaStockManager",
-        "projectPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+        "projectPath": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
         "packagesPath": "C:\\Users\\Hrist\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\obj\\",
+        "outputPath": "C:\\Users\\Hrist\\Source\\Repos\\PharmaStockManager\\PharmaStockManager\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Hrist\\AppData\\Roaming\\NuGet\\NuGet.Config",
