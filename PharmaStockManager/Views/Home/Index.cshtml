@@ -1,123 +1,51 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Dashboard";
 }
 
-@if (!User.Identity.IsAuthenticated)
-{
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Pharmaceutical Warehouse Stock Management</h1>
-            <p>
-                Optimize and streamline your warehouse operations with a smart
-                system designed to manage pharmaceutical stocks efficiently.
-            </p>
-            <div class="cta-buttons">
-                <a asp-controller="Account" asp-action="Register" class="button button-primary">Get Started</a>
-                <button class="button button-secondary" onclick="alert('Demo feature coming soon!')">Watch Demo</button>
-            </div>
-        </div>
-        <div class="hero-circles">
-            <!-- Manager Icon -->
-            <div class="circle circle-1">
-                <a asp-controller="Account" asp-action="Register" class="circle-button">
-                    <img src="~/icons/icon-1.png" alt="Manager Icon" class="role-icon" />
-                    <div class="role-text">Manager</div>
-                </a>
-            </div>
+<h1>Dashboard</h1>
 
-            <!-- Employee Icon -->
-            <div class="circle circle-2">
-                <a asp-controller="Account" asp-action="Register" class="circle-button">
-                    <img src="~/icons/icon-2.png" alt="Employee Icon" class="role-icon" />
-                    <div class="role-text">Employee</div>
-                </a>
-            </div>
-
-            <!-- Customer Icon -->
-            <div class="circle circle-3">
-                <a asp-controller="Account" asp-action="Register" class="circle-button">
-                    <img src="~/icons/icon-3.png" alt="Customer Icon" class="role-icon" />
-                    <div class="role-text">Customer</div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section class="features">
-        <div class="feature-card">
-            <div class="feature-icon"></div>
-            <h3>Inventory Tracking</h3>
-            <p>Real-time monitoring of your pharmaceutical stock levels</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon"></div>
-            <h3>Smart Analytics</h3>
-            <p>Data-driven insights for better inventory decisions</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon"></div>
-            <h3>Enhanced User Experience</h3>
-            <p>
-                User-focused design for easy navigation and efficient task
-                management.
-            </p>
-        </div>
-    </section>
-}
-else
-{
-    <div class="admin-dashboard">
-        @if (User.IsInRole("Admin"))
-        {
-            <a asp-controller="Drugs" asp-action="Index" class="dashboard-card">
-                <div class="dashboard-icon">💊</div>
-                <h3>Manage Drugs</h3>
-                <p>Total Drugs: @Model.Drugs.Count()</p>
-            </a>
-
-            <a asp-controller="Categories" asp-action="Index" class="dashboard-card">
-                <div class="dashboard-icon">📁</div>
-                <h3>Categories</h3>
-                <p>Total Categories: @Model.Categories.Count()</p>
-            </a>
-
-            <a asp-controller="Request" asp-action="Index" class="dashboard-card">
-                <div class="dashboard-icon">📨</div>
-                <h3>Requests</h3>
-                <p>Manage incoming requests</p>
-            </a>
-
-            <a asp-controller="Drugs" asp-action="TransactionHistory" class="dashboard-card">
-                <div class="dashboard-icon">📊</div>
-                <h3>Transaction History</h3>
-                <p>View all transactions</p>
-            </a>
-        }
-        else
-        {
-            <a asp-controller="UserPanel" asp-action="ViewDrugs" class="dashboard-card">
-                <div class="dashboard-icon">🔍</div>
-                <h3>Browse Drugs</h3>
-                <p>View available medications</p>
-            </a>
-
-            <a asp-controller="UserPanel" asp-action="ViewCategories" class="dashboard-card">
-                <div class="dashboard-icon">📁</div>
-                <h3>Categories</h3>
-                <p>Browse by categories</p>
-            </a>
-
-            <a asp-controller="Request" asp-action="Create" class="dashboard-card">
-                <div class="dashboard-icon">✍️</div>
-                <h3>New Request</h3>
-                <p>Submit a new request</p>
-            </a>
-
-            <a asp-controller="UserPanel" asp-action="MyRequests" class="dashboard-card">
-                <div class="dashboard-icon">📋</div>
-                <h3>My Requests</h3>
-                <p>View your request history</p>
-            </a>
-        }
+<div class="row">
+    <div class="col-md-6">
+        <h2>Drugs</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var drug in Model.Drugs)
+                {
+                    <tr>
+                        <td>@drug.Name</td>
+                        <td>@drug.Category</td>
+                        <td>@drug.Quantity</td>
+                        <td>@drug.UnitPrice</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-}
+    <div class="col-md-6">
+        <h2>Categories</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model.Categories)
+                {
+                    <tr>
+                        <td>@category.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

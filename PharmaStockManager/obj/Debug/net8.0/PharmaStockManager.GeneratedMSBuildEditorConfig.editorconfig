@@ -17,151 +17,151 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PharmaStockManager
 build_property.RootNamespace = PharmaStockManager
-build_property.ProjectDir = C:\Users\soner\Masaüstü\proje\PharmaStockManager\
+build_property.ProjectDir = C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\soner\Masaüstü\proje\PharmaStockManager
+build_property.MSBuildProjectDirectory = C:\Users\Hrist\source\repos\PharmaStockManager\PharmaStockManager
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Account/ChangeEmail.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Account/ChangeEmail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDaGFuZ2VFbWFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Account/ChangePassword.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Account/ChangePassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDaGFuZ2VQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Account/EnableAuthenticator.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Account/EnableAuthenticator.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxFbmFibGVBdXRoZW50aWNhdG9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Account/ForgotPassword.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Account/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Account/Login.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Account/MailConfirm.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Account/MailConfirm.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxNYWlsQ29uZmlybS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Account/Profile.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Account/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Account/Register.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/AdminDashboard/Index.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/AdminDashboard/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Admin/EditPermissions.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Admin/EditPermissions.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFBlcm1pc3Npb25zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Admin/Users.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Admin/Users.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXNlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Categories/Create.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Categories/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcmllc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Categories/Delete.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Categories/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcmllc1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Categories/Details.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Categories/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcmllc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Categories/Edit.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Categories/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcmllc1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Categories/Index.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Categories/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcmllc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Depos/Index.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Depos/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwb3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Drugs/Create.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Drugs/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHJ1Z3NcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Drugs/Delete.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Drugs/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHJ1Z3NcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Drugs/Details.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Drugs/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHJ1Z3NcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Drugs/Edit.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Drugs/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHJ1Z3NcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Drugs/Index.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Drugs/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHJ1Z3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Drugs/TransactionHistory.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Drugs/TransactionHistory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRHJ1Z3NcVHJhbnNhY3Rpb25IaXN0b3J5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Home/Index.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Home/Privacy.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Request/Requests.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Request/Requests.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVxdWVzdFxSZXF1ZXN0cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Shared/Error.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Shared/_LoginPartial.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/UserPanel/Index.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/UserPanel/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclBhbmVsXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/UserPanel/ViewCategories.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/UserPanel/ViewCategories.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclBhbmVsXFZpZXdDYXRlZ29yaWVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/UserPanel/ViewDrugs.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/UserPanel/ViewDrugs.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclBhbmVsXFZpZXdEcnVncy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/_ViewImports.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/_ViewStart.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/soner/Masaüstü/proje/PharmaStockManager/Views/Shared/_Layout.cshtml]
+[C:/Users/Hrist/source/repos/PharmaStockManager/PharmaStockManager/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-8xn6dnsh61
