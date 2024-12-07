@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Users</title>
+    <style>
+      /* General Styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+
+      header {
+        background-color: #1e3a8a;
+        color: white;
+        padding: 1rem 0;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+      }
+
+      .logo-circle {
+        width: 40px;
+        height: 40px;
+        background-color: #88b8a5;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pill-icon {
+        width: 20px;
+        height: 10px;
+        background-color: white;
+        border-radius: 50%;
+      }
+
+      .logo-text {
+        margin-left: 10px;
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+
+      .nav-links .nav-link {
+        text-decoration: none;
+        color: white;
+        margin-left: 20px;
+        font-weight: bold;
+      }
+
+      .nav-link.active {
+        text-decoration: underline;
+      }
+
+      .hero {
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      .button-group {
+        margin-top: 1rem;
+      }
+
+      /* Clients button: Light Turquoise */
+      .clients-button {
+        background-color: #40e0d0; /* Light Turquoise */
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-right: 10px;
+      }
+
+      .clients-button:hover {
+        background-color: #36c3b5; /* Slightly darker turquoise */
+        transform: translateY(-2px);
+      }
+
+      /* Admins button: Dark Blue */
+      .admins-button {
+        background-color: #1e3a8a; /* Dark Blue */
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
+
+      .admins-button:hover {
+        background-color: #172c66; /* Slightly darker blue */
+        transform: translateY(-2px);
+      }
+
+      .user-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2rem;
+        background-color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .user-table th,
+      .user-table td {
+        text-align: left;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .user-table th {
+        background-color: #1e3a8a;
+        color: white;
+      }
+
+      /* Spacing adjustments for Status and Actions columns */
+      .user-table th:nth-child(4),
+    .user-table td:nth-child(4), /* Status Column */
+    .user-table th:nth-child(5),
+    .user-table td:nth-child(5)  /* Actions Column */ {
+        padding-left: 30px; /* Adjust this for desired spacing */
+      }
+
+      /* Button styles for Deactivate, Activate, and Delete */
+      .button-deactivate {
+        background-color: #dc3545; /* Red */
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-right: 5px;
+      }
+
+      .button-deactivate:hover {
+        background-color: #b02a37; /* Darker red */
+      }
+
+      .button-activate {
+        background-color: #28a745; /* Green */
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-right: 5px;
+      }
+
+      .button-activate:hover {
+        background-color: #218838; /* Darker green */
+      }
+
+      .button-delete {
+        background-color: #007bff; /* Blue */
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .button-delete:hover {
+        background-color: #0056b3; /* Darker blue */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <nav>
+          <a href="superadmin.html" class="logo">
+            <div class="logo-circle">
+              <div class="pill-icon"></div>
+            </div>
+
+            <span class="logo-text">Super Admin</span>
+          </a>
+          <div class="nav-links">
+            <a href="superadmin.html" class="nav-link">Dashboard</a>
+            <a href="warehouse.html" class="nav-link">Warehouses</a>
+            <a href="systemsettings.html" class="nav-link">Settings</a>
+          </div>
+        </nav>
+      </header>
+      <main>
+        <section class="hero">
+          <div class="hero-content">
+            <h1>Manage Users</h1>
+            <div class="button-group">
+              <button class="clients-button">Clients</button>
+              <button class="admins-button">Admins</button>
+            </div>
+          </div>
+        </section>
+        <section class="admin-dashboard">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Example row -->
+              <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>johndoe@example.com</td>
+                <td>Active</td>
+                <td>
+                  <button class="button-deactivate">Deactivate</button>
+                  <button class="button-activate">Activate</button>
+                  <button class="button-delete">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Jane Smith</td>
+                <td>janesmith@example.com</td>
+                <td>Inactive</td>
+                <td>
+                  <button class="button-activate">Activate</button>
+                  <button class="button-delete">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

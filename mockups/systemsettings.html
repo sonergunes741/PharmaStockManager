@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Settings</title>
+    <!-- Inline CSS -->
+    <style>
+      :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #ffffff;
+        --gray-light: #e8eaed;
+        --gray-hover: #dfe1e5;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        background-color: var(--background);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 0;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-decoration: none;
+      }
+
+      .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-blue) 33%,
+          var(--mint-green) 33% 66%,
+          var(--lavender) 66%
+        );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .settings-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .setting-card {
+        background: var(--white);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .setting-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      .setting-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .setting-card p {
+        color: var(--text);
+        opacity: 0.8;
+        font-size: 0.95rem;
+      }
+
+      .setting-card button {
+        margin-top: 1rem;
+        background-color: var(--primary-blue);
+        color: var(--white);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .setting-card button:hover {
+        background-color: darken(var(--primary-blue), 10%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <a href="superadmin.html" class="logo">
+          <div class="logo-circle">
+            <div class="pill-icon"></div>
+          </div>
+          <span class="logo-text">System Settings</span>
+        </a>
+        </div>
+      </nav>
+
+      <div class="settings-container">
+        <div class="setting-card">
+          <h3>Edit Authentications</h3>
+          <p>Update user accounts, roles, and permissions.</p>
+          <button> Last Activities</button>
+        </div>
+        <div class="setting-card">
+          <h3>Data Backup</h3>
+          <p>Configure automated backups or create one manually.</p>
+          <button>See and Manage Datas</button>
+        </div>
+        <div class="setting-card">
+          <h3>Notifications</h3>
+          <p>Set up email and SMS alerts for critical events.</p>
+          <button>Configure</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inline JavaScript -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const buttons = document.querySelectorAll(".setting-card button");
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", (event) => {
+            const action = event.target.innerText;
+            alert(`You clicked "${action}"!`);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
