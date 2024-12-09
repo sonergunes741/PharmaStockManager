@@ -304,7 +304,7 @@ namespace StockManager.Controllers
                         }
                         else if (roles.Contains("SuperAdmin"))
                         {
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "SuperAdmin");
                         }
 
                         // Default fallback
@@ -518,6 +518,11 @@ namespace StockManager.Controllers
             user.TwoFactorEnabled = true;
             await _userManager.UpdateAsync(user);
             return RedirectToAction("Manage", "Account");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
     }

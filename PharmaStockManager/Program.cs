@@ -35,14 +35,41 @@ using (var scope = app.Services.CreateScope())
     }
 
     // Create User role if it doesn't exist
-    var userRole = "User";
-    if (!await roleManager.RoleExistsAsync(userRole))
+    var superAdminRole = "SuperAdmin";
+    if (!await roleManager.RoleExistsAsync(superAdminRole))
     {
-        await roleManager.CreateAsync(new AppRole(userRole));
+        await roleManager.CreateAsync(new AppRole(superAdminRole));
+    }
+
+    var employeeRole = "Employee";
+    if (!await roleManager.RoleExistsAsync(employeeRole))
+    {
+        await roleManager.CreateAsync(new AppRole(employeeRole));
+    }
+
+    var customerRole = "Customer";
+    if (!await roleManager.RoleExistsAsync(customerRole))
+    {
+        await roleManager.CreateAsync(new AppRole(customerRole));
     }
 
     // Create a default admin user if it doesn't exist
-    var adminEmail = "webwizardssol@gmail.com";
+    var superAdminEmail = "webwizardssol@gmail.com";
+    var superAdminUser = await userManager.FindByEmailAsync(superAdminEmail);
+    if (superAdminUser == null)
+    {
+        superAdminUser = new AppUser
+        {
+            ActiveUser = true,
+            UserName = superAdminEmail,
+            Email = superAdminEmail,
+            EmailConfirmed = true
+        };
+        await userManager.CreateAsync(superAdminUser, "Superadmin123!"); // Default password
+        await userManager.AddToRoleAsync(superAdminUser, superAdminRole);
+    }
+
+    var adminEmail = "admin@example.com";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
     {
@@ -57,19 +84,35 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(adminUser, adminRole);
     }
 
-    // Create a default user if it doesn't exist
-    var userEmail = "user@example.com";
-    var defaultUser = await userManager.FindByEmailAsync(userEmail);
-    if (defaultUser == null)
+
+    var employeeEmail = "employee@example.com";
+    var employeeUser = await userManager.FindByEmailAsync(employeeEmail);
+    if (employeeUser == null)
     {
-        defaultUser = new AppUser
+        employeeUser = new AppUser
         {
             ActiveUser = true,
-            UserName = userEmail,
-            Email = userEmail
+            UserName = employeeEmail,
+            Email = employeeEmail,
+            EmailConfirmed = true
         };
-        await userManager.CreateAsync(defaultUser, "User123!"); // Default password
-        await userManager.AddToRoleAsync(defaultUser, userRole);
+        await userManager.CreateAsync(employeeUser, "Employee123!"); // Default password
+        await userManager.AddToRoleAsync(employeeUser, employeeRole);
+    }
+
+    var customerEmail = "customer@example.com";
+    var customerUser = await userManager.FindByEmailAsync(customerEmail);
+    if (customerUser == null)
+    {
+        customerUser = new AppUser
+        {
+            ActiveUser = true,
+            UserName = customerEmail,
+            Email = customerEmail,
+            EmailConfirmed = true
+        };
+        await userManager.CreateAsync(customerUser, "Customer123!"); // Default password
+        await userManager.AddToRoleAsync(customerUser, customerRole);
     }
 }
 

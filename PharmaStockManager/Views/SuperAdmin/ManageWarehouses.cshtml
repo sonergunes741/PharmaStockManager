@@ -1,0 +1,391 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warehouse Management</title>
+    <style>
+        :root {
+          --primary-blue: #5a9ecf;
+          --soft-blue: #e8f4ff;
+          --soft-blue-hover: #d1e9ff;
+          --lavender: #a68cb1;
+          --mint-green: #88b8a5;
+          --mid-tone: #93b7df;
+          --background: #f4f5f7;
+          --text: #2f3542;
+          --white: #ffffff;
+          --gray-light: #e8eaed;
+          --gray-hover: #dfe1e5;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Inter", system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+          background-color: var(--background);
+          color: var(--text);
+          line-height: 1.6;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 2rem;
+        }
+
+        /* Logo Styles */
+        .logo {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          text-decoration: none;
+          position: absolute;
+          top: 2rem;
+          left: 2rem;
+          cursor: pointer;
+        }
+
+        .logo-circle {
+          width: 44px;
+          height: 44px;
+          background: linear-gradient(
+            135deg,
+            var(--primary-blue) 33%,
+            var(--mint-green) 33% 66%,
+            var(--lavender) 66%
+          );
+          border-radius: 50%;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-circle {
+          transform: scale(1.1);
+        }
+
+        .pill-icon {
+          width: 20px;
+          height: 32px;
+          background-color: var(--white);
+          border-radius: 16px;
+          position: relative;
+        }
+
+        .page-content {
+          padding-top: 3rem;
+        }
+
+        h1 {
+          font-size: 2.5rem;
+          line-height: 1.2;
+          margin-bottom: 1.5rem;
+          color: var(--text);
+          margin-top: 2rem;
+        }
+
+        .warehouse-list {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 2rem;
+          padding: 2rem 0;
+        }
+
+        .warehouse-card {
+          background: var(--soft-blue);
+          padding: 1.5rem;
+          border-radius: 16px;
+          box-shadow: 0 4px 12px rgba(90, 158, 207, 0.08);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: 1px solid rgba(90, 158, 207, 0.1);
+        }
+
+        .warehouse-card:hover {
+          transform: translateY(-5px);
+          background: var(--soft-blue-hover);
+          box-shadow: 0 8px 24px rgba(90, 158, 207, 0.12);
+        }
+
+        .warehouse-card h3 {
+          font-size: 1.25rem;
+          color: var(--text);
+          margin-bottom: 0.5rem;
+        }
+
+        .warehouse-card p {
+          color: var(--text);
+          font-size: 1rem;
+          opacity: 0.8;
+          margin-bottom: 0.5rem;
+        }
+
+        .action-buttons {
+          margin-bottom: 20px;
+        }
+
+        .button {
+          padding: 0.875rem 2rem;
+          border-radius: 12px;
+          border: none;
+          font-size: 1rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+          color: var(--white);
+        }
+
+        .button:hover {
+          transform: translateY(-2px);
+          opacity: 0.9;
+        }
+
+        .modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+
+        .modal.hidden {
+          display: none;
+        }
+
+        .modal-content {
+          background-color: var(--white);
+          padding: 2rem;
+          border-radius: 16px;
+          width: 100%;
+          max-width: 500px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+          color: var(--text);
+        }
+
+        .form-group input {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid var(--gray-light);
+          border-radius: 8px;
+          font-size: 1rem;
+        }
+
+        .form-group input:focus {
+          outline: none;
+          border-color: var(--primary-blue);
+        }
+
+        .modal-content button {
+          padding: 0.75rem 1.5rem;
+          border-radius: 8px;
+          border: none;
+          font-size: 1rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          margin-right: 1rem;
+        }
+
+        .modal-content button[type="submit"] {
+          background-color: var(--lavender);
+          color: var(--white);
+        }
+
+        .modal-content button[type="button"] {
+          background-color: var(--gray-light);
+          color: var(--text);
+        }
+
+        .delete-btn {
+          background-color: var(--primary-blue) !important;
+          color: var(--white) !important;
+        }
+
+        .modal-content button:hover {
+          opacity: 0.9;
+          transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-content">
+            <h1>Warehouse Management</h1>
+
+            <div class="action-buttons">
+                <button class="button" onclick="openAddModal()">
+                    Add New Warehouse
+                </button>
+            </div>
+
+            <div class="warehouse-list" id="warehouseList">
+                <!-- Warehouse cards will be added dynamically -->
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal hidden" id="warehouseModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add Warehouse</h2>
+            <form id="warehouseForm">
+                <div class="form-group">
+                    <label for="name">Warehouse Name:</label>
+                    <input type="text" id="name" required />
+                </div>
+                <div class="form-group">
+                    <label for="manager">Manager Name:</label>
+                    <input type="text" id="manager" required />
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" required />
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required />
+                </div>
+                <div class="form-group">
+                    <label for="customerSince">Customer Since:</label>
+                    <input type="date" id="customerSince" required />
+                </div>
+                <button type="submit">Save</button>
+                <button type="button" id="close-modal" onclick="closeModal()">
+                    Cancel
+                </button>
+                <button type="button"
+                        class="delete-btn"
+                        id="deleteButton"
+                        style="display: none"
+                        onclick="deleteWarehouse()">
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let warehouses = JSON.parse(localStorage.getItem("warehouses")) || [];
+        let currentWarehouseId = null;
+
+        function displayWarehouses() {
+          const warehouseList = document.getElementById("warehouseList");
+          warehouseList.innerHTML = "";
+
+          warehouses.forEach((warehouse) => {
+            const card = document.createElement("div");
+            card.className = "warehouse-card";
+            card.onclick = () => openEditModal(warehouse.id);
+
+            card.innerHTML = `
+                      <h3>${warehouse.name}</h3>
+                      <p><strong>Manager:</strong> ${warehouse.manager}</p>
+                      <p><strong>Phone:</strong> ${warehouse.phone}</p>
+                      <p><strong>Email:</strong> ${warehouse.email}</p>
+                  `;
+
+            warehouseList.appendChild(card);
+          });
+        }
+
+        function openAddModal() {
+          currentWarehouseId = null;
+          document.getElementById("modalTitle").textContent = "Add New Warehouse";
+          document.getElementById("warehouseForm").reset();
+          document.getElementById("deleteButton").style.display = "none";
+          document.getElementById("warehouseModal").classList.remove("hidden");
+        }
+
+        function openEditModal(id) {
+          const warehouse = warehouses.find((w) => w.id === id);
+          if (warehouse) {
+            currentWarehouseId = id;
+            document.getElementById("modalTitle").textContent = "Edit Warehouse";
+            document.getElementById("name").value = warehouse.name;
+            document.getElementById("manager").value = warehouse.manager;
+            document.getElementById("phone").value = warehouse.phone;
+            document.getElementById("address").value = warehouse.address;
+            document.getElementById("email").value = warehouse.email;
+            document.getElementById("customerSince").value =
+              warehouse.customerSince;
+            document.getElementById("deleteButton").style.display =
+              "inline-block";
+            document.getElementById("warehouseModal").classList.remove("hidden");
+          }
+        }
+
+        function closeModal() {
+          document.getElementById("warehouseModal").classList.add("hidden");
+          document.getElementById("warehouseForm").reset();
+        }
+
+        function deleteWarehouse() {
+          if (currentWarehouseId) {
+            warehouses = warehouses.filter((w) => w.id !== currentWarehouseId);
+            localStorage.setItem("warehouses", JSON.stringify(warehouses));
+            closeModal();
+            displayWarehouses();
+          }
+        }
+
+        document.getElementById("warehouseForm").onsubmit = function (e) {
+          e.preventDefault();
+
+          const warehouseData = {
+            id: currentWarehouseId || Date.now(),
+            name: document.getElementById("name").value,
+            manager: document.getElementById("manager").value,
+            phone: document.getElementById("phone").value,
+            address: document.getElementById("address").value,
+            email: document.getElementById("email").value,
+            customerSince: document.getElementById("customerSince").value,
+          };
+
+          if (currentWarehouseId) {
+            warehouses = warehouses.map((w) =>
+              w.id === currentWarehouseId ? warehouseData : w
+            );
+          } else {
+            warehouses.push(warehouseData);
+          }
+
+          localStorage.setItem("warehouses", JSON.stringify(warehouses));
+          closeModal();
+          displayWarehouses();
+        };
+
+        displayWarehouses();
+    </script>
+</body>
+</html>
