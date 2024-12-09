@@ -25,8 +25,17 @@ namespace PharmaStockManager.Controllers
             return View(model);
         }
 
-        [Authorize] // Only allow authenticated users to access the Privacy page
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
         {
             return View();
         }
