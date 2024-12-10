@@ -1,27 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿// FILE: Controllers/AdminDashboardController.cs
 using Microsoft.AspNetCore.Mvc;
-using PharmaStockManager.Models;
-using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
-[Authorize(Roles = "Admin")]
-public class AdminDashboardController : Controller
+namespace PharmaStockManager.Controllers
 {
-    private readonly PharmaContext _context;
-
-    public AdminDashboardController(PharmaContext context)
+    [Authorize(Roles = "Admin")]
+    public class AdminDashboardController : Controller
     {
-        _context = context;
-    }
-
-    public IActionResult Index()
-    {
-        var model = new
+        public IActionResult Index()
         {
-            TotalDrugs = _context.Drugs.Count(),
-            CriticalStockDrugs = _context.Drugs.Where(d => d.Quantity < 10).ToList(),
-            TotalCategories = _context.Categories.Count(),
-            TotalUsers = _context.Users.Count()
-        };
-        return View(model);
+            return Redirect("~/dashboard.html");
+        }
     }
 }
