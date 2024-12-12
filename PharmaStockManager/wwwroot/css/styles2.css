@@ -494,3 +494,44 @@ form button {
     form button:hover {
         background-color: darken(var(--lavender), 10%);
     }
+
+/* Auth button styles */
+.auth-buttons {
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.auth-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 24px;
+    background-color: rgb(182, 208, 229);
+    color: white !important;
+    border: none;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 16px;
+    min-width: 100px;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+    .auth-button:hover {
+        background-color: rgb(164, 190, 211);
+        color: white !important;
+        text-decoration: none;
+    }
+
+/* Only show auth buttons when not signed in */
+.auth-buttons {
+    display: none;
+}
+
+body:not(.user-authenticated) .auth-buttons {
+    display: flex;
+}

@@ -805,3 +805,27 @@ footer {
     text-align: center; /* Center the text horizontally */
     background-color: #f4f4f4; /* Optional, adjust according to your design */
 }
+
+/* Navigation Button Styles */
+.nav-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-button {
+    padding: 0.5rem 1.5rem;
+    color: white;
+    background-color: #60A5FA; /* Tailwind's blue-400 */
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+    .nav-button:hover {
+        background-color: #3B82F6; /* Tailwind's blue-500 */
+    }
+
+/* Ensure text remains white */
+.nav-button {
+    color: white !important;
+}
