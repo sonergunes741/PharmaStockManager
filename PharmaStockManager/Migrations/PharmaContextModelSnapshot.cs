@@ -22,9 +22,6 @@ namespace PharmaStockManager.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.HasSequence<int>("UserIds")
-                .StartsAt(1000L);
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
@@ -158,6 +155,36 @@ namespace PharmaStockManager.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Depos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Depos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Depo A"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Depo B"
+                        });
+                });
+
             modelBuilder.Entity("PharmaStockManager.Models.Drug", b =>
                 {
                     b.Property<int>("Id")
@@ -249,8 +276,9 @@ namespace PharmaStockManager.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("NEXT VALUE FOR UserIds");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -311,9 +339,6 @@ namespace PharmaStockManager.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("WarehouseId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -323,8 +348,6 @@ namespace PharmaStockManager.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("WarehouseId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -426,43 +449,6 @@ namespace PharmaStockManager.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("PharmaStockManager.Models.Warehouse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RefCode")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RefCode")
-                        .IsUnique();
-
-                    b.ToTable("Warehouses");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("PharmaStockManager.Models.Identity.AppRole", null)
@@ -514,13 +500,6 @@ namespace PharmaStockManager.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PharmaStockManager.Models.Identity.AppUser", b =>
-                {
-                    b.HasOne("PharmaStockManager.Models.Warehouse", null)
-                        .WithMany("Users")
-                        .HasForeignKey("WarehouseId");
-                });
-
             modelBuilder.Entity("PharmaStockManager.Models.Permissions", b =>
                 {
                     b.HasOne("PharmaStockManager.Models.Identity.AppUser", "User")
@@ -546,11 +525,6 @@ namespace PharmaStockManager.Migrations
             modelBuilder.Entity("PharmaStockManager.Models.Identity.AppUser", b =>
                 {
                     b.Navigation("Permissions");
-                });
-
-            modelBuilder.Entity("PharmaStockManager.Models.Warehouse", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

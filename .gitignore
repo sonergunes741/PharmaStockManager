@@ -1,12 +1,2 @@
 node_modules
 .vs/
-obj/
-bin/
-PharmaStockManager/obj/Debug/net8.0/PharmaStockManager.AssemblyInfo.cs
-PharmaStockManager/obj/Debug/net8.0/PharmaStockManager.AssemblyInfoInputs.cache
-PharmaStockManager/obj/Debug/net8.0/PharmaStockManager.assets.cache
-PharmaStockManager/obj/Debug/net8.0/PharmaStockManager.GeneratedMSBuildEditorConfig.editorconfig
-PharmaStockManager/obj/PharmaStockManager.csproj.nuget.dgspec.json
-PharmaStockManager/obj/PharmaStockManager.csproj.nuget.g.props
-PharmaStockManager/obj/project.assets.json
-PharmaStockManager/obj/project.nuget.cache

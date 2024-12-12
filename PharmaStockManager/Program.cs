@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Filters;
 using PharmaStockManager.Models.Identity;
-using PharmaStockManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<EmailConfirmedFilter>();
-builder.Services.AddScoped<WarehouseService>();
 
 // Add DbContext and Identity to the services
 builder.Services.AddDbContext<PharmaContext>(options =>
@@ -29,14 +27,6 @@ using (var scope = app.Services.CreateScope())
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
 
-    
-
-    var superAdminRole = "SuperAdmin";
-    if (!await roleManager.RoleExistsAsync(superAdminRole))
-    {
-        await roleManager.CreateAsync(new AppRole(superAdminRole));
-    }
-
     // Create Admin role if it doesn't exist
     var adminRole = "Admin";
     if (!await roleManager.RoleExistsAsync(adminRole))
@@ -44,16 +34,11 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new AppRole(adminRole));
     }
 
-    var employeeRole = "Employee";
-    if (!await roleManager.RoleExistsAsync(employeeRole))
+    // Create User role if it doesn't exist
+    var userRole = "User";
+    if (!await roleManager.RoleExistsAsync(userRole))
     {
-        await roleManager.CreateAsync(new AppRole(employeeRole));
-    }
-
-    var customerRole = "Customer";
-    if (!await roleManager.RoleExistsAsync(customerRole))
-    {
-        await roleManager.CreateAsync(new AppRole(customerRole));
+        await roleManager.CreateAsync(new AppRole(userRole));
     }
 
     // Create User role if it doesn't exist
@@ -70,22 +55,7 @@ using (var scope = app.Services.CreateScope())
     }
 
     // Create a default admin user if it doesn't exist
-    var superAdminEmail = "webwizardssol@example.com";
-    var superAdminUser = await userManager.FindByEmailAsync(superAdminEmail);
-    if (superAdminUser == null)
-    {
-        superAdminUser = new AppUser
-        {
-            ActiveUser = true,
-            UserName = superAdminEmail,
-            Email = superAdminEmail,
-            EmailConfirmed = true
-        };
-        await userManager.CreateAsync(superAdminUser, "Superadmin123!"); // Default password
-        await userManager.AddToRoleAsync(superAdminUser, superAdminRole);
-    }
-
-    var adminEmail = "Admin@example.com";
+    var adminEmail = "webwizardssol@gmail.com";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
     {
@@ -100,35 +70,19 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(adminUser, adminRole);
     }
 
-    var employeeEmail = "Employee@example.com";
-    var employeeUser = await userManager.FindByEmailAsync(employeeEmail);
-    if (employeeUser == null)
-    {
-        employeeUser = new AppUser
-        {
-            ActiveUser = true,
-            UserName = employeeEmail,
-            Email = employeeEmail,
-            EmailConfirmed = true
-        };
-        await userManager.CreateAsync(employeeUser, "Employee123!"); // Default password
-        await userManager.AddToRoleAsync(employeeUser, employeeRole);
-    }
-
     // Create a default user if it doesn't exist
-    var customerEmail = "Customer@example.com";
-    var customerUser = await userManager.FindByEmailAsync(customerEmail);
-    if (customerUser == null)
+    var userEmail = "user@example.com";
+    var defaultUser = await userManager.FindByEmailAsync(userEmail);
+    if (defaultUser == null)
     {
-        customerUser = new AppUser
+        defaultUser = new AppUser
         {
             ActiveUser = true,
-            UserName = customerEmail,
-            Email = customerEmail,
-            EmailConfirmed = true
+            UserName = userEmail,
+            Email = userEmail
         };
-        await userManager.CreateAsync(customerUser, "Customer123!"); // Default password
-        await userManager.AddToRoleAsync(customerUser, customerRole);
+        await userManager.CreateAsync(defaultUser, "User123!"); // Default password
+        await userManager.AddToRoleAsync(defaultUser, userRole);
     }
 
 

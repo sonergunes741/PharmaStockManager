@@ -27,40 +27,28 @@ namespace PharmaStockManager.Models
 
         public DbSet<Permissions> Permissions { get; set; }
 
-        public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<Depos> Depos { get; set; } //Depo Dbset
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure the IdentityUser (or AppUser) to start from 1000
-            modelBuilder.Entity<AppUser>()
-                .HasKey(u => u.Id);
 
-            // If you're using SQL Server, you can use this approach
-            modelBuilder.HasSequence<int>("UserIds")
-                .StartsAt(1000)
-                .IncrementsBy(1);
-
-            modelBuilder.Entity<AppUser>()
-                .Property(u => u.Id)
-                .HasDefaultValueSql("NEXT VALUE FOR UserIds");
-
-            // Rest of your existing configurations remain the same
+            // Seed data for Categories
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Painkillers" },
                 new Category { Id = 2, Name = "Antibiotics" }
             );
 
+            // Seed data for Drugs
             modelBuilder.Entity<Drug>().HasData(
                 new Drug { Id = 1, Name = "Aspirin", Category = "Painkillers", Quantity = 50, UnitPrice = 10.0m },
                 new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 30, UnitPrice = 20.0m },
                 new Drug { Id = 3, Name = "Paracetamol", Category = "Painkillers", Quantity = 100, UnitPrice = 8.0m }
-            );
-
-            modelBuilder.Entity<Warehouse>()
-                .HasIndex(w => w.RefCode)
-                .IsUnique();
-
+                );
+            modelBuilder.Entity<Depos>().HasData(
+                new Depos { Id = 1, Name = "Depo A"},
+                new Depos { Id = 2 ,Name = "Depo B"}
+                );
         }
     }
 }

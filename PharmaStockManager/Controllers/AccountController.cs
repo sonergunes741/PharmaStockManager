@@ -10,7 +10,6 @@ using PharmaStockManager.Filters;
 using PharmaStockManager.Models;
 using QRCoder;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 
 namespace StockManager.Controllers
 {
@@ -197,11 +196,6 @@ namespace StockManager.Controllers
             if (ModelState.IsValid)
             {
 
-                var validref = await _dbContext.Warehouses.FirstOrDefaultAsync(p => p.RefCode == viewModel.RefCode);
-                if (validref == null)
-                {
-                    return View();
-                }
                 AppUser appUser = new AppUser()
                 {
                     UserName = viewModel.Email,
@@ -217,6 +211,9 @@ namespace StockManager.Controllers
                 {
                     Permissions permissions = new Permissions()
                     {
+                        EditStocks = false,
+                        StockIn = false,
+                        StockOut = false,
                         UserID = appUser.Id
                     };
 
@@ -298,7 +295,7 @@ namespace StockManager.Controllers
                         var roles = await _userManager.GetRolesAsync(user);
                         if (roles.Contains("Admin"))
                         {
-                            return RedirectToAction("Dashboard", "Admin");
+                            return RedirectToAction("Index", "AdminDashboard");
                         }
                         else if (roles.Contains("Employee"))
                         {
@@ -318,7 +315,6 @@ namespace StockManager.Controllers
                     }
                 }
             }
-
             ModelState.AddModelError("", "Invalid login attempt.");
             return View(loginViewModel);
         }
