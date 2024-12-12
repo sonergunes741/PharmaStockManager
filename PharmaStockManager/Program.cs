@@ -79,6 +79,7 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(defaultUser, userRole);
     }
 
+
     // Create a default employee if it doesn't exist
     var employeeEmail = "employee@example.com";
     var defaultEmployee = await userManager.FindByEmailAsync(employeeEmail);
@@ -93,7 +94,6 @@ using (var scope = app.Services.CreateScope())
         await userManager.CreateAsync(defaultEmployee, "Employee123!"); // Default password
         await userManager.AddToRoleAsync(defaultEmployee, employeeRole);
     }
-
 }
 
 // Configure the HTTP request pipeline.
