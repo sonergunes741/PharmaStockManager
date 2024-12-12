@@ -48,7 +48,7 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new AppRole(employeeRole));
     }
 
-    var customerRole = "Employee";
+    var customerRole = "Customer";
     if (!await roleManager.RoleExistsAsync(customerRole))
     {
         await roleManager.CreateAsync(new AppRole(customerRole));
