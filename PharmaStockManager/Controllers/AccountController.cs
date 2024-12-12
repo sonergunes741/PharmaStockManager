@@ -307,7 +307,7 @@ namespace StockManager.Controllers
                         }
                         else if (roles.Contains("SuperAdmin"))
                         {
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "SuperAdmin");
                         }
 
                         // Default fallback
