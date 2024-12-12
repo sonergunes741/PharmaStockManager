@@ -29,7 +29,7 @@ using (var scope = app.Services.CreateScope())
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
 
-
+    
 
     var superAdminRole = "SuperAdmin";
     if (!await roleManager.RoleExistsAsync(superAdminRole))
@@ -44,6 +44,19 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new AppRole(adminRole));
     }
 
+    var employeeRole = "Employee";
+    if (!await roleManager.RoleExistsAsync(employeeRole))
+    {
+        await roleManager.CreateAsync(new AppRole(employeeRole));
+    }
+
+    var customerRole = "Customer";
+    if (!await roleManager.RoleExistsAsync(customerRole))
+    {
+        await roleManager.CreateAsync(new AppRole(customerRole));
+    }
+
+    // Create User role if it doesn't exist
     var employeeRole = "Employee";
     if (!await roleManager.RoleExistsAsync(employeeRole))
     {
@@ -116,6 +129,36 @@ using (var scope = app.Services.CreateScope())
         };
         await userManager.CreateAsync(customerUser, "Customer123!"); // Default password
         await userManager.AddToRoleAsync(customerUser, customerRole);
+    }
+
+
+    // Create a default employee if it doesn't exist
+    var employeeEmail = "employee@example.com";
+    var defaultEmployee = await userManager.FindByEmailAsync(employeeEmail);
+    if (defaultEmployee == null)
+    {
+        defaultEmployee = new AppUser
+        {
+            ActiveUser = true,
+            UserName = employeeEmail,
+            Email = employeeEmail
+        };
+        await userManager.CreateAsync(defaultEmployee, "Employee123!"); // Default password
+        await userManager.AddToRoleAsync(defaultEmployee, employeeRole);
+    }
+
+    var customerEmail = "customer@example.com";
+    var defaultCustomer = await userManager.FindByEmailAsync(customerEmail);
+    if (defaultCustomer == null)
+    {
+        defaultCustomer = new AppUser
+        {
+            ActiveUser = true,
+            UserName = customerEmail,
+            Email = customerEmail
+        };
+        await userManager.CreateAsync(defaultCustomer, "Customer123!"); // Default password
+        await userManager.AddToRoleAsync(defaultCustomer, customerRole);
     }
 }
 

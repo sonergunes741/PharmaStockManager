@@ -8640,24 +8640,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Hrist\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Hrist\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Hrist\\OneDrive\\Belgeler\\GitHub\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+      "projectUniqueName": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
       "projectName": "PharmaStockManager",
-      "projectPath": "C:\\Users\\Hrist\\OneDrive\\Belgeler\\GitHub\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+      "projectPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
       "packagesPath": "C:\\Users\\Hrist\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Hrist\\OneDrive\\Belgeler\\GitHub\\PharmaStockManager\\PharmaStockManager\\obj\\",
+      "outputPath": "C:\\Users\\Hrist\\source\\repos\\PharmaStockManager\\PharmaStockManager\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
         "C:\\Users\\Hrist\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
