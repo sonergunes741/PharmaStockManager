@@ -41,6 +41,13 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new AppRole(userRole));
     }
 
+    // Create User role if it doesn't exist
+    var employeeRole = "Employee";
+    if (!await roleManager.RoleExistsAsync(employeeRole))
+    {
+        await roleManager.CreateAsync(new AppRole(employeeRole));
+    }
+
     // Create a default admin user if it doesn't exist
     var adminEmail = "webwizardssol@gmail.com";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
@@ -70,6 +77,22 @@ using (var scope = app.Services.CreateScope())
         };
         await userManager.CreateAsync(defaultUser, "User123!"); // Default password
         await userManager.AddToRoleAsync(defaultUser, userRole);
+    }
+
+
+    // Create a default employee if it doesn't exist
+    var employeeEmail = "employee@example.com";
+    var defaultEmployee = await userManager.FindByEmailAsync(employeeEmail);
+    if (defaultEmployee == null)
+    {
+        defaultEmployee = new AppUser
+        {
+            ActiveUser = true,
+            UserName = employeeEmail,
+            Email = employeeEmail
+        };
+        await userManager.CreateAsync(defaultEmployee, "Employee123!"); // Default password
+        await userManager.AddToRoleAsync(defaultEmployee, employeeRole);
     }
 }
 
