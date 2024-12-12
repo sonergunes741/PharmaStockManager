@@ -1,340 +1,265 @@
-﻿@model List<Warehouse>
-
+﻿@model PharmaStockManager.Models.ManageUsersViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Warehouse Management</title>
-    <link rel="stylesheet" href="~/css/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
     <style>
-        :root {
-            --primary-blue: #5a9ecf;
-            --soft-blue: #e8f4ff;
-            --soft-blue-hover: #d1e9ff;
-            --lavender: #a68cb1;
-            --mint-green: #88b8a5;
-            --mid-tone: #93b7df;
-            --background: #f4f5f7;
-            --text: #2f3542;
-            --white: #ffffff;
-            --gray-light: #e8eaed;
-            --gray-hover: #dfe1e5;
-        }
-
-        * {
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            background-color: #f9fbfd; /* Soft light background */
+            color: #333; /* Neutral text color */
         }
 
-        body {
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.6;
+        header {
+            background-color: #dce6f7; /* Light blue */
+            color: #2c3e50; /* Darker blue for contrast */
+            padding: 1rem;
+            text-align: center;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Logo Styles */
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            cursor: pointer;
-        }
-
-        .logo-circle {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient( 135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66% );
-            border-radius: 50%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover .logo-circle {
-            transform: scale(1.1);
-        }
-
-        .pill-icon {
-            width: 20px;
-            height: 32px;
-            background-color: var(--white);
-            border-radius: 16px;
-            position: relative;
-        }
-
-        .page-content {
-            padding-top: 3rem;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            color: var(--text);
-            margin-top: 2rem;
-        }
-
-        .warehouse-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            padding: 2rem 0;
-        }
-
-        .warehouse-card {
-            background: var(--soft-blue);
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(90, 158, 207, 0.08);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(90, 158, 207, 0.1);
-        }
-
-            .warehouse-card:hover {
-                transform: translateY(-5px);
-                background: var(--soft-blue-hover);
-                box-shadow: 0 8px 24px rgba(90, 158, 207, 0.12);
-            }
-
-            .warehouse-card h3 {
-                font-size: 1.25rem;
-                color: var(--text);
-                margin-bottom: 0.5rem;
-            }
-
-            .warehouse-card p {
-                color: var(--text);
-                font-size: 1rem;
-                opacity: 0.8;
-                margin-bottom: 0.5rem;
-            }
-
-        .action-buttons {
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 0.875rem 2rem;
-            border-radius: 12px;
+        .role-button {
+            background-color: #dce6f7; /* Light blue */
+            color: #2c3e50;
             border: none;
-            font-size: 1rem;
-            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
-            color: var(--white);
+            margin: 0 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-            .button:hover {
-                transform: translateY(-2px);
-                opacity: 0.9;
+            .role-button.active {
+                background-color: #aac4e8; /* Slightly darker light blue */
             }
 
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
+            .role-button:hover {
+                background-color: #aac4e8;
+            }
+
+        .table-container {
+            display: none;
+        }
+
+            .table-container.active {
+                display: block;
+            }
+
+        .user-table {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background-color: #ffffff; /* White for clarity */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .user-table th, .user-table td {
+                text-align: left;
+                padding: 15px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .user-table th {
+                background-color: #aac4e8; /* Light blue header */
+                color: #2c3e50;
+            }
+
+        .action-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+        .button-activate {
+            background-color: #a8df90; /* Light green */
+            color: #2c3e50;
+        }
+
+        .button-deactivate {
+            background-color: #f5b7b1; /* Light red */
+            color: #2c3e50;
+        }
+
+        .button-delete {
+            background-color: #ffd59e; /* Light orange */
+            color: #2c3e50;
+        }
+
+        .button-activate:hover {
+            background-color: #93c97c; /* Slightly darker green */
+        }
+
+        .button-deactivate:hover {
+            background-color: #e99a96; /* Slightly darker red */
+        }
+
+        .button-delete:hover {
+            background-color: #ffbe75; /* Slightly darker orange */
+        }
+
+        nav {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-            .modal.hidden {
-                display: none;
-            }
-
-        .modal-content {
-            background-color: var(--white);
-            padding: 2rem;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .form-group {
+            justify-content: center; /* Centers the navigation bar */
+            gap: 10px; /* Adds a small, uniform space between buttons */
             margin-bottom: 1rem;
         }
 
-            .form-group label {
-                display: block;
-                margin-bottom: 0.5rem;
-                font-weight: 500;
-                color: var(--text);
-            }
-
-            .form-group input {
-                width: 100%;
-                padding: 0.75rem;
-                border: 1px solid var(--gray-light);
-                border-radius: 8px;
-                font-size: 1rem;
-            }
-
-                .form-group input:focus {
-                    outline: none;
-                    border-color: var(--primary-blue);
-                }
-
-        .modal-content button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+        .role-button {
+            background-color: #dce6f7; /* Light blue */
+            color: #2c3e50; /* Darker blue for contrast */
             border: none;
-            font-size: 1rem;
-            font-weight: 500;
+            padding: 0.6rem 1.2rem; /* Reduced padding for a compact design */
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            margin-right: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-            .modal-content button[type="submit"] {
-                background-color: var(--lavender);
-                color: var(--white);
+            .role-button.active {
+                background-color: #aac4e8; /* Slightly darker light blue */
             }
 
-            .modal-content button[type="button"] {
-                background-color: var(--gray-light);
-                color: var(--text);
+            .role-button:hover {
+                background-color: #aac4e8; /* Hover effect */
             }
 
-        .delete-btn {
-            background-color: var(--primary-blue) !important;
-            color: var(--white) !important;
-        }
-
-        .modal-content button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="page-content">
-            <h1>Warehouse Management</h1>
-
-            <div class="action-buttons">
-                <button class="button" onclick="openAddModal()">
-                    Add New Warehouse
-                </button>
-            </div>
-
-            <div class="warehouse-list" id="warehouseList">
-                @foreach (var warehouse in Model)
-                {
-                    <div class="warehouse-card" onclick="openEditModal(@warehouse.Id)">
-                        <h3>@warehouse.Name</h3>
-                        <p><strong>Ref Code:</strong> @warehouse.RefCode</p>
-                        <p><strong>Address:</strong> @warehouse.Address</p>
-                        <p><strong>Created:</strong> @warehouse.CreatedAt.ToShortDateString()</p>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-
-    <div class="modal hidden" id="addWarehouseModal">
-        <div class="modal-content">
-            <h2>Add Warehouse</h2>
-            <form id="addWarehouseForm" asp-action ="SaveWarehouse" asp-controller="SuperAdmin" method="post">
-                <div class="form-group">
-                    <label for="name">Warehouse Name</label>
-                    <input type="text" id="name" name="Name" placeholder="Enter warehouse name" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" id="address" name="Address" placeholder="Enter address" />
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="button">Save</button>
-                    <button type="button" class="button" onclick="closeModal()">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-   
-        <script>
-        function openAddModal() {
-            const modal = document.getElementById('addWarehouseModal');
-            const form = document.getElementById('addWarehouseForm');
-            form.reset(); // Clear any previous data
-            modal.classList.remove('hidden');
-        } document.getElementById('warehouseModal').classList.remove('hidden');
-        
-
-        function openEditModal(id) {
-            // This would typically be handled by an AJAX call to get warehouse details
-            // For now, it's a placeholder
-            fetch(`/SuperAdmin/GetWarehouse/${id}`)
-                .then(response => response.json())
-                .then(warehouse => {
-                    document.getElementById('modalTitle').textContent = 'Edit Warehouse';
-                    document.getElementById('warehouseId').value = warehouse.id;
-                    document.getElementById('Name').value = warehouse.name;
-                    document.getElementById('RefCode').value = warehouse.refCode;
-                    document.getElementById('Address').value = warehouse.address;
-                    document.getElementById('deleteButton').style.display = 'inline-block';
-                    document.getElementById('warehouseModal').classList.remove('hidden');
-                });
-        }
-
-        function closeModal() {
-            const modal = document.querySelector('.modal:not(.hidden)');
-            modal.classList.add('hidden');
-        }
-
-        function deleteWarehouse() {
-            const id = document.getElementById('warehouseId').value;
-            if (id) {
-                fetch(`/SuperAdmin/DeleteWarehouse/${id}`, { method: 'POST' })
-                    .then(response => {
-                        if (response.ok) {
-                            location.reload(); // Refresh the page
+        <header>
+            <h1>Manage Users</h1>
+        </header>
+        <nav>
+            <button class="role-button active" data-role="admins">Admins</button>
+            <button class="role-button" data-role="customers">Customers</button>
+            <button class="role-button" data-role="employees">Employees</button>
+        </nav>
+        <main>
+            <!-- Admin Table -->
+            <!-- Admin Table -->
+            <div class="table-container active" id="admins">
+                <h2>Admins</h2>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Warehouse Name</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.AdminUsers)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.WarehouseName</td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>Active</td>
+                                <td>
+                                    <button class="action-button button-deactivate">Deactivate</button>
+                                    <button class="action-button button-delete">Delete</button>
+                                </td>
+                            </tr>
                         }
-                    });
-            }
-        }
+                    </tbody>
+                </table>
+            </div>
 
-        // Add event listener for form submission
-        document.getElementById('warehouseForm').addEventListener('submit', function (e) {
-            e.preventDefault();
+            <!-- Customer Table -->
+            <div class="table-container" id="customers">
+                <h2>Customers</h2>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Warehouse Name</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.CustomerUsers)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.WarehouseName</td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>Active</td>
+                                <td>
+                                    <button class="action-button button-deactivate">Deactivate</button>
+                                    <button class="action-button button-delete">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- Employee Table -->
+            <div class="table-container" id="employees">
+                <h2>Employees</h2>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Warehouse Name</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.EmployeeUsers)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.WarehouseName</td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>Active</td>
+                                <td>
+                                    <button class="action-button button-deactivate">Deactivate</button>
+                                    <button class="action-button button-delete">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script>
+        // JavaScript for Interactive Role Switching
+        const buttons = document.querySelectorAll('.role-button');
+        const tables = document.querySelectorAll('.table-container');
 
-            const formData = new FormData(this);
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active state from all buttons and hide all tables
+                buttons.forEach(btn => btn.classList.remove('active'));
+                tables.forEach(table => table.classList.remove('active'));
 
-            fetch(this.action, {
-                method: 'POST',
-                body: formData
-            }).then(response => {
-                if (response.ok) {
-                    location.reload(); // Refresh the page
-                }
+                // Add active state to the clicked button and show the associated table
+                button.classList.add('active');
+                document.getElementById(button.dataset.role).classList.add('active');
             });
         });
-        </script>
-    
+    </script>
 </body>
 </html>
