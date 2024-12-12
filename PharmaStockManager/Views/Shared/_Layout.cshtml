@@ -6,6 +6,54 @@
     <title>@ViewData["Title"] - PharmaStockManager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/styles2.css" asp-append-version="true" />
+    <style>
+        .auth-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 24px;
+            background: linear-gradient(135deg, #B6CEE8 0%, #9FB9D4 100%);
+            color: rgba(255, 255, 255, 0.98) !important;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            min-width: 120px;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+            .auth-button:hover {
+                background: linear-gradient(135deg, #9FB9D4 0%, #8BA5C0 100%);
+                color: white !important;
+                text-decoration: none;
+                transform: translateY(-1px);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+            }
+
+        .manage-dropdown .dropdown-toggle {
+            background: linear-gradient(135deg, #B6CEE8 0%, #9FB9D4 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 24px;
+            color: rgba(255, 255, 255, 0.98);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+            .manage-dropdown .dropdown-toggle:hover {
+                background: linear-gradient(135deg, #9FB9D4 0%, #8BA5C0 100%);
+                transform: translateY(-1px);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+            }
+    </style>
 </head>
 <body>
     <header>
@@ -62,19 +110,16 @@
                     </ul>
 
                     <!-- User Authentication Links -->
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
+                            <li class="nav-item me-3">
                                 <span class="navbar-text text-dark">Hello, @User.Identity.Name!</span>
                             </li>
-                            <li class="nav-item dropdown">
-                                <!-- Manage Dropdown Button -->
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <li class="nav-item dropdown manage-dropdown me-3">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     Manage
                                 </button>
-
-                                <!-- Dropdown Menu -->
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <li>
                                         <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
@@ -88,16 +133,16 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link button button-primary" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link button button-primary" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link button button-primary" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
                             </li>
                         }
                     </ul>
