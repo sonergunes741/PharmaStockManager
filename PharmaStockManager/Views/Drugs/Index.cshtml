@@ -1,95 +1,558 @@
 ﻿@model IEnumerable<PharmaStockManager.Models.Drug>
-
 @{
-    ViewData["Title"] = "Drugs List";
+    ViewData["Title"] = "İlaç Stok Yönetimi";
+    Layout = null;
 }
 
-<h1>Drugs List</h1>
 
-<!-- Display success or error messages -->
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
-    </div>
-}
+<style>
+    :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #fff;
+        --gray-light: #e8eaed;
+        --gray-hover: #ddd;
+        --filter-bg: #f9f9f9;
+        --filter-border: #ccc;
+    }
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.Category)</th>
-            <th>@Html.DisplayNameFor(model => model.Quantity)</th>
-            <th>@Html.DisplayNameFor(model => model.UnitPrice)</th>
-            <th>Actions</th> <!-- New column for actions -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Category)</td>
-                <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
-                <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+    body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+    }
 
-                    <div style="display: inline-block;">
-                        <!-- Stock In Form -->
-                        <form asp-action="StockIn" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
+    .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+        z-index: 1000;
+    }
 
-                            <!-- Expiry Date Input -->
-                            <input type="date" name="expiryDate" class="form-control" style="width: 150px; display: inline-block;" required />
+    .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+    }
 
-                            <!-- Drug Type Dropdown -->
-                            <select name="type" class="form-control" style="width: 150px; display: inline-block;" required>
-                                <option value="">Select Type</option>
-                                @foreach (var category in ViewBag.Categories)
-                                {
-                                    <option value="@category">@category</option>
-                                }
-                            </select>
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
 
-                            <!-- Price Input -->
-                            <input type="number" name="price" class="form-control" placeholder="Price" style="width: 100px; display: inline-block;" step="0.01" required />
+    .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-                            <button type="submit" class="btn btn-success">Stock In</button>
-                        </form>
+    .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+    }
 
-                        <!-- Stock Out Form -->
-                        <form asp-action="StockOut" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <input type="number" name="quantity" class="form-control" placeholder="Qty" style="width: 70px; display: inline-block;" required />
-                            <button type="submit" class="btn btn-secondary">Stock Out</button>
-                        </form>
+    .nav-menu {
+        list-style: none;
+    }
 
-                        <!-- Depos Type Dropdown -->
-                        <select name="type" class="form-control" style="width: 150px; display: inline-block;" required>
-                                <option value="">Select Depos</option>
-   @*                              @foreach (var depos in ViewBag.Depos)
-                                {
-                                    <option value="@depos">@depos</option>
-                                } *@
-                        </select>
-                    </div>
-                </td>
-            </tr>
+    .nav-item {
+        margin: 0.5rem 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
         }
-    </tbody>
-</table>
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 1rem;
+        }
+
+    .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+        background-color: var(--background);
+        min-height: calc(100vh - 60px);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: var(--white);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .button-add {
+        background-color: var(--lavender);
+        color: var(--white);
+        margin-bottom: 1rem;
+        margin-right: 1rem;
+    }
+
+        .button-add:hover {
+            background-color: #5a54d4;
+            color: var(--white);
+        }
+
+    .filter-form {
+        background: var(--filter-bg);
+        padding: 1rem;
+        border: 1px solid var(--filter-border);
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+        .filter-form input,
+        .filter-form select,
+        .filter-form button {
+            padding: 0.5rem;
+            border: 1px solid var(--filter-border);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .filter-form input,
+        .filter-form select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-form button {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            cursor: pointer;
+            min-width: 100px;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 1rem;
+    }
+
+        table thead {
+            background-color: var(--lavender);
+            color: var(--white);
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray-hover);
+        }
+
+        table tbody tr:hover {
+            background-color: var(--gray-hover);
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: var(--gray-light);
+        }
+
+    .button-edit {
+        background-color: var(--mint-green);
+        color: var(--white);
+        margin-right: 0.5rem;
+    }
+
+    .button-delete {
+        background-color: var(--primary-blue);
+        color: var(--white);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+        .modal-content input {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+        }
+
+    @@media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+
+        .filter-form input,
+        .filter-form select {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <div class="logo-circle">
+                <div class="pill-icon"></div>
+            </div>
+            <span class="logo-text">Pharma Stock Manager</span>
+        </div>
+    </div>
+
+    <nav>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a asp-controller="AdminDashboard" asp-action="Index" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Drugs" asp-action="Index" class="nav-link active">
+                    <i class="fas fa-pills"></i>
+                    Envanter
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Request" asp-action="Requests" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    Siparişler
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Admin" asp-action="Users" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    Müşteriler
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Categories" asp-action="Index" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    Kategori
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<main class="main-content">
+    <div class="container">
+        <h1>İlaç Stok Yönetimi</h1>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <button class="button button-add" onclick="openAddModal('Ticari')">
+            Ticari İlaç Ekle
+        </button>
+        <button class="button button-add" onclick="openAddModal('Klinik')">
+            Klinik İlaç Ekle
+        </button>
+
+        <form id="filter-form" class="filter-form">
+            <input type="text" id="filter-name" placeholder="İlaç Adı" />
+            <select id="filter-type">
+                <option value="">İlaç Tipi</option>
+                <option value="Ticari">Ticari</option>
+                <option value="Klinik">Klinik</option>
+            </select>
+            <input type="text" id="filter-category" placeholder="Kategori" />
+            <input type="date" id="filter-expiry-date" placeholder="Son Kullanma Tarihi" />
+            <button type="button" onclick="applyFilter()">Filtrele</button>
+        </form>
+
+        <section class="all-medicines">
+            <h2>Tüm İlaçlar</h2>
+            <table class="medicine-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>İlaç Tipi</th>
+                        <th>@Html.DisplayNameFor(model => model.Quantity)</th>
+                        <th>@Html.DisplayNameFor(model => model.Category)</th>
+                        <th>@Html.DisplayNameFor(model => model.UnitPrice)</th>
+                        <th>Son Kullanma Tarihi</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="medicine-table-body">
+                    @foreach (var item in Model)
+                    {
+                        <tr data-id="@item.Id">
+                            <td>@item.Id</td>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            @* <td>@item.DrugType</td> *@
+                            <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                            <td>@item.ExpiryDate?.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                <button class="button button-edit" onclick="openEditModal(this)">
+                                    Stok Güncelle
+                                </button>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="button button-delete">Sil</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="add-modal-title">İlaç Ekle</h2>
+            <form id="add-form" asp-action="Create" method="post">
+                <input type="text" name="Name" id="add-medicine-name" placeholder="İlaç Adı" required />
+                <input type="number" name="Quantity" id="add-stock" placeholder="Stok Adeti" required />
+                <input type="text" name="Category" id="add-category" placeholder="Kategori" required />
+                <input type="number" name="UnitPrice" id="add-price" placeholder="Fiyat" step="0.01" required />
+                <input type="date" name="ExpiryDate" id="add-expiry-date" required />
+                <button type="button" class="button" onclick="closeModal()">Kapat</button>
+                <button type="submit" class="button button-add">Kaydet</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        let medicineIdCounter = @(Model.Any() ? Model.Max(d => d.Id) + 1 : 1);
+        let editingRow = null;
+
+        function openAddModal(type) {
+            document.getElementById("add-modal").style.display = "flex";
+            document.getElementById("add-modal-title").textContent = `${type} İlaç Ekle`;
+            document.getElementById("add-form").dataset.type = type;
+
+            // Form action'ı Create olarak ayarla
+            document.getElementById("add-form").action = '@Url.Action("Create", "Drugs")';
+        }
+
+        function openEditModal(button) {
+            const row = button.closest("tr");
+            editingRow = row;
+            const id = row.getAttribute("data-id");
+
+            const name = row.children[1].textContent;
+            const drugType = row.children[2].textContent;
+            const stock = row.children[3].textContent;
+            const category = row.children[4].textContent;
+            const price = row.children[5].textContent;
+            const expiryDate = row.children[6].textContent;
+
+            document.getElementById("add-medicine-name").value = name;
+            document.getElementById("add-stock").value = stock;
+            document.getElementById("add-category").value = category;
+            document.getElementById("add-price").value = price;
+            document.getElementById("add-expiry-date").value = expiryDate;
+
+            document.getElementById("add-modal-title").textContent = "İlaç Güncelle";
+            document.getElementById("add-modal").style.display = "flex";
+
+            // Form action'ı Edit olarak güncelle
+            document.getElementById("add-form").action = '@Url.Action("Edit", "Drugs")/' + id;
+        }
+
+        function closeModal() {
+            document.getElementById("add-modal").style.display = "none";
+            document.getElementById("add-form").reset();
+            editingRow = null;
+        }
+
+        function saveMedicine(event) {
+            event.preventDefault();
+            const form = event.target;
+
+            // Form verilerini topla
+            const formData = new FormData(form);
+
+            // AJAX isteği gönder
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload(); // Başarılı ise sayfayı yenile
+                    } else {
+                        alert('Bir hata oluştu: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('İşlem sırasında bir hata oluştu!');
+                });
+
+            closeModal();
+        }
+
+        function deleteRow(button) {
+            const row = button.closest("tr");
+            const id = row.getAttribute("data-id");
+
+            if (confirm("Bu ilacı silmek istediğinize emin misiniz?")) {
+                fetch(`@Url.Action("Delete", "Drugs")/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            row.remove();
+                        } else {
+                            alert('Silme işlemi başarısız: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Silme işlemi sırasında bir hata oluştu!');
+                    });
+            }
+        }
+
+        function applyFilter() {
+            const name = document.getElementById("filter-name").value.toLowerCase();
+            const type = document.getElementById("filter-type").value;
+            const category = document.getElementById("filter-category").value.toLowerCase();
+            const expiryDate = document.getElementById("filter-expiry-date").value;
+
+            const rows = document.querySelectorAll("#medicine-table-body tr");
+            rows.forEach((row) => {
+                const rowName = row.children[1].textContent.toLowerCase();
+                const rowType = row.children[2].textContent;
+                const rowCategory = row.children[4].textContent.toLowerCase();
+                const rowExpiryDate = row.children[6].textContent;
+
+                const matchName = rowName.includes(name);
+                const matchType = type === "" || rowType === type;
+                const matchCategory = rowCategory.includes(category);
+                const matchExpiryDate = expiryDate === "" || rowExpiryDate <= expiryDate;
+
+                row.style.display = matchName && matchType && matchCategory && matchExpiryDate ? "" : "none";
+            });
+        }
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function () {
+            // Form submit olayını yakala
+            document.getElementById("add-form").addEventListener("submit", saveMedicine);
+
+            // Filtre formunu resetle
+            document.getElementById("filter-form").reset();
+
+            // Modal dışında tıklandığında kapat
+            window.onclick = function (event) {
+                const modal = document.getElementById("add-modal");
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+
+            // ESC tuşuna basıldığında modalı kapat
+            document.addEventListener('keydown', function (event) {
+                if (event.key === "Escape") {
+                    closeModal();
+                }
+            });
+        });
+
+        // Mobil görünüm için sidebar toggle
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+    </script>
+}
