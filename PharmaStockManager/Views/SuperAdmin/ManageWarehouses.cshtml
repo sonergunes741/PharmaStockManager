@@ -1,0 +1,340 @@
+﻿@model List<Warehouse>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warehouse Management</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+    <style>
+        :root {
+            --primary-blue: #5a9ecf;
+            --soft-blue: #e8f4ff;
+            --soft-blue-hover: #d1e9ff;
+            --lavender: #a68cb1;
+            --mint-green: #88b8a5;
+            --mid-tone: #93b7df;
+            --background: #f4f5f7;
+            --text: #2f3542;
+            --white: #ffffff;
+            --gray-light: #e8eaed;
+            --gray-hover: #dfe1e5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Logo Styles */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            cursor: pointer;
+        }
+
+        .logo-circle {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient( 135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66% );
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-circle {
+            transform: scale(1.1);
+        }
+
+        .pill-icon {
+            width: 20px;
+            height: 32px;
+            background-color: var(--white);
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .page-content {
+            padding-top: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            margin-top: 2rem;
+        }
+
+        .warehouse-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .warehouse-card {
+            background: var(--soft-blue);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(90, 158, 207, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(90, 158, 207, 0.1);
+        }
+
+            .warehouse-card:hover {
+                transform: translateY(-5px);
+                background: var(--soft-blue-hover);
+                box-shadow: 0 8px 24px rgba(90, 158, 207, 0.12);
+            }
+
+            .warehouse-card h3 {
+                font-size: 1.25rem;
+                color: var(--text);
+                margin-bottom: 0.5rem;
+            }
+
+            .warehouse-card p {
+                color: var(--text);
+                font-size: 1rem;
+                opacity: 0.8;
+                margin-bottom: 0.5rem;
+            }
+
+        .action-buttons {
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+            color: var(--white);
+        }
+
+            .button:hover {
+                transform: translateY(-2px);
+                opacity: 0.9;
+            }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+            .modal.hidden {
+                display: none;
+            }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+                color: var(--text);
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid var(--gray-light);
+                border-radius: 8px;
+                font-size: 1rem;
+            }
+
+                .form-group input:focus {
+                    outline: none;
+                    border-color: var(--primary-blue);
+                }
+
+        .modal-content button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 1rem;
+        }
+
+            .modal-content button[type="submit"] {
+                background-color: var(--lavender);
+                color: var(--white);
+            }
+
+            .modal-content button[type="button"] {
+                background-color: var(--gray-light);
+                color: var(--text);
+            }
+
+        .delete-btn {
+            background-color: var(--primary-blue) !important;
+            color: var(--white) !important;
+        }
+
+        .modal-content button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-content">
+            <h1>Warehouse Management</h1>
+
+            <div class="action-buttons">
+                <button class="button" onclick="openAddModal()">
+                    Add New Warehouse
+                </button>
+            </div>
+
+            <div class="warehouse-list" id="warehouseList">
+                @foreach (var warehouse in Model)
+                {
+                    <div class="warehouse-card" onclick="openEditModal(@warehouse.Id)">
+                        <h3>@warehouse.Name</h3>
+                        <p><strong>Ref Code:</strong> @warehouse.RefCode</p>
+                        <p><strong>Address:</strong> @warehouse.Address</p>
+                        <p><strong>Created:</strong> @warehouse.CreatedAt.ToShortDateString()</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hidden" id="addWarehouseModal">
+        <div class="modal-content">
+            <h2>Add Warehouse</h2>
+            <form id="addWarehouseForm" asp-action ="SaveWarehouse" asp-controller="SuperAdmin" method="post">
+                <div class="form-group">
+                    <label for="name">Warehouse Name</label>
+                    <input type="text" id="name" name="Name" placeholder="Enter warehouse name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="Address" placeholder="Enter address" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="button">Save</button>
+                    <button type="button" class="button" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+   
+        <script>
+        function openAddModal() {
+            const modal = document.getElementById('addWarehouseModal');
+            const form = document.getElementById('addWarehouseForm');
+            form.reset(); // Clear any previous data
+            modal.classList.remove('hidden');
+        } document.getElementById('warehouseModal').classList.remove('hidden');
+        
+
+        function openEditModal(id) {
+            // This would typically be handled by an AJAX call to get warehouse details
+            // For now, it's a placeholder
+            fetch(`/SuperAdmin/GetWarehouse/${id}`)
+                .then(response => response.json())
+                .then(warehouse => {
+                    document.getElementById('modalTitle').textContent = 'Edit Warehouse';
+                    document.getElementById('warehouseId').value = warehouse.id;
+                    document.getElementById('Name').value = warehouse.name;
+                    document.getElementById('RefCode').value = warehouse.refCode;
+                    document.getElementById('Address').value = warehouse.address;
+                    document.getElementById('deleteButton').style.display = 'inline-block';
+                    document.getElementById('warehouseModal').classList.remove('hidden');
+                });
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.modal:not(.hidden)');
+            modal.classList.add('hidden');
+        }
+
+        function deleteWarehouse() {
+            const id = document.getElementById('warehouseId').value;
+            if (id) {
+                fetch(`/SuperAdmin/DeleteWarehouse/${id}`, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload(); // Refresh the page
+                        }
+                    });
+            }
+        }
+
+        // Add event listener for form submission
+        document.getElementById('warehouseForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    location.reload(); // Refresh the page
+                }
+            });
+        });
+        </script>
+    
+</body>
+</html>
