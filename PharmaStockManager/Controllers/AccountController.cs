@@ -38,6 +38,9 @@ namespace StockManager.Controllers
             return View();
         }
 
+
+        
+
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel viewModel)
         {
@@ -126,7 +129,7 @@ namespace StockManager.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser != null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
             return View();
         }
@@ -248,7 +251,7 @@ namespace StockManager.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "Home");
                 }
                 else
                 {
@@ -315,7 +318,6 @@ namespace StockManager.Controllers
             ModelState.AddModelError("", "Invalid login attempt.");
             return View(loginViewModel);
         }
-
         [HttpGet]
         public async Task<IActionResult> MailConfirm()
         {
