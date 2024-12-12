@@ -295,7 +295,7 @@ namespace StockManager.Controllers
                         var roles = await _userManager.GetRolesAsync(user);
                         if (roles.Contains("Admin"))
                         {
-                            return RedirectToAction("Dashboard", "Admin");
+                            return RedirectToAction("Index", "AdminDashboard");
                         }
                         else if (roles.Contains("Employee"))
                         {
