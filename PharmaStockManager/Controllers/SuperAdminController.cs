@@ -36,21 +36,24 @@ public class SuperAdminController : Controller
         var adminUsersWithWarehouses = adminUsers.Select(user => new AppUser_Warehouse
         {
             Id = user.Id,
-            UserName = user.UserName,
+            FullName = user.FullName,
+            Email = user.Email,
             WarehouseName = warehouses.FirstOrDefault(w => w.RefCode == user.RefCode)?.Name
         }).ToList();
 
         var employeeUsersWithWarehouses = employeeUsers.Select(user => new AppUser_Warehouse
         {
             Id = user.Id,
-            UserName = user.UserName,
+            FullName = user.FullName,
+            Email = user.Email,
             WarehouseName = warehouses.FirstOrDefault(w => w.RefCode == user.RefCode)?.Name
         }).ToList();
 
         var customerUsersWithWarehouses = customerUsers.Select(user => new AppUser_Warehouse
         {
             Id = user.Id,
-            UserName = user.UserName,
+            FullName = user.FullName,
+            Email = user.Email,
             WarehouseName = warehouses.FirstOrDefault(w => w.RefCode == user.RefCode)?.Name
         }).ToList();
 

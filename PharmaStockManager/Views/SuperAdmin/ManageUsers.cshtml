@@ -1,8 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model ManageUsersViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,6 +151,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Warehouse Name</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Status</th>
@@ -162,16 +159,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Admin One</td>
-                            <td>admin1@example.com</td>
-                            <td>Active</td>
-                            <td>
-                                <button class="action-button button-deactivate">Deactivate</button>
-                                <button class="action-button button-delete">Delete</button>
-                            </td>
-                        </tr>
+                        @foreach (var user in Model.AdminUsers)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.WarehouseName</td>
+                                <td>@user.FullName</td>
+                                <td>@user.Email</td>
+                                @if (@user.ActiveUser)
+                                {
+                                    <td>Active</td>
+                                    <td>
+                                        <button class="action-button button-deactivate">Deactivate</button>
+                                        <button class="action-button button-delete">Delete</button>
+                                    </td>
+                                } else
+                                {
+                                    <td>Passive</td>
+                                    <td>
+                                        <button class="action-button button-activate">Activate</button>
+                                        <button class="action-button button-delete">Delete</button>
+                                    </td>
+                                }
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -182,6 +193,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Warehouse Name</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Status</th>
@@ -189,16 +201,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>101</td>
-                            <td>Customer One</td>
-                            <td>customer1@example.com</td>
-                            <td>Inactive</td>
-                            <td>
-                                <button class="action-button button-activate">Activate</button>
-                                <button class="action-button button-delete">Delete</button>
-                            </td>
-                        </tr>
+                        @foreach (var user in Model.CustomerUsers)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.WarehouseName</td>
+                                <td>@user.FullName</td>
+                                <td>@user.Email</td>
+                                @if (@user.ActiveUser)
+                                {
+                                    <td>Active</td>
+                                    <td>
+                                        <button class="action-button button-deactivate">Deactivate</button>
+                                        <button class="action-button button-delete">Delete</button>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>Passive</td>
+                                    <td>
+                                        <button class="action-button button-activate">Activate</button>
+                                        <button class="action-button button-delete">Delete</button>
+                                    </td>
+                                }
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -209,6 +236,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Warehouse Name</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Status</th>
@@ -216,16 +244,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>201</td>
-                            <td>Employee One</td>
-                            <td>employee1@example.com</td>
-                            <td>Active</td>
-                            <td>
-                                <button class="action-button button-deactivate">Deactivate</button>
-                                <button class="action-button button-delete">Delete</button>
-                            </td>
-                        </tr>
+                        @foreach (var user in Model.EmployeeUsers)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.WarehouseName</td>
+                                <td>@user.FullName</td>
+                                <td>@user.Email</td>
+                                @if (@user.ActiveUser)
+                                {
+                                    <td>Active</td>
+                                    <td>
+                                        <button class="action-button button-deactivate">Deactivate</button>
+                                        <button class="action-button button-delete">Delete</button>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>Passive</td>
+                                    <td>
+                                        <button class="action-button button-activate">Activate</button>
+                                        <button class="action-button button-delete">Delete</button>
+                                    </td>
+                                }
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
