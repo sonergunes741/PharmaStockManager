@@ -93,16 +93,16 @@
         transition: all 0.3s ease;
     }
 
-    .nav-link:hover, .nav-link.active {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--white);
-        transform: translateX(5px);
-    }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
+        }
 
-    .nav-link i {
-        width: 20px;
-        margin-right: 1rem;
-    }
+        .nav-link i {
+            width: 20px;
+            margin-right: 1rem;
+        }
 
     .main-content {
         flex: 1;
@@ -127,25 +127,25 @@
         margin-top: 1.5rem;
     }
 
-    .transaction-table thead {
-        background-color: var(--lavender);
-        color: var(--white);
-    }
+        .transaction-table thead {
+            background-color: var(--lavender);
+            color: var(--white);
+        }
 
-    .transaction-table th,
-    .transaction-table td {
-        padding: 1rem;
-        text-align: left;
-        border-bottom: 1px solid var(--gray-light);
-    }
+        .transaction-table th,
+        .transaction-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
 
-    .transaction-table tbody tr:hover {
-        background-color: var(--gray-hover);
-    }
+        .transaction-table tbody tr:hover {
+            background-color: var(--gray-hover);
+        }
 
-    .transaction-table tbody tr:nth-child(even) {
-        background-color: var(--gray-light);
-    }
+        .transaction-table tbody tr:nth-child(even) {
+            background-color: var(--gray-light);
+        }
 
     .btn {
         padding: 0.75rem 1.5rem;
@@ -176,6 +176,62 @@
         .main-content {
             margin-left: 0;
         }
+    }
+    .filter-form {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background-color: var(--gray-light);
+        border-radius: 8px;
+    }
+
+    .filter-input {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.5rem;
+        border: 1px solid var(--gray-hover);
+        border-radius: 4px;
+        font-size: 0.875rem;
+    }
+
+    .filter-btn {
+        background-color: var(--lavender);
+        color: var(--white);
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .status-badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        color: white;
+        font-size: 0.875rem;
+        display: inline-block;
+    }
+
+    .status-stockin {
+        background-color: var(--mint-green);
+    }
+
+    .status-stockout {
+        background-color: var(--primary-blue);
+    }
+
+    .status-adjustment {
+        background-color: var(--lavender);
+    }
+
+    .status-deleted {
+        background-color: #ff6b6b;
+    }
+
+    .status-request {
+        background-color: #ffd43b;
+        color: var(--text);
     }
 </style>
 
@@ -239,6 +295,26 @@
 
         <h1>İşlem Geçmişi</h1>
 
+        <div class="filter-form">
+            <input type="text" id="drugNameFilter" class="filter-input" placeholder="İlaç Adı" />
+            <select id="transactionTypeFilter" class="filter-input">
+                <option value="">Tüm İşlemler</option>
+                <option value="Stock In">Stok Girişi</option>
+                <option value="Stock Out">Stok Çıkışı</option>
+                <option value="Stock Adjustment">Stok Düzeltme</option>
+                <option value="Drug Deleted">Silinen İlaçlar</option>
+                <option value="Request Approved">Onaylanan İstekler</option>
+                <option value="Request Rejected">Reddedilen İstekler</option>
+            </select>
+            <input type="date" id="dateFilter" class="filter-input" />
+            <button onclick="applyFilters()" class="filter-btn">
+                <i class="fas fa-filter"></i> Filtrele
+            </button>
+            <button onclick="resetFilters()" class="filter-btn">
+                <i class="fas fa-sync"></i> Sıfırla
+            </button>
+        </div>
+
         <table class="transaction-table">
             <thead>
                 <tr>
@@ -257,7 +333,20 @@
                     <tr>
                         <td>@transaction.Drug.Name</td>
                         <td>@transaction.Quantity</td>
-                        <td>@transaction.TransactionType</td>
+                        <td>
+                            @{
+                                var statusClass = transaction.TransactionType switch
+                                {
+                                    "Stock In" => "status-stockin",
+                                    "Stock Out" => "status-stockout",
+                                    "Stock Adjustment" => "status-adjustment",
+                                    "Drug Deleted" => "status-deleted",
+                                    "Request Approved" or "Request Rejected" => "status-request",
+                                    _ => "status-adjustment"
+                                };
+                            }
+                            <span class="status-badge @statusClass">@transaction.TransactionType</span>
+                        </td>
                         <td>@transaction.TransactionDate.ToString("yyyy-MM-dd HH:mm")</td>
                         <td>@transaction.ExpiryDate.ToString("yyyy-MM-dd")</td>
                         <td>@transaction.Type</td>
@@ -268,3 +357,31 @@
         </table>
     </div>
 </main>
+
+<script>
+    function applyFilters() {
+        const drugName = document.getElementById('drugNameFilter').value.toLowerCase();
+        const transactionType = document.getElementById('transactionTypeFilter').value;
+        const date = document.getElementById('dateFilter').value;
+
+        const rows = document.querySelectorAll('.transaction-table tbody tr');
+
+        rows.forEach(row => {
+            const nameMatch = row.cells[0].textContent.toLowerCase().includes(drugName);
+            const typeMatch = !transactionType || row.cells[2].textContent.includes(transactionType);
+            const rowDate = row.cells[3].textContent.split(' ')[0];
+            const dateMatch = !date || rowDate === date;
+
+            row.style.display = nameMatch && typeMatch && dateMatch ? '' : 'none';
+        });
+    }
+
+    function resetFilters() {
+        document.getElementById('drugNameFilter').value = '';
+        document.getElementById('transactionTypeFilter').value = '';
+        document.getElementById('dateFilter').value = '';
+
+        const rows = document.querySelectorAll('.transaction-table tbody tr');
+        rows.forEach(row => row.style.display = '');
+    }
+</script>

@@ -8,11 +8,15 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PharmaStockManager.Migrations
 {
     /// <inheritdoc />
-    public partial class mainpush : Migration
+    public partial class mainmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence<int>(
+                name: "UserIds",
+                startValue: 1000L);
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -32,8 +36,7 @@ namespace PharmaStockManager.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR UserIds"),
                     ActiveUser = table.Column<bool>(type: "bit", nullable: false),
                     RefCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ActivationCode = table.Column<int>(type: "int", nullable: true),
@@ -72,19 +75,6 @@ namespace PharmaStockManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Depos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Depos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Drugs",
                 columns: table => new
                 {
@@ -94,7 +84,8 @@ namespace PharmaStockManager.Migrations
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DrugType = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,6 +108,23 @@ namespace PharmaStockManager.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Requests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Warehouses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RefCode = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Warehouses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -282,22 +290,13 @@ namespace PharmaStockManager.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Depos",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Depo A" },
-                    { 2, "Depo B" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Drugs",
-                columns: new[] { "Id", "Category", "ExpiryDate", "Name", "Quantity", "UnitPrice" },
+                columns: new[] { "Id", "Category", "DrugType", "ExpiryDate", "Name", "Quantity", "UnitPrice" },
                 values: new object[,]
                 {
-                    { 1, "Painkillers", null, "Aspirin", 50, 10.0m },
-                    { 2, "Antibiotics", null, "Amoxicillin", 30, 20.0m },
-                    { 3, "Painkillers", null, "Paracetamol", 100, 8.0m }
+                    { 1, "Painkillers", "Commercial", null, "Aspirin", 50, 10.0m },
+                    { 2, "Antibiotics", "Commercial", null, "Amoxicillin", 30, 20.0m },
+                    { 3, "Painkillers", "Commercial", null, "Paracetamol", 100, 8.0m }
                 });
 
             migrationBuilder.CreateIndex(
@@ -348,6 +347,12 @@ namespace PharmaStockManager.Migrations
                 name: "IX_Transactions_DrugId",
                 table: "Transactions",
                 column: "DrugId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Warehouses_RefCode",
+                table: "Warehouses",
+                column: "RefCode",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -372,9 +377,6 @@ namespace PharmaStockManager.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Depos");
-
-            migrationBuilder.DropTable(
                 name: "Permissions");
 
             migrationBuilder.DropTable(
@@ -384,6 +386,9 @@ namespace PharmaStockManager.Migrations
                 name: "Transactions");
 
             migrationBuilder.DropTable(
+                name: "Warehouses");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -391,6 +396,9 @@ namespace PharmaStockManager.Migrations
 
             migrationBuilder.DropTable(
                 name: "Drugs");
+
+            migrationBuilder.DropSequence(
+                name: "UserIds");
         }
     }
 }

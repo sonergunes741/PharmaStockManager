@@ -26,7 +26,9 @@ namespace PharmaStockManager.Models
         // Yeni eklenen ExpiryDate alanı
         [DataType(DataType.Date)] // Expiry date input formatı için
         public DateTime? ExpiryDate { get; set; } // Nullable çünkü bazı ilaçların son kullanma tarihi olmayabilir.
-
+        [Required]
+        [Display(Name = "Drug Type")]
+        public string DrugType { get; set; }
         public decimal TotalValue => Quantity * UnitPrice;
     }
 }

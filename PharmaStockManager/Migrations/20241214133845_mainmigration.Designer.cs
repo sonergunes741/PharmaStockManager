@@ -12,8 +12,8 @@ using PharmaStockManager.Models;
 namespace PharmaStockManager.Migrations
 {
     [DbContext(typeof(PharmaContext))]
-    [Migration("20241207142035_mainpush")]
-    partial class mainpush
+    [Migration("20241214133845_mainmigration")]
+    partial class mainmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,9 @@ namespace PharmaStockManager.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.HasSequence<int>("UserIds")
+                .StartsAt(1000L);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -158,36 +161,6 @@ namespace PharmaStockManager.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PharmaStockManager.Models.Depos", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Depos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Depo A"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Depo B"
-                        });
-                });
-
             modelBuilder.Entity("PharmaStockManager.Models.Drug", b =>
                 {
                     b.Property<int>("Id")
@@ -197,6 +170,10 @@ namespace PharmaStockManager.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DrugType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -223,6 +200,7 @@ namespace PharmaStockManager.Migrations
                         {
                             Id = 1,
                             Category = "Painkillers",
+                            DrugType = "Commercial",
                             Name = "Aspirin",
                             Quantity = 50,
                             UnitPrice = 10.0m
@@ -231,6 +209,7 @@ namespace PharmaStockManager.Migrations
                         {
                             Id = 2,
                             Category = "Antibiotics",
+                            DrugType = "Commercial",
                             Name = "Amoxicillin",
                             Quantity = 30,
                             UnitPrice = 20.0m
@@ -239,6 +218,7 @@ namespace PharmaStockManager.Migrations
                         {
                             Id = 3,
                             Category = "Painkillers",
+                            DrugType = "Commercial",
                             Name = "Paracetamol",
                             Quantity = 100,
                             UnitPrice = 8.0m
@@ -279,9 +259,8 @@ namespace PharmaStockManager.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR UserIds");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -450,6 +429,43 @@ namespace PharmaStockManager.Migrations
                     b.HasIndex("DrugId");
 
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("PharmaStockManager.Models.Warehouse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("RefCode")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RefCode")
+                        .IsUnique();
+
+                    b.ToTable("Warehouses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
