@@ -8640,19 +8640,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\soner\\.nuget\\packages\\": {}
+    "C:\\Users\\unals\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\soner\\Masaüstü\\proje\\PharmaStockManager\\PharmaStockManager.csproj",
+      "projectUniqueName": "C:\\Users\\unals\\OneDrive\\Belgeler\\GitHub\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
       "projectName": "PharmaStockManager",
-      "projectPath": "C:\\Users\\soner\\Masaüstü\\proje\\PharmaStockManager\\PharmaStockManager.csproj",
-      "packagesPath": "C:\\Users\\soner\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\soner\\Masaüstü\\proje\\PharmaStockManager\\obj\\",
+      "projectPath": "C:\\Users\\unals\\OneDrive\\Belgeler\\GitHub\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
+      "packagesPath": "C:\\Users\\unals\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\unals\\OneDrive\\Belgeler\\GitHub\\PharmaStockManager\\PharmaStockManager\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\soner\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\unals\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8746,7 +8746,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.402/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
