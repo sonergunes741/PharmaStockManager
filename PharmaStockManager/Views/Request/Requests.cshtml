@@ -1,81 +1,352 @@
-﻿<h2>User Requests</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Drug Name</th>
-            <th>Quantity</th>
-            <th>User</th>
-            <th>Request Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var request in Model)
-        {
-            <tr>
-                <td>@request.DrugName</td>
-                <td>@request.Quantity</td>
-                <td>@request.UserName</td>
-                <td>@request.RequestDate.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>
-                    @if (request.IsApproved)
-                    {
-                        <span class="badge bg-success">Approved</span>
-                    }
-                    else if (request.IsRejected)
-                    {
-                        <span class="badge bg-danger">Rejected</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-warning">Pending</span>
-                    }
-                </td>
-                <td>
-                    @if (!request.IsApproved && !request.IsRejected)
-                    {
-                        <button class="btn btn-primary btn-sm approve-btn" data-id="@request.Id" data-quantity="@request.Quantity" data-drugname="@request.DrugName">
-                            Approve
-                        </button>
-                        <button class="btn btn-danger btn-sm reject-btn" data-id="@request.Id">
-                            Reject
-                        </button>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+﻿@model IEnumerable<PharmaStockManager.Models.ViewModels.RequestViewModel>
+@{
+    ViewData["Title"] = "Orders";
+    Layout = null;
+}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #fff;
+        --gray-light: #e8eaed;
+        --gray-hover: #ddd;
+        --filter-bg: #f9f9f9;
+        --filter-border: #ccc;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+        z-index: 1000;
+    }
+
+    .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+    }
+
+    .nav-menu {
+        list-style: none;
+    }
+
+    .nav-item {
+        margin: 0.5rem 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 1rem;
+        }
+
+    .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+        background-color: var(--background);
+        min-height: calc(100vh - 60px);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: var(--white);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 1rem;
+    }
+
+        .orders-table thead {
+            background-color: var(--lavender);
+            color: var(--white);
+        }
+
+        .orders-table th, .orders-table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray-hover);
+        }
+
+        .orders-table tbody tr:hover {
+            background-color: var(--gray-hover);
+        }
+
+        .orders-table tbody tr:nth-child(even) {
+            background-color: var(--gray-light);
+        }
+
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .badge-success {
+        background-color: var(--mint-green);
+        color: var(--white);
+    }
+
+    .badge-warning {
+        background-color: #ffd43b;
+        color: var(--text);
+    }
+
+    .badge-danger {
+        background-color: #ff6b6b;
+        color: var(--white);
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        margin-right: 0.5rem;
+        transition: opacity 0.2s;
+    }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+    .btn-approve {
+        background-color: var(--mint-green);
+        color: var(--white);
+    }
+
+    .btn-reject {
+        background-color: var(--primary-blue);
+        color: var(--white);
+    }
+
+    @@media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+    }
+</style>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <div class="logo-circle">
+                <div class="pill-icon"></div>
+            </div>
+            <span class="logo-text">Pharma Stock Manager</span>
+        </div>
+    </div>
+
+    <nav>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a asp-controller="AdminDashboard" asp-action="Index" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Drugs" asp-action="Index" class="nav-link">
+                    <i class="fas fa-pills"></i>
+                    Envanter
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Request" asp-action="Index" class="nav-link active">
+                    <i class="fas fa-shopping-cart"></i>
+                    Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Admin" asp-action="Users" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Categories" asp-action="Index" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    Kategori
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Drugs" asp-action="TransactionHistory" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    History
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<main class="main-content">
+    <div class="container">
+        <h1>Orders</h1>
+
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Drug Name</th>
+                    <th>Quantity</th>
+                    <th>User</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var request in Model)
+                {
+                    <tr>
+                        <td>@request.DrugName</td>
+                        <td>@request.Quantity</td>
+                        <td>@request.UserName</td>
+                        <td>@request.RequestDate.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>
+                            @if (request.IsApproved)
+                            {
+                                <span class="badge badge-success">Approved</span>
+                            }
+                            else if (request.IsRejected)
+                            {
+                                <span class="badge badge-danger">Rejected</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">Pending</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!request.IsApproved && !request.IsRejected)
+                            {
+                                <button class="btn btn-approve approve-btn"
+                                        data-id="@request.Id"
+                                        data-quantity="@request.Quantity"
+                                        data-drugname="@request.DrugName">
+                                    Approve
+                                </button>
+                                <button class="btn btn-reject reject-btn"
+                                        data-id="@request.Id">
+                                    Reject
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Onayla butonu
         $('.approve-btn').click(function () {
             const requestId = $(this).data('id');
             const drugName = $(this).data('drugname');
             const quantity = $(this).data('quantity');
-            
+
             $.ajax({
                 url: '/Request/Approve',
                 type: 'POST',
-                data: { id: requestId, drugName: drugName, quantity: quantity },
+                data: {
+                    id: requestId,
+                    drugName: drugName,
+                    quantity: quantity
+                },
                 success: function (response) {
                     if (response.success) {
                         alert('Request approved successfully!');
                         location.reload();
                     } else {
-                        alert('Failed to approve request.');
+                        alert('Failed to approve request: ' + response.message);
                     }
                 }
             });
         });
 
-        // Reddet butonu
         $('.reject-btn').click(function () {
             const requestId = $(this).data('id');
-            
+
             $.ajax({
                 url: '/Request/Reject',
                 type: 'POST',
@@ -85,7 +356,7 @@
                         alert('Request rejected successfully!');
                         location.reload();
                     } else {
-                        alert('Failed to reject request.');
+                        alert('Failed to reject request: ' + response.message);
                     }
                 }
             });

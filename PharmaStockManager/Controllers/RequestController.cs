@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models;
+using PharmaStockManager.Models.ViewModels;
 
 [Authorize(Roles = "Admin")]
 public class RequestController : Controller
@@ -15,20 +16,21 @@ public class RequestController : Controller
     public IActionResult Index()
     {
         var requests = _context.Requests
-                               .Select(r => new
-                               {
-                                   r.Id,
-                                   DrugName = _context.Drugs.FirstOrDefault(d => d.Id == r.DrugId).Name,
-                                   r.Quantity,
-                                   r.UserName,
-                                   r.RequestDate,
-                                   r.IsApproved,
-                                   r.IsRejected
-                               })
-                               .ToList();
+            .Select(r => new RequestViewModel
+            {
+                Id = r.Id,
+                DrugName = _context.Drugs.FirstOrDefault(d => d.Id == r.DrugId).Name,
+                Quantity = r.Quantity,
+                UserName = r.UserName,
+                RequestDate = r.RequestDate,
+                IsApproved = r.IsApproved,
+                IsRejected = r.IsRejected
+            })
+            .ToList();
 
-        return View("~/Views/Request/Requests.cshtml", requests);// Bu durumda /Views/Request/Requests.cshtml kullanılacaktır
+        return View("~/Views/Request/Requests.cshtml", requests);
     }
+
     [HttpPost]
     public IActionResult Approve(int id, string drugName, int quantity)
     {
@@ -52,9 +54,9 @@ public class RequestController : Controller
 
         // Veritabanını güncelle
         _context.SaveChanges();
-
         return Json(new { success = true });
     }
+
     [HttpPost]
     public IActionResult Reject(int id)
     {
@@ -65,11 +67,7 @@ public class RequestController : Controller
         }
 
         request.IsRejected = true;
-
         _context.SaveChanges();
-
         return Json(new { success = true });
     }
-
-
 }
