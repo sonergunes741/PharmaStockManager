@@ -1,8 +1,11 @@
-﻿@model IEnumerable<PharmaStockManager.Models.Identity.AppUser>
+﻿
+
+@model IEnumerable<PharmaStockManager.Models.ViewModel.UserManagementViewModel>
 @{
     ViewData["Title"] = "User Management";
     Layout = null;
 }
+
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 
@@ -93,16 +96,16 @@
         transition: all 0.3s ease;
     }
 
-    .nav-link:hover, .nav-link.active {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--white);
-        transform: translateX(5px);
-    }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
+        }
 
-    .nav-link i {
-        width: 20px;
-        margin-right: 1rem;
-    }
+        .nav-link i {
+            width: 20px;
+            margin-right: 1rem;
+        }
 
     .main-content {
         flex: 1;
@@ -177,9 +180,63 @@
         .sidebar {
             transform: translateX(-100%);
         }
+
         .main-content {
             margin-left: 0;
         }
+    }
+    .button-accept {
+        background-color: #4CAF50;
+        color: var(--white);
+        margin-right: 0.5rem;
+    }
+
+    .button-reject {
+        background-color: #f44336;
+        color: var(--white);
+        margin-right: 0.5rem;
+    }
+
+    .button-employee {
+        background-color: #2196F3;
+        color: var(--white);
+        margin-right: 0.5rem;
+    }
+
+    .button-customer {
+        background-color: #ff9800;
+        color: var(--white);
+        margin-right: 0.5rem;
+    }
+
+    .pending-row {
+        background-color: #fff3cd;
+    }
+
+        .pending-row:hover {
+            background-color: #ffe69c;
+        }
+
+    .role-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .role-employee {
+        background-color: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .role-customer {
+        background-color: #fff3e0;
+        color: #f57c00;
+    }
+
+    .role-pending {
+        background-color: #ffebee;
+        color: #c62828;
     }
 </style>
 
@@ -189,9 +246,10 @@
             <div class="logo-circle">
                 <div class="pill-icon"></div>
             </div>
-            <span>Pharma Stock Manager</span>
+            <span class="logo-text">Pharma Stock Manager</span>
         </div>
     </div>
+
     <nav>
         <ul class="nav-menu">
             <li class="nav-item">
@@ -207,7 +265,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a asp-controller="Request" asp-action="Requests" class="nav-link">
+                <a asp-controller="Request" asp-action="Index" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
                     Orders
                 </a>
@@ -257,18 +315,47 @@
                 <tr>
                     <th>Email</th>
                     <th>Username</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var user in Model)
                 {
-                    <tr>
+                    var isPending = !user.ActiveUser;
+
+                    <tr class="@(isPending ? "pending-row" : "")">
                         <td>@user.Email</td>
                         <td>@user.UserName</td>
                         <td>
-                            <a class="button button-edit" asp-action="EditPermissions" asp-route-id="@user.Id">Edit</a>
-                            <button class="button button-delete" onclick="deleteUser('@user.Id')">Delete</button>
+                            <span class="role-badge @(user.Role == "Employee" ? "role-employee" :
+                                            user.Role == "Customer" ? "role-customer" :
+                                            "role-pending")">
+                                @(isPending ? "Pending" : user.Role)
+                            </span>
+                        </td>
+                        <td>
+                            @if (isPending)
+                            {
+                                <button class="button button-accept" onclick="acceptUser(@user.Id)">
+                                    <i class="fas fa-check"></i> Accept
+                                </button>
+                                <button class="button button-reject" onclick="rejectUser(@user.Id)">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            }
+                            <button class="button button-employee" onclick="makeEmployee(@user.Id)">
+                                <i class="fas fa-user-tie"></i> Make Employee
+                            </button>
+                            <button class="button button-customer" onclick="makeCustomer(@user.Id)">
+                                <i class="fas fa-user"></i> Make Customer
+                            </button>
+                            <a class="button button-edit" asp-action="EditPermissions" asp-route-id="@user.Id">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <button class="button button-delete" onclick="deleteUser(@user.Id)">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </td>
                     </tr>
                 }
@@ -278,27 +365,123 @@
 </main>
 
 <script>
-    function deleteUser(userId) {
-        if (confirm('Are you sure you want to delete this user?')) {
-            fetch(`@Url.Action("DeleteUser", "Admin")?id=${userId}`, {
+    function acceptUser(userId) {
+        if (confirm('Are you sure you want to accept this user?')) {
+            fetch('/Admin/AcceptUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify({ userId: userId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error accepting user: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while accepting the user');
+                });
+        }
+    }
+
+    function rejectUser(userId) {
+        if (confirm('Are you sure you want to reject this user?')) {
+            fetch('/Admin/RejectUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify({ userId: userId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error rejecting user: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while rejecting the user');
+                });
+        }
+    }
+    function makeEmployee(userId) {
+        if (confirm('Are you sure you want to make this user an Employee?')) {
+            fetch('/Admin/MakeEmployee?userId=' + userId, { // URL'i değiştirdik
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert('Error deleting user: ' + data.message);
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error changing role: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while changing the user role');
+                });
+        }
+    }
+
+    function makeCustomer(userId) {
+        if (confirm('Are you sure you want to make this user a Customer?')) {
+            fetch('/Admin/MakeCustomer?userId=' + userId, {  // URL'i değiştirdik
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while deleting the user');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error changing role: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while changing the user role');
+                });
+        }
+    }
+    function deleteUser(userId) {
+        if (confirm('Are you sure you want to delete this user?')) {
+            fetch(`/Admin/DeleteUser?id=${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error deleting user: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the user');
+                });
         }
     }
 </script>

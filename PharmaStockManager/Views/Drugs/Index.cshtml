@@ -4,263 +4,263 @@
     Layout = null;
 }
 
-
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 
+<!-- Existing CSS styles remain the same -->
 <style>
     :root {
-        --primary-blue: #5a9ecf;
-        --lavender: #a68cb1;
-        --mint-green: #88b8a5;
-        --mid-tone: #93b7df;
-        --background: #f4f5f7;
-        --text: #2f3542;
-        --white: #fff;
-        --gray-light: #e8eaed;
-        --gray-hover: #ddd;
-        --filter-bg: #f9f9f9;
-        --filter-border: #ccc;
-    }
+    --primary-blue: #5a9ecf;
+    --lavender: #a68cb1;
+    --mint-green: #88b8a5;
+    --mid-tone: #93b7df;
+    --background: #f4f5f7;
+    --text: #2f3542;
+    --white: #fff;
+    --gray-light: #e8eaed;
+    --gray-hover: #ddd;
+    --filter-bg: #f9f9f9;
+    --filter-border: #ccc;
+}
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Inter", system-ui, -apple-system, sans-serif;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
 
-    body {
-        background: var(--background);
-        color: var(--text);
-        display: flex;
-        min-height: 100vh;
-    }
+body {
+    background: var(--background);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+}
 
-    .sidebar {
-        width: 250px;
-        background-color: var(--text);
-        height: 100vh;
-        position: fixed;
-        padding: 2rem;
+.sidebar {
+    width: 250px;
+    background-color: var(--text);
+    height: 100vh;
+    position: fixed;
+    padding: 2rem;
+    color: var(--white);
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-circle {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pill-icon {
+    width: 20px;
+    height: 32px;
+    background-color: var(--white);
+    border-radius: 16px;
+}
+
+.nav-menu {
+    list-style: none;
+}
+
+.nav-item {
+    margin: 0.5rem 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+    .nav-link:hover, .nav-link.active {
+        background: rgba(255, 255, 255, 0.1);
         color: var(--white);
-        top: 0;
-        left: 0;
-        overflow-y: auto;
-        z-index: 1000;
+        transform: translateX(5px);
     }
 
-    .sidebar-header {
-        padding-bottom: 2rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        margin-bottom: 2rem;
-    }
-
-    .logo {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .logo-circle {
-        width: 44px;
-        height: 44px;
-        background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .pill-icon {
+    .nav-link i {
         width: 20px;
-        height: 32px;
-        background-color: var(--white);
-        border-radius: 16px;
-    }
-
-    .nav-menu {
-        list-style: none;
-    }
-
-    .nav-item {
-        margin: 0.5rem 0;
-    }
-
-    .nav-link {
-        display: flex;
-        align-items: center;
-        padding: 0.75rem 1rem;
-        color: rgba(255, 255, 255, 0.8);
-        text-decoration: none;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-        .nav-link:hover, .nav-link.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--white);
-            transform: translateX(5px);
-        }
-
-        .nav-link i {
-            width: 20px;
-            margin-right: 1rem;
-        }
-
-    .main-content {
-        flex: 1;
-        margin-left: 250px;
-        padding: 2rem;
-        background-color: var(--background);
-        min-height: calc(100vh - 60px);
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-        background-color: var(--white);
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .button {
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1rem;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .button-add {
-        background-color: var(--lavender);
-        color: var(--white);
-        margin-bottom: 1rem;
         margin-right: 1rem;
     }
 
-        .button-add:hover {
-            background-color: #5a54d4;
-            color: var(--white);
-        }
+.main-content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 2rem;
+    background-color: var(--background);
+    min-height: calc(100vh - 60px);
+}
 
-    .filter-form {
-        background: var(--filter-bg);
-        padding: 1rem;
-        border: 1px solid var(--filter-border);
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.button-add {
+    background-color: var(--lavender);
+    color: var(--white);
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+}
+
+    .button-add:hover {
+        background-color: #5a54d4;
+        color: var(--white);
     }
 
-        .filter-form input,
-        .filter-form select,
-        .filter-form button {
-            padding: 0.5rem;
-            border: 1px solid var(--filter-border);
-            border-radius: 8px;
-            font-size: 1rem;
-        }
+.filter-form {
+    background: var(--filter-bg);
+    padding: 1rem;
+    border: 1px solid var(--filter-border);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
 
-        .filter-form input,
-        .filter-form select {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .filter-form button {
-            background-color: var(--primary-blue);
-            color: var(--white);
-            cursor: pointer;
-            min-width: 100px;
-        }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1rem 0;
+    .filter-form input,
+    .filter-form select,
+    .filter-form button {
+        padding: 0.5rem;
+        border: 1px solid var(--filter-border);
+        border-radius: 8px;
         font-size: 1rem;
     }
 
-        table thead {
-            background-color: var(--lavender);
-            color: var(--white);
-        }
-
-        table th, table td {
-            text-align: left;
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--gray-hover);
-        }
-
-        table tbody tr:hover {
-            background-color: var(--gray-hover);
-        }
-
-        table tbody tr:nth-child(even) {
-            background-color: var(--gray-light);
-        }
-
-    .button-edit {
-        background-color: var(--mint-green);
-        color: var(--white);
-        margin-right: 0.5rem;
+    .filter-form input,
+    .filter-form select {
+        flex: 1;
+        min-width: 200px;
     }
 
-    .button-delete {
+    .filter-form button {
         background-color: var(--primary-blue);
         color: var(--white);
+        cursor: pointer;
+        min-width: 100px;
     }
 
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 1rem;
+}
+
+    table thead {
+        background-color: var(--lavender);
+        color: var(--white);
+    }
+
+    table th, table td {
+        text-align: left;
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--gray-hover);
+    }
+
+    table tbody tr:hover {
+        background-color: var(--gray-hover);
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: var(--gray-light);
+    }
+
+.button-edit {
+    background-color: var(--mint-green);
+    color: var(--white);
+    margin-right: 0.5rem;
+}
+
+.button-delete {
+    background-color: var(--primary-blue);
+    color: var(--white);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+    .modal-content input {
+        display: block;
         width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .modal-content {
-        background: var(--white);
-        padding: 2rem;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid var(--gray-light);
         border-radius: 8px;
+    }
+
+@@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .filter-form input,
+    .filter-form select {
         width: 100%;
-        max-width: 500px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-
-        .modal-content input {
-            display: block;
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--gray-light);
-            border-radius: 8px;
-        }
-
-    @@media (max-width: 768px) {
-        .sidebar {
-            transform: translateX(-100%);
-        }
-
-        .main-content {
-            margin-left: 0;
-        }
-
-        .filter-form input,
-        .filter-form select {
-            width: 100%;
-        }
-    }
+}
 </style>
 
 <div class="sidebar">
@@ -333,10 +333,10 @@
             </div>
         }
 
-        <button class="button button-add" onclick="openAddModal('Ticari')">
+        <button class="button button-add" onclick="openModal('add', 'Ticari')">
             Ticari İlaç Ekle
         </button>
-        <button class="button button-add" onclick="openAddModal('Klinik')">
+        <button class="button button-add" onclick="openModal('add', 'Klinik')">
             Klinik İlaç Ekle
         </button>
 
@@ -373,16 +373,18 @@
                         <tr data-id="@item.Id">
                             <td>@item.Id</td>
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            @* <td>@item.DrugType</td> *@
+                            <td>@Html.DisplayFor(modelItem => item.DrugType)</td>
                             <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
                             <td>@Html.DisplayFor(modelItem => item.Category)</td>
                             <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
                             <td>@item.ExpiryDate?.ToString("yyyy-MM-dd")</td>
                             <td>
-                                <button class="button button-edit" onclick="openEditModal(this)">
+                                <button class="button button-edit" onclick="openModal('edit', '@item.DrugType', @item.Id)">
                                     Stok Güncelle
                                 </button>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="button button-delete">Sil</a>
+                                <button class="button button-delete" onclick="deleteDrug(@item.Id)">
+                                    Sil
+                                </button>
                             </td>
                         </tr>
                     }
@@ -391,17 +393,43 @@
         </section>
     </div>
 
-    <div id="add-modal" class="modal">
+    <!-- Modal for Add/Edit -->
+    <div id="drugModal" class="modal">
         <div class="modal-content">
-            <h2 id="add-modal-title">İlaç Ekle</h2>
-            <form id="add-form" asp-action="Create" method="post">
-                <input type="text" name="Name" id="add-medicine-name" placeholder="İlaç Adı" required />
-                <input type="number" name="Quantity" id="add-stock" placeholder="Stok Adeti" required />
-                <input type="text" name="Category" id="add-category" placeholder="Kategori" required />
-                <input type="number" name="UnitPrice" id="add-price" placeholder="Fiyat" step="0.01" required />
-                <input type="date" name="ExpiryDate" id="add-expiry-date" required />
-                <button type="button" class="button" onclick="closeModal()">Kapat</button>
-                <button type="submit" class="button button-add">Kaydet</button>
+            <h2 id="modal-title">İlaç İşlemi</h2>
+            <form id="drugForm">
+                <input type="hidden" id="drugId" name="Id" />
+                <input type="hidden" id="drugType" name="DrugType" />
+                
+                <div class="form-group">
+                    <label for="Name">İlaç Adı</label>
+                    <input type="text" id="Name" name="Name" class="form-control" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="Category">Kategori</label>
+                    <input type="text" id="Category" name="Category" class="form-control" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="Quantity">Miktar</label>
+                    <input type="number" id="Quantity" name="Quantity" class="form-control" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="UnitPrice">Birim Fiyat</label>
+                    <input type="number" id="UnitPrice" name="UnitPrice" step="0.01" class="form-control" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="ExpiryDate">Son Kullanma Tarihi</label>
+                    <input type="date" id="ExpiryDate" name="ExpiryDate" class="form-control" required />
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="button" onclick="closeModal()">İptal</button>
+                    <button type="submit" class="button button-add">Kaydet</button>
+                </div>
             </form>
         </div>
     </div>
@@ -409,156 +437,120 @@
 
 @section Scripts {
     <script>
-        let medicineIdCounter = @(Model.Any() ? Model.Max(d => d.Id) + 1 : 1);
-        let editingRow = null;
-
-        function openAddModal(type) {
-            document.getElementById("add-modal").style.display = "flex";
-            document.getElementById("add-modal-title").textContent = `${type} İlaç Ekle`;
-            document.getElementById("add-form").dataset.type = type;
-
-            // Form action'ı Create olarak ayarla
-            document.getElementById("add-form").action = '@Url.Action("Create", "Drugs")';
-        }
-
-        function openEditModal(button) {
-            const row = button.closest("tr");
-            editingRow = row;
-            const id = row.getAttribute("data-id");
-
-            const name = row.children[1].textContent;
-            const drugType = row.children[2].textContent;
-            const stock = row.children[3].textContent;
-            const category = row.children[4].textContent;
-            const price = row.children[5].textContent;
-            const expiryDate = row.children[6].textContent;
-
-            document.getElementById("add-medicine-name").value = name;
-            document.getElementById("add-stock").value = stock;
-            document.getElementById("add-category").value = category;
-            document.getElementById("add-price").value = price;
-            document.getElementById("add-expiry-date").value = expiryDate;
-
-            document.getElementById("add-modal-title").textContent = "İlaç Güncelle";
-            document.getElementById("add-modal").style.display = "flex";
-
-            // Form action'ı Edit olarak güncelle
-            document.getElementById("add-form").action = '@Url.Action("Edit", "Drugs")/' + id;
+        function openModal(action, drugType, id = null) {
+            const modal = document.getElementById('drugModal');
+            const form = document.getElementById('drugForm');
+            const title = document.getElementById('modal-title');
+            
+            // Reset form
+            form.reset();
+            
+            // Set drug type
+            document.getElementById('drugType').value = drugType;
+            
+            if (action === 'edit' && id) {
+                title.textContent = 'İlaç Güncelle';
+                fetchDrugDetails(id);
+            } else {
+                title.textContent = `${drugType} İlaç Ekle`;
+                document.getElementById('drugId').value = '';
+            }
+            
+            modal.style.display = 'flex';
+            setupFormSubmission(action);
         }
 
         function closeModal() {
-            document.getElementById("add-modal").style.display = "none";
-            document.getElementById("add-form").reset();
-            editingRow = null;
+            document.getElementById('drugModal').style.display = 'none';
         }
 
-        function saveMedicine(event) {
-            event.preventDefault();
-            const form = event.target;
-
-            // Form verilerini topla
-            const formData = new FormData(form);
-
-            // AJAX isteği gönder
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                }
-            })
+        function fetchDrugDetails(id) {
+            fetch(`/Drugs/Details/${id}`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        location.reload(); // Başarılı ise sayfayı yenile
-                    } else {
-                        alert('Bir hata oluştu: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('İşlem sırasında bir hata oluştu!');
+                    document.getElementById('drugId').value = data.id;
+                    document.getElementById('Name').value = data.name;
+                    document.getElementById('Category').value = data.category;
+                    document.getElementById('Quantity').value = data.quantity;
+                    document.getElementById('UnitPrice').value = data.unitPrice;
+                    document.getElementById('ExpiryDate').value = data.expiryDate.split('T')[0];
                 });
-
-            closeModal();
         }
 
-        function deleteRow(button) {
-            const row = button.closest("tr");
-            const id = row.getAttribute("data-id");
-
-            if (confirm("Bu ilacı silmek istediğinize emin misiniz?")) {
-                fetch(`@Url.Action("Delete", "Drugs")/${id}`, {
+        function setupFormSubmission(action) {
+            const form = document.getElementById('drugForm');
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const url = action === 'edit' ? '/Drugs/Edit' : '/Drugs/Create';
+                
+                fetch(url, {
                     method: 'POST',
+                    body: formData,
                     headers: {
-                        'Content-Type': 'application/json',
                         'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                     }
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            row.remove();
-                        } else {
-                            alert('Silme işlemi başarısız: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Silme işlemi sırasında bir hata oluştu!');
-                    });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('İşlem sırasında hata oluştu: ' + data.message);
+                    }
+                });
+            };
+        }
+
+        function deleteDrug(id) {
+            if (confirm('Bu ilacı silmek istediğinize emin misiniz?')) {
+                fetch(`/Drugs/Delete/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Silme işlemi başarısız: ' + data.message);
+                    }
+                });
             }
         }
 
         function applyFilter() {
-            const name = document.getElementById("filter-name").value.toLowerCase();
-            const type = document.getElementById("filter-type").value;
-            const category = document.getElementById("filter-category").value.toLowerCase();
-            const expiryDate = document.getElementById("filter-expiry-date").value;
+            const name = document.getElementById('filter-name').value.toLowerCase();
+            const type = document.getElementById('filter-type').value;
+            const category = document.getElementById('filter-category').value.toLowerCase();
+            const expiryDate = document.getElementById('filter-expiry-date').value;
 
-            const rows = document.querySelectorAll("#medicine-table-body tr");
-            rows.forEach((row) => {
-                const rowName = row.children[1].textContent.toLowerCase();
-                const rowType = row.children[2].textContent;
-                const rowCategory = row.children[4].textContent.toLowerCase();
-                const rowExpiryDate = row.children[6].textContent;
+            document.querySelectorAll('#medicine-table-body tr').forEach(row => {
+                const matchName = row.cells[1].textContent.toLowerCase().includes(name);
+                const matchType = !type || row.cells[2].textContent === type;
+                const matchCategory = row.cells[4].textContent.toLowerCase().includes(category);
+                const rowExpiryDate = row.cells[6].textContent;
+                const matchExpiry = !expiryDate || rowExpiryDate <= expiryDate;
 
-                const matchName = rowName.includes(name);
-                const matchType = type === "" || rowType === type;
-                const matchCategory = rowCategory.includes(category);
-                const matchExpiryDate = expiryDate === "" || rowExpiryDate <= expiryDate;
-
-                row.style.display = matchName && matchType && matchCategory && matchExpiryDate ? "" : "none";
+                row.style.display = matchName && matchType && matchCategory && matchExpiry ? '' : 'none';
             });
         }
 
-        // Sayfa yüklendiğinde
-        document.addEventListener('DOMContentLoaded', function () {
-            // Form submit olayını yakala
-            document.getElementById("add-form").addEventListener("submit", saveMedicine);
-
-            // Filtre formunu resetle
-            document.getElementById("filter-form").reset();
-
-            // Modal dışında tıklandığında kapat
-            window.onclick = function (event) {
-                const modal = document.getElementById("add-modal");
-                if (event.target === modal) {
-                    closeModal();
-                }
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('drugModal');
+            if (event.target === modal) {
+                closeModal();
             }
+        };
 
-            // ESC tuşuna basıldığında modalı kapat
-            document.addEventListener('keydown', function (event) {
-                if (event.key === "Escape") {
-                    closeModal();
-                }
-            });
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
         });
-
-        // Mobil görünüm için sidebar toggle
-        function toggleSidebar() {
-            document.querySelector('.sidebar').classList.toggle('active');
-        }
     </script>
 }

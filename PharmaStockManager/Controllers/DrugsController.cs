@@ -1,321 +1,241 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Models;
-
-namespace PharmaStockManager.Controllers
+using System;
+using System.Threading.Tasks;
+[Authorize(Roles = "Admin")]
+public class DrugsController : Controller
 {
-    [Authorize(Roles = "Admin")]
-    public class DrugsController : Controller
+    private readonly PharmaContext _context;
+
+    public DrugsController(PharmaContext context)
     {
-        private readonly PharmaContext _context;
+        _context = context;
+    }
 
-        public DrugsController(PharmaContext context)
+    // GET: Drugs
+    public async Task<IActionResult> Index()
+    {
+        return View(await _context.Drugs.ToListAsync());
+    }
+
+    // GET: Drugs/Details/5
+    [HttpGet]
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return Json(new { success = false, message = "ID bulunamadı." });
         }
 
-        public async Task<IActionResult> Index()
+        var drug = await _context.Drugs
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (drug == null)
         {
-            ViewBag.Categories = _context.Categories.Select(c => c.Name).ToList();
-            return View(await _context.Drugs.ToListAsync());
+            return Json(new { success = false, message = "İlaç bulunamadı." });
         }
 
-        public async Task<IActionResult> Details(int? id)
+        return Json(new { success = true, data = drug });
+    }
+
+    // POST: Drugs/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType")] Drug drug)
+    {
+        if (ModelState.IsValid)
         {
-            if (id == null)
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                return NotFound();
-            }
+                _context.Add(drug);
+                await _context.SaveChangesAsync();
 
-            var drug = await _context.Drugs
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (drug == null)
-            {
-                return NotFound();
-            }
-
-            return View(drug);
-        }
-
-        public IActionResult Create()
-        {
-            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name");
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType")] Drug drug)
-        {
-            if (ModelState.IsValid)
-            {
-                using var transaction = await _context.Database.BeginTransactionAsync();
-                try
+                var transactionRecord = new Transaction
                 {
-                    _context.Add(drug);
-                    await _context.SaveChangesAsync();
+                    DrugId = drug.Id,
+                    Quantity = drug.Quantity,
+                    TransactionType = "Initial Stock",
+                    TransactionDate = DateTime.Now,
+                    ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
+                    Type = drug.DrugType,
+                    Price = drug.UnitPrice * drug.Quantity
+                };
 
-                    // Yeni ilaç eklendiğinde transaction kaydı oluştur
+                _context.Transactions.Add(transactionRecord);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Json(new { success = true, message = "İlaç başarıyla eklendi." });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return Json(new { success = false, message = "İlaç eklenirken hata oluştu: " + ex.Message });
+            }
+        }
+        return Json(new { success = false, message = "Geçersiz veri girişi." });
+    }
+
+    // POST: Drugs/Edit
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit([Bind("Id,Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType")] Drug drug)
+    {
+        if (ModelState.IsValid)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var oldDrug = await _context.Drugs.AsNoTracking().FirstOrDefaultAsync(d => d.Id == drug.Id);
+                if (oldDrug == null)
+                {
+                    return Json(new { success = false, message = "İlaç bulunamadı." });
+                }
+
+                var quantityDifference = drug.Quantity - oldDrug.Quantity;
+                if (quantityDifference != 0)
+                {
                     var transactionRecord = new Transaction
                     {
                         DrugId = drug.Id,
-                        Quantity = drug.Quantity,
-                        TransactionType = "Initial Stock",
+                        Quantity = Math.Abs(quantityDifference),
+                        TransactionType = quantityDifference > 0 ? "Stock Increase" : "Stock Decrease",
                         TransactionDate = DateTime.Now,
                         ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                         Type = drug.DrugType,
-                        Price = drug.UnitPrice * drug.Quantity
+                        Price = drug.UnitPrice * Math.Abs(quantityDifference)
                     };
 
                     _context.Transactions.Add(transactionRecord);
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
+                }
 
-                    TempData["SuccessMessage"] = "Drug created successfully.";
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception)
-                {
-                    await transaction.RollbackAsync();
-                    TempData["ErrorMessage"] = "Failed to create drug.";
-                }
+                _context.Update(drug);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Json(new { success = true, message = "İlaç başarıyla güncellendi." });
             }
-
-            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
-            return View(drug);
-        }
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
+            catch (DbUpdateConcurrencyException)
             {
-                return NotFound();
+                await transaction.RollbackAsync();
+                if (!DrugExists(drug.Id))
+                {
+                    return Json(new { success = false, message = "İlaç bulunamadı." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Güncelleme sırasında hata oluştu." });
+                }
             }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return Json(new { success = false, message = "Güncelleme sırasında hata oluştu: " + ex.Message });
+            }
+        }
+        return Json(new { success = false, message = "Geçersiz veri girişi." });
+    }
 
+    // POST: Drugs/Delete/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int id)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
             var drug = await _context.Drugs.FindAsync(id);
             if (drug == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "İlaç bulunamadı." });
             }
 
-            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
-            return View(drug);
+            var transactionRecord = new Transaction
+            {
+                DrugId = drug.Id,
+                Quantity = drug.Quantity,
+                TransactionType = "Drug Deleted",
+                TransactionDate = DateTime.Now,
+                ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
+                Type = drug.DrugType,
+                Price = drug.UnitPrice * drug.Quantity
+            };
+
+            _context.Transactions.Add(transactionRecord);
+            _context.Drugs.Remove(drug);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return Json(new { success = true, message = "İlaç başarıyla silindi." });
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType")] Drug drug)
+        catch (Exception ex)
         {
-            if (id != drug.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                using var transaction = await _context.Database.BeginTransactionAsync();
-                try
-                {
-                    var oldDrug = await _context.Drugs.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
-                    if (oldDrug != null && oldDrug.Quantity != drug.Quantity)
-                    {
-                        // Stok değişimi varsa transaction kaydı oluştur
-                        var quantityDifference = drug.Quantity - oldDrug.Quantity;
-                        var transactionRecord = new Transaction
-                        {
-                            DrugId = drug.Id,
-                            Quantity = Math.Abs(quantityDifference),
-                            TransactionType = quantityDifference > 0 ? "Stock Adjustment (+" : "Stock Adjustment (-",
-                            TransactionDate = DateTime.Now,
-                            ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
-                            Type = drug.DrugType,
-                            Price = drug.UnitPrice * Math.Abs(quantityDifference)
-                        };
-
-                        _context.Transactions.Add(transactionRecord);
-                    }
-
-                    _context.Update(drug);
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    TempData["SuccessMessage"] = "Drug updated successfully.";
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    await transaction.RollbackAsync();
-                    if (!DrugExists(drug.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-            ViewBag.Categories = new SelectList(_context.Categories, "Name", "Name", drug.Category);
-            return View(drug);
+            await transaction.RollbackAsync();
+            return Json(new { success = false, message = "Silme işlemi sırasında hata oluştu: " + ex.Message });
         }
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> StockIn(int id, int quantity, DateTime expiryDate, string type, decimal price)
+    // GET: Drugs/TransactionHistory
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> TransactionHistory()
+    {
+        var transactions = await _context.Transactions
+            .Include(t => t.Drug)
+            .OrderByDescending(t => t.TransactionDate)
+            .ToListAsync();
+
+        return View(transactions);
+    }
+
+    private bool DrugExists(int id)
+    {
+        return _context.Drugs.Any(e => e.Id == id);
+    }
+
+    // Helper action for stock operations
+    [HttpPost]
+    public async Task<IActionResult> StockOperation(int id, int quantity, string operationType)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
-            {
-                var drug = await _context.Drugs.FindAsync(id);
-                if (drug != null)
-                {
-                    drug.Quantity += quantity;
-
-                    var transactionRecord = new Transaction
-                    {
-                        DrugId = drug.Id,
-                        Quantity = quantity,
-                        TransactionType = "Stock In",
-                        TransactionDate = DateTime.Now,
-                        ExpiryDate = expiryDate,
-                        Type = type,
-                        Price = price * quantity
-                    };
-
-                    _context.Transactions.Add(transactionRecord);
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    TempData["SuccessMessage"] = $"{quantity} units added to {drug.Name}.";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Failed to add stock. Drug not found.";
-                }
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                TempData["ErrorMessage"] = "An error occurred while processing the stock in.";
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> StockOut(int id, int quantity)
-        {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
-            {
-                var drug = await _context.Drugs.FindAsync(id);
-                if (drug != null && drug.Quantity >= quantity)
-                {
-                    drug.Quantity -= quantity;
-
-                    var transactionRecord = new Transaction
-                    {
-                        DrugId = drug.Id,
-                        Quantity = quantity,
-                        TransactionType = "Stock Out",
-                        TransactionDate = DateTime.Now,
-                        ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
-                        Type = drug.DrugType,
-                        Price = drug.UnitPrice * quantity
-                    };
-
-                    _context.Transactions.Add(transactionRecord);
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    TempData["SuccessMessage"] = $"{quantity} units removed from {drug.Name}.";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Insufficient stock or drug not found.";
-                }
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                TempData["ErrorMessage"] = "An error occurred while processing the stock out.";
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var drug = await _context.Drugs
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var drug = await _context.Drugs.FindAsync(id);
             if (drug == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "İlaç bulunamadı." });
             }
 
-            return View(drug);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            if (operationType == "decrease" && drug.Quantity < quantity)
             {
-                var drug = await _context.Drugs.FindAsync(id);
-                if (drug != null)
-                {
-                    var transactionRecord = new Transaction
-                    {
-                        DrugId = drug.Id,
-                        Quantity = drug.Quantity,
-                        TransactionType = "Drug Deleted",
-                        TransactionDate = DateTime.Now,
-                        ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
-                        Type = drug.DrugType,
-                        Price = drug.UnitPrice * drug.Quantity
-                    };
-
-                    _context.Transactions.Add(transactionRecord);
-                    _context.Drugs.Remove(drug);
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    TempData["SuccessMessage"] = "Drug deleted successfully.";
-                }
+                return Json(new { success = false, message = "Yetersiz stok." });
             }
-            catch (Exception)
+
+            drug.Quantity += operationType == "increase" ? quantity : -quantity;
+
+            var transactionRecord = new Transaction
             {
-                await transaction.RollbackAsync();
-                TempData["ErrorMessage"] = "Failed to delete drug.";
-            }
+                DrugId = drug.Id,
+                Quantity = quantity,
+                TransactionType = operationType == "increase" ? "Stock In" : "Stock Out",
+                TransactionDate = DateTime.Now,
+                ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
+                Type = drug.DrugType,
+                Price = drug.UnitPrice * quantity
+            };
 
-            return RedirectToAction(nameof(Index));
+            _context.Transactions.Add(transactionRecord);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return Json(new { success = true, message = $"Stok {(operationType == "increase" ? "artırma" : "azaltma")} işlemi başarılı." });
         }
-
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> TransactionHistory()
+        catch (Exception ex)
         {
-            var transactions = await _context.Transactions
-                .Include(t => t.Drug)
-                .OrderByDescending(t => t.TransactionDate)
-                .ToListAsync();
-
-            return View(transactions);
-        }
-
-        private bool DrugExists(int id)
-        {
-            return _context.Drugs.Any(e => e.Id == id);
+            await transaction.RollbackAsync();
+            return Json(new { success = false, message = $"Stok işlemi sırasında hata oluştu: {ex.Message}" });
         }
     }
 }

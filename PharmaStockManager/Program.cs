@@ -1,4 +1,4 @@
-using PharmaStockManager.Models;
+﻿using PharmaStockManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Filters;
@@ -16,9 +16,24 @@ builder.Services.AddScoped<WarehouseService>();
 builder.Services.AddDbContext<PharmaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PharmaDatabase")));
 
-builder.Services.AddIdentity<AppUser, AppRole>()
-    .AddEntityFrameworkStores<PharmaContext>()
-    .AddDefaultTokenProviders();
+// Add Identity configuration
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 6;
+
+    // User settings
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<PharmaContext>()
+.AddDefaultTokenProviders();
+
+// Add RoleManager explicitly
+builder.Services.AddScoped<RoleManager<AppRole>>();
 
 var app = builder.Build();
 
@@ -28,8 +43,6 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
-
-    
 
     var superAdminRole = "SuperAdmin";
     if (!await roleManager.RoleExistsAsync(superAdminRole))
@@ -56,7 +69,7 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new AppRole(customerRole));
     }
 
-    // Create a default admin user if it doesn't exist
+    // Create default users with RefCode and UserType
     var superAdminEmail = "webwizardssol@example.com";
     var superAdminUser = await userManager.FindByEmailAsync(superAdminEmail);
     if (superAdminUser == null)
@@ -66,7 +79,9 @@ using (var scope = app.Services.CreateScope())
             ActiveUser = true,
             UserName = superAdminEmail,
             Email = superAdminEmail,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            UserType = "SuperAdmin",
+            RefCode = "SUPER001"
         };
         await userManager.CreateAsync(superAdminUser, "Superadmin123!"); // Default password
         await userManager.AddToRoleAsync(superAdminUser, superAdminRole);
@@ -81,7 +96,9 @@ using (var scope = app.Services.CreateScope())
             ActiveUser = true,
             UserName = adminEmail,
             Email = adminEmail,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            UserType = "Admin",
+            RefCode = "ADMIN001"
         };
         await userManager.CreateAsync(adminUser, "Admin123!"); // Default password
         await userManager.AddToRoleAsync(adminUser, adminRole);
@@ -96,13 +113,14 @@ using (var scope = app.Services.CreateScope())
             ActiveUser = true,
             UserName = employeeEmail,
             Email = employeeEmail,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            UserType = "Employee",
+            RefCode = "ADMIN001" // Aynı RefCode ile Admin'e bağlı
         };
         await userManager.CreateAsync(employeeUser, "Employee123!"); // Default password
         await userManager.AddToRoleAsync(employeeUser, employeeRole);
     }
 
-    // Create a default user if it doesn't exist
     var customerEmail = "Customer@example.com";
     var customerUser = await userManager.FindByEmailAsync(customerEmail);
     if (customerUser == null)
@@ -112,7 +130,9 @@ using (var scope = app.Services.CreateScope())
             ActiveUser = true,
             UserName = customerEmail,
             Email = customerEmail,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            UserType = "Customer",
+            RefCode = "ADMIN001" // Aynı RefCode ile Admin'e bağlı
         };
         await userManager.CreateAsync(customerUser, "Customer123!"); // Default password
         await userManager.AddToRoleAsync(customerUser, customerRole);
@@ -131,7 +151,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Add authentication
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
