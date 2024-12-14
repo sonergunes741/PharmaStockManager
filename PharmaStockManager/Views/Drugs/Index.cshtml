@@ -333,6 +333,7 @@ table {
             </div>
         }
 
+        @Html.AntiForgeryToken()
         <button class="button button-add" onclick="openModal('add', 'Ticari')">
             Ticari İlaç Ekle
         </button>
@@ -344,8 +345,8 @@ table {
             <input type="text" id="filter-name" placeholder="İlaç Adı" />
             <select id="filter-type">
                 <option value="">İlaç Tipi</option>
-                <option value="Ticari">Ticari</option>
-                <option value="Klinik">Klinik</option>
+                <option value="Ticari">Commercial</option>
+                <option value="Klinik">Clinical</option>
             </select>
             <input type="text" id="filter-category" placeholder="Kategori" />
             <input type="date" id="filter-expiry-date" placeholder="Son Kullanma Tarihi" />
@@ -398,6 +399,7 @@ table {
         <div class="modal-content">
             <h2 id="modal-title">İlaç İşlemi</h2>
             <form id="drugForm">
+                @Html.AntiForgeryToken()
                 <input type="hidden" id="drugId" name="Id" />
                 <input type="hidden" id="drugType" name="DrugType" />
                 
@@ -435,19 +437,22 @@ table {
     </div>
 </main>
 
-@section Scripts {
-    <script>
-        function openModal(action, drugType, id = null) {
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentAction = '';
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        // Global scope'a fonksiyonları ekleyelim
+        window.openModal = function(action, drugType, id = null) {
+            currentAction = action;
             const modal = document.getElementById('drugModal');
             const form = document.getElementById('drugForm');
             const title = document.getElementById('modal-title');
-            
-            // Reset form
+
             form.reset();
-            
-            // Set drug type
             document.getElementById('drugType').value = drugType;
-            
+
             if (action === 'edit' && id) {
                 title.textContent = 'İlaç Güncelle';
                 fetchDrugDetails(id);
@@ -455,59 +460,21 @@ table {
                 title.textContent = `${drugType} İlaç Ekle`;
                 document.getElementById('drugId').value = '';
             }
-            
+
             modal.style.display = 'flex';
-            setupFormSubmission(action);
-        }
+        };
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('drugModal').style.display = 'none';
-        }
+        };
 
-        function fetchDrugDetails(id) {
-            fetch(`/Drugs/Details/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('drugId').value = data.id;
-                    document.getElementById('Name').value = data.name;
-                    document.getElementById('Category').value = data.category;
-                    document.getElementById('Quantity').value = data.quantity;
-                    document.getElementById('UnitPrice').value = data.unitPrice;
-                    document.getElementById('ExpiryDate').value = data.expiryDate.split('T')[0];
-                });
-        }
-
-        function setupFormSubmission(action) {
-            const form = document.getElementById('drugForm');
-            form.onsubmit = function(e) {
-                e.preventDefault();
-                const formData = new FormData(form);
-                const url = action === 'edit' ? '/Drugs/Edit' : '/Drugs/Create';
-                
-                fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert('İşlem sırasında hata oluştu: ' + data.message);
-                    }
-                });
-            };
-        }
-
-        function deleteDrug(id) {
+        window.deleteDrug = function(id) {
             if (confirm('Bu ilacı silmek istediğinize emin misiniz?')) {
                 fetch(`/Drugs/Delete/${id}`, {
                     method: 'POST',
                     headers: {
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
                     }
                 })
                 .then(response => response.json())
@@ -517,28 +484,83 @@ table {
                     } else {
                         alert('Silme işlemi başarısız: ' + data.message);
                     }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Silme işlemi sırasında bir hata oluştu.');
                 });
             }
+        };
+
+        function fetchDrugDetails(id) {
+            fetch(`/Drugs/Details/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        const drug = data.data;
+                        document.getElementById('drugId').value = drug.id;
+                        document.getElementById('Name').value = drug.name;
+                        document.getElementById('Category').value = drug.category;
+                        document.getElementById('Quantity').value = drug.quantity;
+                        document.getElementById('UnitPrice').value = drug.unitPrice;
+                        document.getElementById('ExpiryDate').value = drug.expiryDate ? drug.expiryDate.split('T')[0] : '';
+                    } else {
+                        alert('İlaç bilgileri alınamadı: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('İlaç bilgileri alınırken bir hata oluştu.');
+                });
         }
 
-        function applyFilter() {
+        // Form submit handler
+        document.getElementById('drugForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const url = currentAction === 'edit' ? '/Drugs/Edit' : '/Drugs/Create';
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'RequestVerificationToken': token
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('İşlem başarısız: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('İşlem sırasında bir hata oluştu.');
+            });
+        });
+
+        // Filter function
+        window.applyFilter = function() {
             const name = document.getElementById('filter-name').value.toLowerCase();
             const type = document.getElementById('filter-type').value;
             const category = document.getElementById('filter-category').value.toLowerCase();
             const expiryDate = document.getElementById('filter-expiry-date').value;
 
-            document.querySelectorAll('#medicine-table-body tr').forEach(row => {
+            const rows = document.querySelectorAll('#medicine-table-body tr');
+            rows.forEach(row => {
                 const matchName = row.cells[1].textContent.toLowerCase().includes(name);
                 const matchType = !type || row.cells[2].textContent === type;
                 const matchCategory = row.cells[4].textContent.toLowerCase().includes(category);
                 const rowExpiryDate = row.cells[6].textContent;
                 const matchExpiry = !expiryDate || rowExpiryDate <= expiryDate;
 
-                row.style.display = matchName && matchType && matchCategory && matchExpiry ? '' : 'none';
+                row.style.display = (matchName && matchType && matchCategory && matchExpiry) ? '' : 'none';
             });
-        }
+        };
 
-        // Close modal when clicking outside
+        // Modal dışına tıklama ile kapatma
         window.onclick = function(event) {
             const modal = document.getElementById('drugModal');
             if (event.target === modal) {
@@ -546,11 +568,11 @@ table {
             }
         };
 
-        // Close modal on ESC key
+        // ESC tuşu ile modal kapatma
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeModal();
             }
         });
-    </script>
-}
+    });
+</script>
