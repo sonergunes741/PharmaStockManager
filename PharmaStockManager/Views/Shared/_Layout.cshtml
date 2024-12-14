@@ -101,7 +101,7 @@
                         }
 
                         <!-- User Only Links -->
-                        @if (User.IsInRole("User"))
+                        @if (User.IsInRole("Customer"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="UserPanel" asp-action="Index">User Panel</a>

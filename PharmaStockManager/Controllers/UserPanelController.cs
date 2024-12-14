@@ -4,7 +4,7 @@ using PharmaStockManager.Models;
 using Microsoft.Extensions.Logging; // Loglama için gerekli
 using System.Linq;
 
-[Authorize(Roles = "User")] // Bu controller'a yalnızca "User" rolündeki kullanıcılar erişebilir.
+[Authorize(Roles = "Customer")] // Bu controller'a yalnızca "User" rolündeki kullanıcılar erişebilir.
 public class UserPanelController : Controller
 {
     private readonly PharmaContext _context;
