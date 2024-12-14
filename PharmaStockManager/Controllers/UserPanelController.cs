@@ -4,7 +4,7 @@ using PharmaStockManager.Models;
 using Microsoft.Extensions.Logging; // Loglama için gerekli
 using System.Linq;
 
-[Authorize(Roles = "Customer")] // Bu controller'a yalnızca "User" rolündeki kullanıcılar erişebilir.
+[Authorize(Roles = "Customer")] // Bu controller'a yalnızca "Customer" rolündeki kullanıcılar erişebilir.
 public class UserPanelController : Controller
 {
     private readonly PharmaContext _context;
@@ -77,4 +77,60 @@ public class UserPanelController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpGet]
+    public IActionResult FilterMedicines(string search, decimal? minPrice, decimal? maxPrice, string stockStatus, string sortOption)
+    {
+        var query = _context.Drugs.AsQueryable();
+
+        // Arama filtresi
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(m => m.Name.Contains(search) || m.Category.Contains(search));
+        }
+
+        // Fiyat filtresi
+        if (minPrice.HasValue)
+        {
+            query = query.Where(m => m.UnitPrice >= minPrice.Value);
+        }
+
+        if (maxPrice.HasValue)
+        {
+            query = query.Where(m => m.UnitPrice <= maxPrice.Value);
+        }
+
+        // Stok durumu medici
+        if (stockStatus == "in-stock")
+        {
+            query = query.Where(m => m.Quantity > 0);
+        }
+        else if (stockStatus == "out-of-stock")
+        {
+            query = query.Where(m => m.Quantity == 0);
+        }
+
+        // Sıralama
+        query = sortOption switch
+        {
+            "name-asc" => query.OrderBy(m => m.Name),
+            "name-desc" => query.OrderByDescending(m => m.Name),
+            "price-asc" => query.OrderBy(m => m.UnitPrice),
+            "price-desc" => query.OrderByDescending(m => m.UnitPrice),
+            "category-asc" => query.OrderBy(m => m.Category),
+            "category-desc" => query.OrderByDescending(m => m.Category),
+            _ => query
+        };
+
+        var filteredMedicines = query.Select(m => new
+        {
+            m.Id,
+            m.Name,
+            m.Category,
+            m.UnitPrice,
+            m.Quantity
+        }).ToList();
+        return Json(filteredMedicines);
+    }
+
 }

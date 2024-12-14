@@ -3,45 +3,499 @@
 @{
     ViewData["Title"] = "User Panel";
 }
+@{
+    Layout = null;
+}
 
-<h2>Welcome to the User Panel</h2>
-
-<div class="row">
-    <div class="col-md-6">
-        <h3>Available Drugs</h3>
-        <ul class="list-group">
-            @foreach (var drug in Model.Drugs)
-            {
-                <li class="list-group-item">
-                    <strong>@drug.Name</strong> - Quantity: @drug.Quantity, Category: @drug.Category
-
-                    <!-- Stock Request Form -->
-                    <form asp-controller="UserPanel" asp-action="RequestStock" method="post" class="mt-2">
-                        <input type="hidden" name="drugId" value="@drug.Id" />
-                        <div class="input-group">
-                            <input type="number" name="quantity" class="form-control" placeholder="Quantity" min="1" required />
-                            <button type="submit" class="btn btn-primary">Request Stock</button>
-                        </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pharma Stock Manager - Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <form action="index.html"
+                          method="get"
+                          style="display: flex; align-items: center; gap: 1rem">
+                        <button type="submit"
+                                style="
+              all: unset;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+            ">
+                            <div class="logo-circle">
+                                <div class="pill-icon"></div>
+                            </div>
+                            <span class="logo-text">Pharma Stock Manager</span>
+                        </button>
                     </form>
-                </li>
-            }
-        </ul>
-    </div>
+                </div>
 
-    <div class="col-md-6">
-        <h3>Available Categories</h3>
-        <ul class="list-group">
-            @foreach (var category in Model.Categories)
-            {
-                <li class="list-group-item">
-                    @category.Name
-                </li>
-            }
-        </ul>
-    </div>
-</div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="fas fa-warehouse"></i> <!-- Depo Bilgileri için logo -->
+                                Depo Bilgileri
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="orders_management.html" class="nav-link">
+                                <i class="fas fa-shopping-cart"></i> <!-- Siparişler için logo -->
+                                Siparişler
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="user_management.html" class="nav-link">
+                                <i class="fas fa-users"></i> <!-- Kendi Bilgilerim için logo -->
+                                Kendi Bilgilerim
+                            </a>
+                        </li>
+                    </ul>
 
-<div class="mt-3">
-    <a class="btn btn-primary" asp-controller="UserPanel" asp-action="ViewDrugs">View All Drugs</a>
-    <a class="btn btn-secondary" asp-controller="UserPanel" asp-action="ViewCategories">View All Categories</a>
-</div>
+                    </ul>
+                </nav>
+            </aside>
+            <!-- Main Content Section -->
+            <div class="main-content">
+                <!-- Filter and Drug Table -->
+                <div class="filter-section">
+                    <input type="text" id="search-input" placeholder="Search by Name and Category" />
+                    <input type="number" id="min-price" placeholder="Min Price" />
+                    <input type="number" id="max-price" placeholder="Max Price" />
+                    <select id="stock-filter">
+                        <option value="">All Stock</option>
+                        <option value="in-stock">In Stock</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                    </select>
+                    <button class="filter-btn" onclick="applyFilters()">Search</button>
+                    <button class="filter-btn" onclick="clearFilters()">Clear</button>
+                    <select id="sort-options" onchange="applyFilters()">
+                        <option value="">Sort By</option>
+                        <option value="name-asc">Name (A-Z)</option>
+                        <option value="name-desc">Name (Z-A)</option>
+                        <option value="price-asc">Lowest Price</option>
+                        <option value="price-desc">Highest Price</option>
+                        <option value="category-asc">Category (A-Z)</option>
+                        <option value="category-desc">Category (Z-A)</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <h3 class="text-center">Available Drugs</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Medicine Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Action</th> <!-- Stock Request Column -->
+                                </tr>
+                            </thead>
+                            <tbody id="medicine-table">
+                                @foreach (var drug in Model.Drugs)
+                                {
+                                    <tr>
+                                        <td>@drug.Name</td>
+                                        <td>@drug.Category</td>
+                                        <td>@drug.UnitPrice</td>
+                                        <td>
+                                            <span class="status @(drug.Quantity > 0 ? "in-stock" : "out-of-stock")">
+                                                @(drug.Quantity > 0 ? "In Stock" : "Out of Stock")
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if (drug.Quantity > 0)
+                                            {
+                                                <form asp-controller="UserPanel" asp-action="RequestStock" method="post">
+                                                    <input type="hidden" name="drugId" value="@drug.Id" />
+                                                    <div class="input-group">
+                                                        <input type="number" name="quantity" class="form-control" placeholder="Quantity" min="1" max="@drug.Quantity" required />
+                                                        <button type="submit" class="btn button">Request Stock</button>
+                                                    </div>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-secondary" disabled>Out of Stock</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+<style>
+    :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #ffffff;
+        --gray-light: #e8eaed;
+        --gray-hover: #dfe1e5;
+        /* Professional status colors */
+        --status-green: rgba(139, 195, 174, 0.12);
+        --status-yellow: rgba(255, 193, 7, 0.12);
+        --status-blue: rgba(184, 161, 204, 0.12);
+        --status-red: rgba(230, 92, 92, 0.12);
+        /* Subtle shadow colors */
+        --shadow-green: rgba(139, 195, 174, 0.25);
+        --shadow-yellow: rgba(255, 193, 7, 0.25);
+        --shadow-blue: rgba(184, 161, 204, 0.25);
+        --shadow-red: rgba(230, 92, 92, 0.25);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+        line-height: 1.6;
+    }
+
+    .container {
+        background-color: var(--white);
+        max-width: 100vw;
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px var(--shadow);
+    }
+
+    .button {
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+        color: var(--white);
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+    }
+
+    .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+
+
+    .nav-menu {
+        list-style: none;
+    }
+
+    .nav-item {
+        margin: 0.5rem 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 1rem;
+        }
+
+    .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient( 135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66% );
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+    }
+
+    .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+    }
+
+    .filter-section {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: 1rem 0;
+        gap: 1rem;
+    }
+
+        .filter-section input,
+        .filter-section select {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px var(--shadow);
+            transition: all 0.3s ease-in-out;
+            width: 200px; /* Butonlar ve inputlar için uygun genişlik */
+        }
+
+            .filter-section input:focus,
+            .filter-section select:focus {
+                outline: none;
+                border-color: var(--primary-blue);
+                box-shadow: 0 2px 5px rgba(46, 107, 194, 0.5);
+            }
+
+    .filter-btn {
+        background-color: var(--primary-blue);
+        color: var(--white);
+        border: none;
+        border-radius: 12px;
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 3px 8px var(--shadow);
+        transition: all 0.3s ease-in-out;
+        width: auto; /* Butonların uygun genişlikte olmasını sağla */
+    }
+
+        .filter-btn:hover {
+            background-color: var(--mid-tone);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 107, 194, 0.3);
+        }
+
+    .table {
+        width: 100%;
+        margin-top: 2rem;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--gray-light);
+        }
+
+        .table thead {
+            background-color: var(--mid-tone);
+            color: var(--white);
+        }
+
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .status {
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+        .status.in-stock {
+            background-color: var(--status-green);
+            color: #2e7d32;
+        }
+
+        .status.out-of-stock {
+            background-color: var(--status-red);
+            color: #d32f2f;
+        }
+
+    #medicine-table {
+        width: 100%;
+        margin-top: 2rem;
+    }
+
+    .status {
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+        .status.in-stock {
+            background-color: var(--success-green);
+            color: #2e7d32;
+        }
+
+        .status.out-of-stock {
+            background-color: var(--error-red);
+            color: #d32f2f;
+        }
+
+    .btn-primary {
+        background-color: var(--dark-blue);
+        border: none;
+        color: white;
+        font-size: 1rem;
+        padding: 0.25rem 1rem;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: var(--hover-blue);
+        }
+
+    .input-group {
+        margin-top: 1rem;
+    }
+
+    .form-control {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        width: 200px;
+        padding: 0.5rem 1rem;
+    }
+
+    #sort-options {
+        cursor: pointer;
+        border: 2px solid var(--border);
+        box-shadow: 0 2px 5px var(--shadow);
+    }
+
+</style>
+
+<script>
+    // JavaScript function to apply filters
+    function applyFilters() {
+        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        const minPrice = document.getElementById('min-price').value;
+        const maxPrice = document.getElementById('max-price').value;
+        const stockFilter = document.getElementById('stock-filter').value;
+        const sortOption = document.getElementById('sort-options').value;
+
+        const rows = document.querySelectorAll('#medicine-table tr');
+        rows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            const category = row.cells[1].textContent.toLowerCase();
+            const price = parseFloat(row.cells[2].textContent);
+            const status = row.cells[3].textContent.toLowerCase();
+            const stock = status.includes('in stock') ? 'in-stock' : 'out-of-stock';
+
+            let showRow = true;
+
+            // Arama filtresi
+            if (searchInput && !name.includes(searchInput) && !category.includes(searchInput)) {
+                showRow = false;
+            }
+
+            // Fiyat filtresi
+            if (minPrice && price < minPrice) {
+                showRow = false;
+            }
+            if (maxPrice && price > maxPrice) {
+                showRow = false;
+            }
+
+            // Stok filtresi
+            if (stockFilter) {
+                if (stockFilter === 'in-stock' && stock !== 'in-stock') {
+                    showRow = false;
+                }
+                if (stockFilter === 'out-of-stock' && stock !== 'out-of-stock') {
+                    showRow = false;
+                }
+            }
+
+            // Sonuçları göster veya gizle
+            if (showRow) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Sorting logic
+        const sortedRows = Array.from(rows).sort((a, b) => {
+            const aData = a.cells;
+            const bData = b.cells;
+
+            switch (sortOption) {
+                case 'name-asc':
+                    return aData[0].textContent.localeCompare(bData[0].textContent);
+                case 'name-desc':
+                    return bData[0].textContent.localeCompare(aData[0].textContent);
+                case 'price-asc':
+                    return parseFloat(aData[2].textContent) - parseFloat(bData[2].textContent);
+                case 'price-desc':
+                    return parseFloat(bData[2].textContent) - parseFloat(aData[2].textContent);
+                case 'category-asc':
+                    return aData[1].textContent.localeCompare(bData[1].textContent);
+                case 'category-desc':
+                    return bData[1].textContent.localeCompare(aData[1].textContent);
+                default:
+                    return 0;
+            }
+        });
+
+        // Reorder rows after sorting
+        const tbody = document.getElementById('medicine-table');
+        sortedRows.forEach(row => tbody.appendChild(row));
+    }
+
+    // Clear all filters
+    function clearFilters() {
+        document.getElementById('search-input').value = '';
+        document.getElementById('min-price').value = '';
+        document.getElementById('max-price').value = '';
+        document.getElementById('stock-filter').value = '';
+        document.getElementById('sort-options').value = '';
+        applyFilters();
+    }
+</script>
