@@ -1,8 +1,5 @@
 ﻿@model PharmaStockManager.Models.Identity.LoginViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
-    Layout = null;
-}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,24 +40,46 @@
             background-color: #f4f4f4; /* Optional, adjust according to your design */
         }
     </style>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding-top: 10px; /* Adjust this value to move the content closer to the top */
+        }
+
+        .hero.login-hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* Center the text horizontally */
+            background-color: #f4f4f4; /* Optional, adjust according to your design */
+        }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--lavender), var(--primary-blue));
+            color: var(--white);
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+            .button:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+            }
+    </style>
     <title>Login - PharmaStockManager</title>
 </head>
 <body>
     <div class="container">
-        <nav>
-            <div class="logo">
-                <div class="logo-circle">
-                    <div class="pill-icon"></div>
-                </div>
-                <span class="logo-text">Pharma Stock Manager</span>
-            </div>
-            <div class="nav-links">
-                <a class="nav-links" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
-                <a class="nav-links" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                <a class="nav-links" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                <a class="nav-links" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
-            </div>
-        </nav>
 
         <header class="hero login-hero">
             <div class="hero-content">
@@ -102,7 +121,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn-primary">Login</button>
+                        <button type="submit" class="button">Login</button>
                         <a href="/Account/ForgotPassword" class="link-secondary">Forgot Password?</a>
                     </div>
                 </form>
@@ -112,10 +131,6 @@
                 <p>Don't have an account? <a href="/Account/Register">Sign up</a></p>
             </div>
         </section>
-
-        <footer>
-            <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
-        </footer>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

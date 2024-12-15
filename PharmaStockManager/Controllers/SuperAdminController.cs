@@ -38,6 +38,7 @@ public class SuperAdminController : Controller
             Id = user.Id,
             FullName = user.FullName,
             Email = user.Email,
+            ActiveUser = user.ActiveUser,
             WarehouseName = warehouses.FirstOrDefault(w => w.RefCode == user.RefCode)?.Name
         }).ToList();
 
@@ -46,6 +47,7 @@ public class SuperAdminController : Controller
             Id = user.Id,
             FullName = user.FullName,
             Email = user.Email,
+            ActiveUser = user.ActiveUser,
             WarehouseName = warehouses.FirstOrDefault(w => w.RefCode == user.RefCode)?.Name
         }).ToList();
 
@@ -54,6 +56,7 @@ public class SuperAdminController : Controller
             Id = user.Id,
             FullName = user.FullName,
             Email = user.Email,
+            ActiveUser = user.ActiveUser,
             WarehouseName = warehouses.FirstOrDefault(w => w.RefCode == user.RefCode)?.Name
         }).ToList();
 
@@ -67,13 +70,63 @@ public class SuperAdminController : Controller
         return View(model);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> DeactivateUser(int id)
+    {
+        if (id == 0) {
+            return RedirectToAction("ManageUsers", "SuperAdmin");
+        }
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        if (user != null) { 
+            user.ActiveUser = false;
+            await _dbContext.SaveChangesAsync();
+        }
+        return RedirectToAction("ManageUsers", "SuperAdmin");
+    }
 
+    [HttpGet]
+    public async Task<IActionResult> ActivateUser(int id)
+    {
+        if (id == 0)
+        {
+            return RedirectToAction("ManageUsers", "SuperAdmin");
+        }
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        if (user != null)
+        {
+            user.ActiveUser = true;
+            await _dbContext.SaveChangesAsync();
+        }
+        return RedirectToAction("ManageUsers", "SuperAdmin");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        if (id == 0)
+        {
+            return RedirectToAction("ManageUsers", "SuperAdmin");
+        }
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        if (user != null)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Any())
+            {
+                await _userManager.RemoveFromRolesAsync(user, roles);
+            }
+            user.ActiveUser = false;
+            user.RefCode = null;
+            user.UserName = null;
+            await _dbContext.SaveChangesAsync();
+        }
+        return RedirectToAction("ManageUsers", "SuperAdmin");
+    }
 
     public IActionResult SystemSettings()
     {
         return View();
     }
-
     public IActionResult ManageWarehouses()
     {
         var warehouses = _dbContext.Warehouses.ToList();
@@ -92,6 +145,22 @@ public class SuperAdminController : Controller
     }
 
     [HttpPost]
+    public async Task<IActionResult> EditWarehouse(int id, AddWarehouseModel updatedWarehouse)
+    {
+        var warehouse = await _dbContext.Warehouses.FindAsync(id);
+        if (warehouse != null)
+        {
+            warehouse.Name = updatedWarehouse.Name;
+            warehouse.Address = updatedWarehouse.Address;
+
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction("ManageWarehouses","SuperAdmin");
+        }
+        return NotFound();
+    }
+
+
+    [HttpPost]
     public async Task<IActionResult> SaveWarehouse(AddWarehouseModel warehouse)
     {
         if (ModelState.IsValid)
@@ -103,7 +172,7 @@ public class SuperAdminController : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteWarehouse(int id)
+    public async Task<IActionResult> DeleteWarehouse(int id)
     {
         var warehouse = _dbContext.Warehouses.Find(id);
         if (warehouse != null)

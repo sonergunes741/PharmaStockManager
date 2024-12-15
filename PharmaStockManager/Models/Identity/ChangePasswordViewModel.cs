@@ -5,13 +5,13 @@ namespace PharmaStockManager.Models.Identity
     public class ChangePasswordViewModel
     {
         [Required]
-        public required string OldPassword;
+        public string OldPassword { get; set; }
 
         [Required]
-        public required string NewPassword;
+        public string NewPassword   { get; set; }
 
         [Required]
-        public required string ConfirmPassword;
+        public string ConfirmPassword { get; set; }
 
     }
 }

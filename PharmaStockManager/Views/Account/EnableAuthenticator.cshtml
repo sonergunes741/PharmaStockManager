@@ -1,115 +1,166 @@
-﻿@model PharmaStockManager.Models.Identity.ChangePasswordViewModel
+﻿
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
-    Layout = null;
-}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pharma Stock Manager - Change Password</title>
+    <title>Enable Two-Factor Authentication</title>
     <link rel="stylesheet" href="~/css/styles.css" />
+    <style>
+        :root {
+            --primary-blue: #5a9ecf;
+            --soft-blue: #e8f4ff;
+            --lavender: #a68cb1;
+            --background: #f4f5f7;
+            --text: #2f3542;
+            --white: #ffffff;
+            --gray-light: #e8eaed;
+        }
 
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        .qr-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+            .qr-container img {
+                border: 1px solid var(--gray-light);
+                border-radius: 8px;
+                margin-bottom: 1rem;
+            }
+
+            .qr-container strong {
+                font-size: 1rem;
+                color: var(--primary-blue);
+            }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+                color: var(--text);
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid var(--gray-light);
+                border-radius: 8px;
+                font-size: 1rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+
+                .form-group input:focus {
+                    outline: none;
+                    border-color: var(--primary-blue);
+                    box-shadow: 0 4px 12px rgba(90, 158, 207, 0.2);
+                }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--lavender), var(--primary-blue));
+            color: var(--white);
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+            .button:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+            }
+
+        .back-button {
+            background-color: #dce6f7;
+            color: #2c3e50;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+            .back-button:hover {
+                background-color: #aac4e8;
+            }
+    </style>
 </head>
 <body>
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator">
-        <button id="scroll-button"
-                class="scroll-button"
-                aria-label="Scroll to bottom">
-            <svg class="scroll-arrow"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
-                <path d="M7 13l5 5 5-5" />
-                <path d="M7 6l5 5 5-5" />
-            </svg>
-        </button>
-    </div>
-
     <div class="container">
-        <nav>
-            <div class="logo">
-                <div class="logo-circle">
-                    <div class="pill-icon"></div>
-                </div>
-                <span class="logo-text">Pharma Stock Manager</span>
+        <button class="back-button" onclick="window.location.href='/'">&larr; Back</button>
+        @if (TempData["Message"] != null)
+        {
+            var messageType = TempData["MessageType"]?.ToString();
+            <div class="alert alert-@messageType">
+                @TempData["Message"]
             </div>
-            <div class="nav-links">
-                <a href="#" class="nav-link">About Us</a>
-                <a href="#" class="nav-link">Contact</a>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        Account
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li>
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Profile">Profile</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeEmail">Change Email</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="EnableAuthenticator">Enable Authenticator</a>
-                        </li>
-                    </ul>
-                </div>
-                <a href="/Account/Logout" class="nav-link">Logout</a>
-            </div>
-        </nav>
+        }
+        @if (TempData["TwoFactorEnabled"] == "true")
+        {
+            <h1>Disable Two-Factor Authentication</h1>
+            <p>Remove two-factor authentication (2FA).</p>
+            <form asp-action="Disable2FAConfirm" asp-controller="Account" method="post">
+                <button type="submit" class="button">Disable 2FA</button>
+            </form>
 
-        <main>
-            <section class="hero">
-                <div class="hero-content">
-                    <h1>Activate 2FA</h1>
-                    <div>
-                        <h3>Enable Two-Factor Authentication</h3>
-                        <p>Scan the following QR code in your authenticator app:</p>
-                        <img src="@ViewBag.QrCodeImage" alt="Two-Factor Authentication QR Code" height="180px" width="180px" />
-                        <p>Or enter this key manually:<br></br> <strong>@ViewBag.AuthenticatorKey</strong></br>
-                    </div>
-                    <form asp-action="VerifyAuthenticatorCode" asp-controller="Account" method="post">
-                        <label for="code">Enter the verification code generated by your app:</label>
-                        <input type="text" id="code" name="code" required />
-                        <button type="submit">Enable 2FA</button>
-                    </form>
+        } else
+        {
+            <h1>Enable Two-Factor Authentication</h1>
+            <p>Secure your account by enabling two-factor authentication (2FA).</p>
+            <div class="qr-container">
+                <p>Scan the QR code below using your authenticator app:</p>
+                <img src="@ViewBag.QrCodeImage" alt="Two-Factor Authentication QR Code" height="180" width="180" />
+                <p>Or enter this key manually:</p>
+                <strong>@ViewBag.AuthenticatorKey</strong>
+            </div>
+            <form asp-action="VerifyAuthenticatorCode" asp-controller="Account" method="post">
+                <div class="form-group">
+                    <label for="code">Enter the verification code from your app:</label>
+                    <input type="text" id="code" name="code" required placeholder="Verification code" />
                 </div>
-            </section>
-        </main>
+
+                <button type="submit" class="button">Enable 2FA</button>
+            </form>
+        }
+        
     </div>
-
-    <!-- Scroll to Bottom Script -->
-    <script>
-        document.getElementById("scroll-button").addEventListener("mousedown", (e) => {
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: "smooth",
-            });
-
-            // Ensure button remains visible during click
-            e.target.style.opacity = "1";
-        });
-
-        // Existing scroll event listener remains the same
-        window.addEventListener("scroll", () => {
-            const scrollIndicator = document.querySelector(".scroll-indicator");
-            const bottomReached =
-                window.innerHeight + window.scrollY >=
-                document.documentElement.scrollHeight - 100;
-
-            scrollIndicator.style.opacity = bottomReached ? "0" : "1";
-            scrollIndicator.style.pointerEvents = bottomReached ? "none" : "all";
-        });
-    </script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

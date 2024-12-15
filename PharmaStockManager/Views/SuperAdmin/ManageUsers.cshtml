@@ -131,10 +131,26 @@
                 background-color: #aac4e8; /* Hover effect */
             }
 
+        .back-button {
+            background-color: #dce6f7; /* Light blue */
+            color: #2c3e50; /* Dark blue */
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .back-button:hover {
+                background-color: #aac4e8; /* Slightly darker light blue */
+            }
     </style>
 </head>
 <body>
     <div class="container">
+        <button class="back-button" onclick="window.location.href='/SuperAdmin/'">← Back</button>
         <header>
             <h1>Manage Users</h1>
         </header>
@@ -170,15 +186,25 @@
                                 {
                                     <td>Active</td>
                                     <td>
-                                        <button class="action-button button-deactivate">Deactivate</button>
-                                        <button class="action-button button-delete">Delete</button>
+                                        <a class="action-button button-deactivate" asp-action="DeactivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Deactivate
+                                        </a>
+                                        <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Delete
+                                        </a>
+
                                     </td>
-                                } else
+                                }
+                                else
                                 {
                                     <td>Passive</td>
                                     <td>
-                                        <button class="action-button button-activate">Activate</button>
-                                        <button class="action-button button-delete">Delete</button>
+                                        <a class="action-button button-activate" asp-action="ActivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Activate
+                                        </a>
+                                        <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Delete
+                                        </a>
                                     </td>
                                 }
                             </tr>
@@ -212,16 +238,25 @@
                                 {
                                     <td>Active</td>
                                     <td>
-                                        <button class="action-button button-deactivate">Deactivate</button>
-                                        <button class="action-button button-delete">Delete</button>
+                                        <a class="action-button button-deactivate" asp-action="DeactivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Deactivate
+                                        </a>
+                                        <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Delete
+                                        </a>
+
                                     </td>
                                 }
                                 else
                                 {
                                     <td>Passive</td>
                                     <td>
-                                        <button class="action-button button-activate">Activate</button>
-                                        <button class="action-button button-delete">Delete</button>
+                                        <a class="action-button button-activate" asp-action="ActivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Activate
+                                        </a>
+                                        <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Delete
+                                        </a>
                                     </td>
                                 }
                             </tr>
@@ -251,20 +286,28 @@
                                 <td>@user.WarehouseName</td>
                                 <td>@user.FullName</td>
                                 <td>@user.Email</td>
-                                @if (@user.ActiveUser)
+                                @if (user.ActiveUser)
                                 {
                                     <td>Active</td>
                                     <td>
-                                        <button class="action-button button-deactivate">Deactivate</button>
-                                        <button class="action-button button-delete">Delete</button>
+                                        <a class="action-button button-deactivate" asp-action="DeactivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Deactivate
+                                        </a>
+                                        <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Delete
+                                        </a>
+                                       
                                     </td>
-                                }
-                                else
+                                }else
                                 {
                                     <td>Passive</td>
                                     <td>
-                                        <button class="action-button button-activate">Activate</button>
-                                        <button class="action-button button-delete">Delete</button>
+                                        <a class="action-button button-activate" asp-action="ActivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Activate
+                                        </a>
+                                        <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
+                                            Delete
+                                        </a>
                                     </td>
                                 }
                             </tr>
@@ -275,10 +318,11 @@
         </main>
     </div>
     <script>
-        // JavaScript for Interactive Role Switching
+        // JavaScript for Interactive Role Switching with Confirmation Dialogs
         const buttons = document.querySelectorAll('.role-button');
         const tables = document.querySelectorAll('.table-container');
 
+        // Role Switching Logic
         buttons.forEach(button => {
             button.addEventListener('click', () => {
                 // Remove active state from all buttons and hide all tables
@@ -290,6 +334,43 @@
                 document.getElementById(button.dataset.role).classList.add('active');
             });
         });
+
+        // Add Confirmation Dialogs for Action Buttons
+        document.querySelectorAll('.table-container').forEach(container => {
+            container.addEventListener('click', (event) => {
+                const button = event.target.closest('.action-button');
+                if (!button) return;
+
+                event.preventDefault();
+
+                let actionText = '';
+                let confirmMessage = '';
+
+                if (button.classList.contains('button-activate')) {
+                    actionText = 'activate';
+                    confirmMessage = 'Are you sure you want to activate this user?';
+                } else if (button.classList.contains('button-deactivate')) {
+                    actionText = 'deactivate';
+                    confirmMessage = 'Are you sure you want to deactivate this user?';
+                } else if (button.classList.contains('button-delete')) {
+                    actionText = 'delete';
+                    confirmMessage = 'Are you sure you want to permanently delete this user? This action cannot be undone.';
+                }
+
+                if (confirmMessage && confirm(confirmMessage)) {
+                    // If it's a link (for Employee table)
+                    if (button.tagName === 'A') {
+                        window.location.href = button.href;
+                    }
+                    // If it's a button (for Admin and Customer tables)
+                    else {
+                        alert(`User will be ${actionText}d`);
+                    }
+                }
+            });
+        });
+
+
     </script>
 </body>
 </html>

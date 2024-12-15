@@ -7,24 +7,26 @@ namespace PharmaStockManager.Models
     public class Warehouse
     {
         [Key]
-        public int Id { get; set; } // Primary Key
+        public int Id { get; set; }
+
+        public bool isActive { get; set; }
 
         [Required]
-        [MaxLength(8)] // Adjust length based on your shortened GUID size
-        public string RefCode { get; set; } // Unique Warehouse Reference Code
+        [MaxLength(8)]
+        public string RefCode { get; set; }
 
         [Required]
-        [MaxLength(100)] // Name of the warehouse
+        [MaxLength(100)]
         public string Name { get; set; }
 
-        [MaxLength(100)] // Name of the warehouse
+        [MaxLength(100)]
         public string Address { get; set; }
 
         [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow; // Timestamp
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     }
 }

@@ -10,6 +10,10 @@ using PharmaStockManager.Filters;
 using PharmaStockManager.Models;
 using QRCoder;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using PharmaStockManager.Models.ViewModel;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace StockManager.Controllers
 {
@@ -32,14 +36,53 @@ namespace StockManager.Controllers
             _configuration = configuration;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ContactMail(ContactViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    MimeMessage mimeMessage = new MimeMessage();
+                    mimeMessage.From.Add(new MailboxAddress("Admin", _configuration["MailInfos:EmailAddress"]));
+                    mimeMessage.To.Add(new MailboxAddress("Admin", "webwizardssol@gmail.com"));
+                    var bodyBuilder = new BodyBuilder();
+                    bodyBuilder.HtmlBody = $"Sender Name:{viewModel.Name}<br><br>Sender Email: {viewModel.Email}<br><br>Sender Message:{viewModel.Content}";
+                    mimeMessage.Body = bodyBuilder.ToMessageBody();
+                    mimeMessage.Subject = "Contact Mail";
+                    // Kalan kısım aynı kalacak
+                    using (var client = new MailKit.Net.Smtp.SmtpClient())
+                    {
+                        var sendermail = _configuration["MailInfos:EmailAddress"];
+                        var senderkey = _configuration["MailInfos:EmailKey"];
+                        var host = _configuration["MailInfos:Host"];
+                        var port = int.Parse(_configuration["MailInfos:Port"]);
+                        client.Connect(host, port, false);
+                        client.Authenticate(sendermail, senderkey);
+                        client.Send(mimeMessage);
+                        client.Disconnect(true);
+                    }
+                    TempData["Message"] = "Your message has been sent successfully!";
+                    TempData["MessageType"] = "success";
+                }
+                catch (Exception ex) {
+                    TempData["Message"] = "There was an error sending your message. Please try again later.";
+                    TempData["MessageType"] = "error";
+                }
+            } else
+            {
+                TempData["Message"] = "Please fill out the form correctly.";
+                TempData["MessageType"] = "warning";
+            }
+            return RedirectToAction("Contact", "Home");
+        }
+
+
         [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View();
         }
-
-
-        
 
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel viewModel)
@@ -68,6 +111,58 @@ namespace StockManager.Controllers
             }
             return View(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+            {
+                return RedirectToAction("ForgotPassword", "Account");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return RedirectToAction("ForgotPassword", "Account");
+            }
+
+            var model = new ResetPasswordViewModel { Email = email, Token = token };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return RedirectToAction("ForgotPassword", "Account");
+                }
+
+                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            foreach (var modelState in ModelState.Values)
+            {
+                foreach (var error in modelState.Errors)
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+            }
+            return View(model);
+        }
+
 
         public IActionResult ForgotPasswordConfirmation()
         {
@@ -134,60 +229,57 @@ namespace StockManager.Controllers
             return View();
         }
 
-        private async Task SendActivationCode(AppUser appUser)
-        {
-            Random random = new Random();
-            int code = random.Next(100000, 1000000); // 6-digit code
-
-            appUser.ActivationCode = code;
-            await _userManager.UpdateAsync(appUser);
-
-            MimeMessage mimeMessage = new MimeMessage();
-            MailboxAddress mailboxAddressFrom = new MailboxAddress("Admin", "webwizardssol@gmail.com");
-            MailboxAddress mailboxAddressTo = new MailboxAddress("User", appUser.Email);
-
-            mimeMessage.From.Add(mailboxAddressFrom);
-            mimeMessage.To.Add(mailboxAddressTo);
-
-            var bodyBuilder = new BodyBuilder();
-            bodyBuilder.TextBody = "Kayıt işlemini gerçekleştirmek için onay kodunuz: " + code;
-            mimeMessage.Body = bodyBuilder.ToMessageBody();
-
-            mimeMessage.Subject = "PharmaStockManager Onay Kodu";
-
-            using (var client = new MailKit.Net.Smtp.SmtpClient())
-            {
-                try
-                {
-                    var sendermail = _configuration["MailInfos:EmailAddress"];
-                    var senderkey = _configuration["MailInfox:EmailKey"];
-                    var host = _configuration["MailInfos:Host"];
-                    var port = int.Parse(_configuration["MailInfos:Port"]);
-                    client.Connect(host, port, false);
-                    client.Authenticate(sendermail, senderkey);
-                    client.Send(mimeMessage);
-                    client.Disconnect(true);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> SendActivationCode()
         {
-            var appUser = await _userManager.GetUserAsync(User);
-            if (appUser != null)
+            try
             {
-                await SendActivationCode(appUser);
+                var appUser = await _userManager.GetUserAsync(User);
+                Console.WriteLine("firstcheck");
+                if (appUser != null)
+                {
+                    Random random = new Random();
+                    int code = random.Next(100000, 1000000); // 6-digit code
+                    appUser.ActivationCode = code;
+                    await _userManager.UpdateAsync(appUser);
+
+                    MimeMessage mimeMessage = new MimeMessage();
+                    MailboxAddress mailboxAddressFrom = new MailboxAddress("Admin", "webwizardssol@gmail.com");
+                    MailboxAddress mailboxAddressTo = new MailboxAddress("User", appUser.Email);
+                    mimeMessage.From.Add(mailboxAddressFrom);
+                    mimeMessage.To.Add(mailboxAddressTo);
+                    var bodyBuilder = new BodyBuilder();
+                    bodyBuilder.TextBody = "Kayıt işlemini gerçekleştirmek için onay kodunuz: " + code;
+                    mimeMessage.Body = bodyBuilder.ToMessageBody();
+                    mimeMessage.Subject = "PharmaStockManager Onay Kodu";
+                    Console.WriteLine("secondcheck");
+                    using (var client = new MailKit.Net.Smtp.SmtpClient())
+                    {
+                        var sendermail = _configuration["MailInfos:EmailAddress"];
+                        var senderkey = _configuration["MailInfos:EmailKey"];
+                        var host = _configuration["MailInfos:Host"];
+                        var port = int.Parse(_configuration["MailInfos:Port"]);
+
+                        client.Connect(host, port, false);
+                        client.Authenticate(sendermail, senderkey);
+                        client.Send(mimeMessage);
+                        client.Disconnect(true);
+                    }
+                    Console.WriteLine("thirdcheck");
+                    return Json(new { success = true, message = "Activation code sent successfully" });
+                }
+                else
+                {
+                    Console.WriteLine("foyrcheck");
+                    return Json(new { success = false, message = "User not found" });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Activationcode failed");
+                Console.WriteLine(ex.Message);
+                // Log the exception
+                return Json(new { success = false, message = "Failed to send activation code" });
             }
-            return RedirectToAction("MailConfirm");
         }
 
         [HttpPost]
@@ -221,7 +313,6 @@ namespace StockManager.Controllers
                     await _dbContext.SaveChangesAsync();
 
                     await _signInManager.PasswordSignInAsync(viewModel.Email, viewModel.Password, false, true);
-                    await SendActivationCode(appUser);
                     return RedirectToAction("MailConfirm", "Account");
                 }
                 else
@@ -245,13 +336,35 @@ namespace StockManager.Controllers
         [HttpPost]
         public async Task<IActionResult> Verify2faCode(string code)
         {
+
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.TwoFactorSignInAsync("Authenticator", code, false, false);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Dashboard", "Home");
+                    var user = await _userManager.GetUserAsync(User);
+                    var roles = await _userManager.GetRolesAsync(user);
+                    if(user != null && roles != null)
+                    {
+
+                        if (roles.Contains("Admin"))
+                        {
+                            return RedirectToAction("Index", "AdminDashboard");
+                        }
+                        else if (roles.Contains("Employee"))
+                        {
+                            return RedirectToAction("Index", "Manager");
+                        }
+                        else if (roles.Contains("Customer"))
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else if (roles.Contains("SuperAdmin"))
+                        {
+                            return RedirectToAction("Index", "SuperAdmin");
+                        }
+                    }
                 }
                 else
                 {
@@ -318,6 +431,7 @@ namespace StockManager.Controllers
             ModelState.AddModelError("", "Invalid login attempt.");
             return View(loginViewModel);
         }
+
         [HttpGet]
         public async Task<IActionResult> MailConfirm()
         {
@@ -400,7 +514,6 @@ namespace StockManager.Controllers
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    await SendActivationCode(user);
                     return RedirectToAction("Manage", "Account");
                 }
 
@@ -456,6 +569,10 @@ namespace StockManager.Controllers
             {
                 return RedirectToAction("Login");
             }
+            if (user.TwoFactorEnabled) {
+                TempData["TwoFactorEnabled"] = "true";
+                return View();
+            }
             var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             if (string.IsNullOrEmpty(unformattedKey))
             {
@@ -467,6 +584,8 @@ namespace StockManager.Controllers
 
             ViewBag.AuthenticatorKey = formattedKey;
             ViewBag.QrCodeImage = GenerateQrCodeImage(qrCodeUri);
+
+            TempData["TwoFactorEnabled"] = "false";
             return View();
         }
 
@@ -519,7 +638,41 @@ namespace StockManager.Controllers
             }
             user.TwoFactorEnabled = true;
             await _userManager.UpdateAsync(user);
-            return RedirectToAction("Manage", "Account");
+            return RedirectToAction("EnableAuthenticator", "Account");
+        }
+
+        // Disable 2FA - POST
+        [HttpPost]
+        public async Task<IActionResult> Disable2FAConfirm()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (!user.TwoFactorEnabled)
+            {
+                TempData["Message"] = "2FA is not currently enabled.";
+                TempData["MessageType"] = "Error";
+                return RedirectToAction("EnableAuthenticator", "Account");
+            }
+
+            // Disable Two-Factor Authentication
+            var result = await _userManager.SetTwoFactorEnabledAsync(user, false);
+            if (!result.Succeeded)
+            {
+                TempData["Message"] = "Failed to disable 2FA. Please try again.";
+                TempData["MessageType"] = "Error";
+                return RedirectToAction("EnableAuthenticator", "Account");
+            }
+
+            // Clear user's authenticator key if needed
+            await _userManager.ResetAuthenticatorKeyAsync(user);
+
+            TempData["Message"] = "2FA has been disabled successfully.";
+            TempData["MessageType"] = "Success";
+            return RedirectToAction("EnableAuthenticator", "Account");
         }
 
     }

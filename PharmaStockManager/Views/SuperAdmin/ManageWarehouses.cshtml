@@ -41,7 +41,6 @@
             padding: 2rem;
         }
 
-        /* Logo Styles */
         .logo {
             display: flex;
             align-items: center;
@@ -56,7 +55,7 @@
         .logo-circle {
             width: 44px;
             height: 44px;
-            background: linear-gradient( 135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66% );
+            background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
             border-radius: 50%;
             position: relative;
             display: flex;
@@ -125,15 +124,17 @@
                 margin-bottom: 0.5rem;
             }
 
-        .action-buttons {
-            margin-bottom: 20px;
+        .card-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
         }
 
         .button {
-            padding: 0.875rem 2rem;
-            border-radius: 12px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
             border: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -144,6 +145,14 @@
             .button:hover {
                 transform: translateY(-2px);
                 opacity: 0.9;
+            }
+
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+
+            .delete-btn:hover {
+                background-color: #c0392b;
             }
 
         .modal {
@@ -217,19 +226,31 @@
                 color: var(--text);
             }
 
-        .delete-btn {
-            background-color: var(--primary-blue) !important;
-            color: var(--white) !important;
+            .modal-content button:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+            }
+
+        .back-button {
+            background-color: #dce6f7;
+            color: #2c3e50;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
         }
 
-        .modal-content button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
+            .back-button:hover {
+                background-color: #aac4e8;
+            }
     </style>
 </head>
 <body>
     <div class="container">
+        <button class="back-button" onclick="window.location.href='/SuperAdmin/'">← Back</button>
         <div class="page-content">
             <h1>Warehouse Management</h1>
 
@@ -242,11 +263,17 @@
             <div class="warehouse-list" id="warehouseList">
                 @foreach (var warehouse in Model)
                 {
-                    <div class="warehouse-card" onclick="openEditModal(@warehouse.Id)">
+                    <div class="warehouse-card">
                         <h3>@warehouse.Name</h3>
                         <p><strong>Ref Code:</strong> @warehouse.RefCode</p>
                         <p><strong>Address:</strong> @warehouse.Address</p>
                         <p><strong>Created:</strong> @warehouse.CreatedAt.ToShortDateString()</p>
+                        <p><strong>Last Updated:</strong> @warehouse.UpdatedAt.ToShortDateString()</p>
+
+                        <div class="card-buttons">
+                            <button class="button" onclick="openEditModal(@warehouse.Id)">Update</button>
+                            <button class="button delete-btn" onclick="deleteWarehouse(@warehouse.Id)">Delete</button>
+                        </div>
                     </div>
                 }
             </div>
@@ -279,66 +306,47 @@
         </div>
     </div>
 
-
-
     <script>
         function openAddModal() {
             const modal = document.getElementById('addWarehouseModal');
             const form = document.getElementById('addWarehouseForm');
-            form.reset(); // Clear any previous data
+            form.reset();
+            form.setAttribute('action', '/SuperAdmin/SaveWarehouse');
+            modal.querySelector('h2').textContent = 'Add Warehouse';
             modal.classList.remove('hidden');
-        } document.getElementById('warehouseModal').classList.remove('hidden');
-
+        }
 
         function openEditModal(id) {
-            // This would typically be handled by an AJAX call to get warehouse details
-            // For now, it's a placeholder
             fetch(`/SuperAdmin/GetWarehouse/${id}`)
                 .then(response => response.json())
                 .then(warehouse => {
-                    document.getElementById('modalTitle').textContent = 'Edit Warehouse';
-                    document.getElementById('warehouseId').value = warehouse.id;
-                    document.getElementById('Name').value = warehouse.name;
-                    document.getElementById('RefCode').value = warehouse.refCode;
-                    document.getElementById('Address').value = warehouse.address;
-                    document.getElementById('deleteButton').style.display = 'inline-block';
-                    document.getElementById('warehouseModal').classList.remove('hidden');
+                    const modal = document.getElementById('addWarehouseModal');
+                    const form = document.getElementById('addWarehouseForm');
+                    modal.querySelector('h2').textContent = 'Edit Warehouse';
+                    modal.querySelector('#name').value = warehouse.Name;
+                    modal.querySelector('#address').value = warehouse.Address;
+                    modal.querySelector('#refCode').value = warehouse.RefCode;
+                    form.setAttribute('action', `/SuperAdmin/EditWarehouse/${id}`);
+                    modal.classList.remove('hidden');
                 });
+        }
+
+        function deleteWarehouse(id) {
+            if (confirm('Are you sure you want to delete this warehouse?')) {
+                fetch(`/SuperAdmin/DeleteWarehouse/${id}`, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        }
+                    });
+            }
         }
 
         function closeModal() {
             const modal = document.querySelector('.modal:not(.hidden)');
             modal.classList.add('hidden');
         }
-
-        function deleteWarehouse() {
-            const id = document.getElementById('warehouseId').value;
-            if (id) {
-                fetch(`/SuperAdmin/DeleteWarehouse/${id}`, { method: 'POST' })
-                    .then(response => {
-                        if (response.ok) {
-                            location.reload(); // Refresh the page
-                        }
-                    });
-            }
-        }
-
-        // Add event listener for form submission
-        document.getElementById('warehouseForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-
-            fetch(this.action, {
-                method: 'POST',
-                body: formData
-            }).then(response => {
-                if (response.ok) {
-                    location.reload(); // Refresh the page
-                }
-            });
-        });
     </script>
-
 </body>
 </html>
+

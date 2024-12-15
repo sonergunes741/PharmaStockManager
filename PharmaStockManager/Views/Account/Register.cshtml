@@ -1,8 +1,5 @@
 ﻿@model PharmaStockManager.Models.Identity.RegisterViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
-    Layout = null;
-}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,27 +8,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/styles.css">
     <title>Register - PharmaStockManager</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: -50px; /* Adjusts overall page position */
+        }
+
+        .register-hero {
+            margin-bottom: 10px; /* Reduces space between header and form */
+        }
+
+        .hero-content h1 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .register-form {
+            margin-top: 0; /* Ensures the form starts closer to the header */
+        }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--lavender), var(--primary-blue));
+            color: var(--white);
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+            .button:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+            }
+    </style>
 </head>
 <body>
     <div class="container">
-        <nav>
-            <div class="logo">
-                <div class="logo-circle">
-                    <div class="pill-icon"></div>
-                </div>
-                <span class="logo-text">Pharma Stock Manager</span>
-            </div>
-            <div class="nav-links">
-                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
-                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
-            </div>
-        </nav>
 
         <header class="hero register-hero">
             <div class="hero-content">
                 <h1>Register</h1>
+                <p>Welcome! Please Register to create your account.</p>
             </div>
         </header>
 
@@ -56,13 +81,13 @@
                 </div>
 
                 <div>
-                    <label asp-for="RefCode"></label>
+                    <label asp-for="RefCode">Reference Code</label>
                     <input asp-for="RefCode" class="form-control" placeholder="Reference Code" required />
                     <span asp-validation-for="RefCode" class="text-danger"></span>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Register</button>
+                    <button type="submit" class="button">Register</button>
                 </div>
             </form>
 
@@ -70,10 +95,6 @@
                 <p>Already have an account? <a href="/Account/Login">Login here</a></p>
             </div>
         </section>
-
-        <footer>
-            <p>&copy; 2024 PharmaStockManager. All Rights Reserved.</p>
-        </footer>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

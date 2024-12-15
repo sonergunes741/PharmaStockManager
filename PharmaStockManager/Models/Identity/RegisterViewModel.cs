@@ -21,6 +21,7 @@ namespace PharmaStockManager.Models.Identity
         //public string ConfirmPassword { get; set; }
 
         [StringLength(50, ErrorMessage = "Referral code cannot exceed 50 characters.")]
+        [Required(ErrorMessage = "Reference code is required")]
         // Add validation for specific code format and uniqueness if necessary
         public string RefCode { get; set; }
     }
