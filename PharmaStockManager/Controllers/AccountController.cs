@@ -416,7 +416,7 @@ namespace StockManager.Controllers
                         }
                         else if (roles.Contains("Customer"))
                         {
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "UserPanel");
                         }
                         else if (roles.Contains("SuperAdmin"))
                         {

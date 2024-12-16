@@ -47,13 +47,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="orders_management.html" class="nav-link">
+                            <a href="@Url.Action("ViewOrders", "UserPanel")" class="nav-link">
                                 <i class="fas fa-shopping-cart"></i> <!-- Siparişler için logo -->
-                                Siparişler
+                                Siparişlerim
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="user_management.html" class="nav-link">
+                            <a href="@Url.Action("MyProfile", "UserPanel")" class="nav-link">
                                 <i class="fas fa-users"></i> <!-- Kendi Bilgilerim için logo -->
                                 Kendi Bilgilerim
                             </a>
@@ -65,6 +65,21 @@
             </aside>
             <!-- Main Content Section -->
             <div class="main-content">
+                <header class="header">
+                    <div class="welcome-section">
+                        <div class="welcome-text">
+                            <h1>Welcome back</h1>
+                        </div>
+                    </div>
+
+                    <div class="user-menu">
+                        <span id="current-time"></span>
+                        <a href="@Url.Action("Logout", "Account")" class="button">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </header>
                 <!-- Filter and Drug Table -->
                 <div class="filter-section">
                     <input type="text" id="search-input" placeholder="Search by Name and Category" />
@@ -409,6 +424,60 @@
         box-shadow: 0 2px 5px var(--shadow);
     }
 
+    .header {
+        background: var(--white);
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .welcome-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .welcome-text {
+        color: var(--text);
+    }
+
+        .welcome-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text p {
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+    .daily-summary {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 0.5rem;
+    }
+
+    .summary-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .summary-item i {
+            color: var(--primary-blue);
+        }
+
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
 </style>
 
 <script>

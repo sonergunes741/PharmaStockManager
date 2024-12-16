@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models;
 using Microsoft.Extensions.Logging; // Loglama için gerekli
 using System.Linq;
+using PharmaStockManager.Models.ViewModels;
+using PharmaStockManager.Models.ViewModel;
 
 [Authorize(Roles = "Customer")] // Bu controller'a yalnızca "Customer" rolündeki kullanıcılar erişebilir.
 public class UserPanelController : Controller
@@ -132,5 +134,45 @@ public class UserPanelController : Controller
         }).ToList();
         return Json(filteredMedicines);
     }
+
+
+    // GET: UserPanel/ViewOrders
+    public IActionResult ViewOrders()
+    {
+        var userOrders = _context.Requests
+            .Where(r => r.UserName == User.Identity.Name)
+            .Select(r => new RequestViewModel
+            {
+                Id = r.Id,
+                DrugName = _context.Drugs.FirstOrDefault(d => d.Id == r.DrugId).Name,
+                Quantity = r.Quantity,
+                RequestDate = r.RequestDate,
+                IsApproved = r.IsApproved,
+                IsRejected = r.IsRejected
+            })
+            .ToList();
+
+        return View(userOrders);
+    }
+
+    public IActionResult MyProfile()
+    {
+        var user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var model = new UserManagementViewModel
+        {
+            UserName = user.UserName,
+            Email = user.Email,
+            ActiveUser = user.ActiveUser,
+            Role = user.UserType
+        };
+
+        return View(model);
+    }
+
 
 }
