@@ -503,7 +503,7 @@ namespace StockManager.Controllers
                 if (duplicatecheck != null)
                 {
                     ModelState.AddModelError(string.Empty, "Başka bir kullanıcı bu eposta adresiyle kayıtlı");
-                    return RedirectToAction("Manage", "Account");
+                    return RedirectToAction("ChangeEmail", "Account");
 
                 }
 
@@ -514,7 +514,7 @@ namespace StockManager.Controllers
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Manage", "Account");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)
@@ -550,7 +550,7 @@ namespace StockManager.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.RefreshSignInAsync(user);
-                    return RedirectToAction("Manage", "Account");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)
