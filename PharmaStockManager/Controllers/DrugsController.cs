@@ -43,7 +43,7 @@ public class DrugsController : Controller
     // POST: Drugs/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType")] Drug drug)
+    public async Task<IActionResult> Create([Bind("Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType,CriticalStockLevel")] Drug drug)
     {
         if (ModelState.IsValid)
         {
@@ -82,7 +82,7 @@ public class DrugsController : Controller
     // POST: Drugs/Edit
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit([Bind("Id,Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType")] Drug drug)
+    public async Task<IActionResult> Edit([Bind("Id,Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType,CriticalStockLevel")] Drug drug)
     {
         if (ModelState.IsValid)
         {

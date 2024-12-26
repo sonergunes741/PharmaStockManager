@@ -589,35 +589,65 @@
                     </div>
                 }
             </div>
-        </div>
 
-        <div class="detail-grid">
-            <div class="detail-card">
-                <h3>Critical Stock Items</h3>
-                <div class="critical-stock-list">
-                    @foreach (var drug in Model.CriticalStockDrugs)
+            <h2>Critical Stock Alerts</h2>
+
+            <div class="critical-stock-list">
+                @if (!Model.CriticalStockDrugs.Any())
+                {
+                    <div class="stock-item" style="background-color: var(--status-green);">
+                        <i class="fas fa-check-circle"></i>
+                        <span>All stock levels are normal</span>
+                    </div>
+                }
+                else
+                {
+                    foreach (var drug in Model.CriticalStockDrugs)
                     {
-                        var stockClass = drug.Quantity <= 5 ? "very-low" : "low";
-                        <div class="stock-item @stockClass">
-                            <div class="item-details">
-                                <span class="item-name">@drug.Name</span>
-                                <span class="item-stock">Stock: @drug.Quantity</span>
+                        var stockStatus = drug.Quantity <= (drug.CriticalStockLevel / 2) ? "very-low" : "low";
+                        var percentageLeft = Math.Min((drug.Quantity * 100.0) / drug.CriticalStockLevel, 100);
+
+                        <div class="stock-item @stockStatus">
+                            <div class="stock-content">
+                                <div class="stock-header">
+                                    <div class="stock-title">
+                                        <span class="item-name">@drug.Name</span>
+                                        <span class="status-badge @stockStatus">
+                                            @drug.Quantity / @drug.CriticalStockLevel
+                                        </span>
+                                    </div>
+                                    <div class="stock-progress">
+                                        <div class="progress">
+                                            <div class="progress-bar"
+                                                 style="width: @percentageLeft%; background-color: @(stockStatus == "very-low" ? "var(--status-red)" : "var(--status-yellow)")">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="stock-details">
+                                    <span>
+                                        <i class="fas fa-layer-group"></i>
+                                        @drug.Category
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-pills"></i>
+                                        @drug.DrugType
+                                    </span>
+                                </div>
                             </div>
-                            <div class="item-status">
-                                @if (drug.Quantity <= 5)
-                                {
-                                    <span class="status-badge very-low">Very Low</span>
-                                }
-                                else
-                                {
-                                    <span class="status-badge low">Low</span>
-                                }
+                            <div class="stock-actions">
+                                <a href="@Url.Action("Index", "Drugs")" class="button">
+                                    Add Stock
+                                </a>
                             </div>
                         </div>
                     }
-                </div>
+                }
             </div>
         </div>
+
+        
+        
     </main>
 
     <script>

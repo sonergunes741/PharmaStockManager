@@ -30,5 +30,9 @@ namespace PharmaStockManager.Models
         [Display(Name = "Drug Type")]
         public string DrugType { get; set; }
         public decimal TotalValue => Quantity * UnitPrice;
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int CriticalStockLevel { get; set; } = 10;
     }
 }

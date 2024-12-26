@@ -22,32 +22,23 @@ namespace PharmaStockManager.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var today = DateTime.Today;
-            var thirtyDaysFromNow = today.AddDays(30);
-
-            // Get drugs that are expiring soon or already expired
-            var expiringDrugs = await _context.Drugs
-                .Where(d => d.ExpiryDate != null && d.ExpiryDate <= thirtyDaysFromNow)
-                .OrderBy(d => d.ExpiryDate)
-                .ToListAsync();
-
-            // Get drugs with critical stock levels
-            var criticalStockDrugs = await _context.Drugs
-                .Where(d => d.Quantity <= 10)
-                .OrderBy(d => d.Quantity)
-                .ToListAsync();
-
-            var viewModel = new DashboardViewModel
+            var model = new DashboardViewModel
             {
                 TotalDrugs = await _context.Drugs.CountAsync(),
-                CriticalStockDrugs = criticalStockDrugs,
-                TotalCategories = await _context.Categories.CountAsync(),
+                CriticalStockDrugs = await _context.Drugs
+                    .Where(d => d.Quantity <= d.CriticalStockLevel)
+                    .OrderBy(d => (double)d.Quantity / d.CriticalStockLevel)
+                    .ToListAsync(),
+                ExpiringDrugs = await _context.Drugs
+                    .Where(d => d.ExpiryDate.HasValue &&
+                           d.ExpiryDate.Value <= DateTime.Now.AddDays(30))
+                    .OrderBy(d => d.ExpiryDate)
+                    .ToListAsync(),
                 TotalUsers = await _userManager.Users.CountAsync(),
-                ExpiringDrugs = expiringDrugs,
-                CurrentDate = today
+                CurrentDate = DateTime.Now
             };
 
-            return View(viewModel);
+            return View(model);
         }
     }
 
