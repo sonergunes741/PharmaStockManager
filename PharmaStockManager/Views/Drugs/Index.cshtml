@@ -261,6 +261,63 @@ table {
         width: 100%;
     }
 }
+
+    .header {
+        background: var(--white);
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+
+    .welcome-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .welcome-text h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+    }
+
+    .welcome-text p {
+        color: var(--text);
+        opacity: 0.8;
+    }
+
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .button2 {
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .button2:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
 </style>
 
 <div class="sidebar">
@@ -316,8 +373,22 @@ table {
 </div>
 
 <main class="main-content">
+    <header class="header">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Drug Stock Management</h1>
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <span id="current-time"></span>
+            <a href="@Url.Action("Logout", "Account")" class="button2">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </header>
     <div class="container">
-        <h1>İlaç Stok Yönetimi</h1>
 
         @if (TempData["SuccessMessage"] != null)
         {

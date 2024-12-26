@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model PharmaStockManager.Models.ViewModel.DashboardViewModel
 @{
     Layout = null;
 }
@@ -28,6 +28,9 @@
             --shadow-yellow: rgba(255, 193, 7, 0.25);
             --shadow-blue: rgba(184, 161, 204, 0.25);
             --shadow-red: rgba(230, 92, 92, 0.25);
+            --orange: #f57c00;
+            --deep-orange: #e65100;
+            --light-orange: #ffa726;
         }
 
         * {
@@ -101,16 +104,17 @@
             transition: all 0.3s ease;
         }
 
-            .nav-link:hover, .nav-link.active {
-                background: rgba(255, 255, 255, 0.1);
-                color: var(--white);
-                transform: translateX(5px);
-            }
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
+        }
 
-            .nav-link i {
-                width: 20px;
-                margin-right: 1rem;
-            }
+        .nav-link i {
+            width: 20px;
+            margin-right: 1rem;
+        }
 
         .main-content {
             flex: 1;
@@ -127,7 +131,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-            transition: transform 0.3s ease;
         }
 
         .welcome-section {
@@ -136,36 +139,16 @@
             gap: 1rem;
         }
 
-        .welcome-text {
+        .welcome-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
             color: var(--text);
         }
 
-            .welcome-text h1 {
-                font-size: 1.5rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .welcome-text p {
-                color: var(--text);
-                opacity: 0.8;
-            }
-
-        .daily-summary {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            margin-top: 0.5rem;
+        .welcome-text p {
+            color: var(--text);
+            opacity: 0.8;
         }
-
-        .summary-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-            .summary-item i {
-                color: var(--primary-blue);
-            }
 
         .user-menu {
             display: flex;
@@ -177,6 +160,52 @@
             margin-right: 1rem;
         }
 
+        /* Alert Section Styles */
+        .expiring-drugs-alert {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .alert-list {
+            margin-top: 1rem;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            gap: 1rem;
+        }
+
+        .alert-item.expired {
+            background: var(--status-red);
+            color: #d32f2f;
+        }
+
+        .alert-item.expiring {
+            background: var(--status-yellow);
+            color: var(--orange);
+        }
+
+        .alert-item i {
+            font-size: 1.25rem;
+        }
+
+        .drug-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .expiry-date {
+            font-size: 0.875rem;
+        }
+
+        /* Stats Grid Styles */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -191,29 +220,9 @@
             transition: all 0.3s ease;
         }
 
-            .stat-card.status-green {
-                background: linear-gradient(135deg, var(--white), var(--status-green));
-                box-shadow: 0 4px 20px var(--shadow-green);
-            }
-
-            .stat-card.status-yellow {
-                background: linear-gradient(135deg, var(--white), var(--status-yellow));
-                box-shadow: 0 4px 20px var(--shadow-yellow);
-            }
-
-            .stat-card.status-blue {
-                background: linear-gradient(135deg, var(--white), var(--status-blue));
-                box-shadow: 0 4px 20px var(--shadow-blue);
-            }
-
-            .stat-card.status-red {
-                background: linear-gradient(135deg, var(--white), var(--status-red));
-                box-shadow: 0 4px 20px var(--shadow-red);
-            }
-
-            .stat-card:hover {
-                transform: translateY(-5px);
-            }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
 
         .stat-header {
             display: flex;
@@ -232,22 +241,6 @@
             color: var(--white);
         }
 
-        .status-green .stat-icon {
-            background: linear-gradient(135deg, #88b8a5, #9ecfbb);
-        }
-
-        .status-yellow .stat-icon {
-            background: linear-gradient(135deg, #ffc107, #ffd54f);
-        }
-
-        .status-blue .stat-icon {
-            background: linear-gradient(135deg, #a68cb1, #b99fc8);
-        }
-
-        .status-red .stat-icon {
-            background: linear-gradient(135deg, #e65c5c, #f08080);
-        }
-
         .stat-value {
             font-size: 1.5rem;
             font-weight: 600;
@@ -261,6 +254,26 @@
             font-size: 0.875rem;
         }
 
+        /* Status Colors */
+        .status-blue {
+            background: linear-gradient(135deg, var(--white), var(--status-blue));
+            box-shadow: 0 4px 20px var(--shadow-blue);
+        }
+
+        .status-blue .stat-icon {
+            background: linear-gradient(135deg, var(--primary-blue), var(--mid-tone));
+        }
+
+        .status-orange {
+            background: linear-gradient(135deg, var(--white), var(--status-yellow));
+            box-shadow: 0 4px 20px var(--shadow-yellow);
+        }
+
+        .status-orange .stat-icon {
+            background: linear-gradient(135deg, var(--orange), var(--light-orange));
+        }
+
+        /* Critical Stock List Styles */
         .detail-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -272,25 +285,65 @@
             padding: 2rem;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .critical-stock-list {
+            margin-top: 1rem;
+        }
+
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
             transition: transform 0.3s ease;
         }
 
-            .detail-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 24px rgba(111, 195, 255, 0.1);
-            }
+        .stock-item:hover {
+            transform: translateX(5px);
+        }
 
-            .detail-card h3 {
-                font-size: 1.25rem;
-                margin-bottom: 1rem;
-                color: var(--text);
-            }
+        .stock-item.very-low {
+            background: var(--status-red);
+        }
 
-            .detail-card p {
-                color: var(--text);
-                opacity: 0.8;
-                margin: 0.5rem 0;
-            }
+        .stock-item.low {
+            background: var(--status-yellow);
+        }
+
+        .item-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .item-stock {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.very-low {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .status-badge.low {
+            background: var(--orange);
+            color: white;
+        }
 
         .button {
             padding: 0.875rem 2rem;
@@ -302,17 +355,22 @@
             transition: all 0.3s ease;
             background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
             color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-            .button:hover {
-                transform: translateY(-2px);
-                opacity: 0.9;
-            }
+        .button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
 
         @@media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                z-index: 1000;
             }
 
             .main-content {
@@ -323,11 +381,57 @@
                 transform: translateX(0);
             }
 
-            .daily-summary {
+            .header {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
+                gap: 1rem;
             }
+
+            .user-menu {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* Stat card için link stili */
+        .stat-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* Yeni renk tanımlamaları */
+        .status-purple {
+            background: linear-gradient(135deg, var(--white), rgba(147, 51, 234, 0.12));
+            box-shadow: 0 4px 20px rgba(147, 51, 234, 0.25);
+        }
+
+            .status-purple .stat-icon {
+                background: linear-gradient(135deg, #9333ea, #a855f7);
+            }
+
+        .status-red {
+            background: linear-gradient(135deg, var(--white), var(--status-red));
+            box-shadow: 0 4px 20px var(--shadow-red);
+        }
+
+            .status-red .stat-icon {
+                background: linear-gradient(135deg, #dc2626, #ef4444);
+            }
+
+        /* Hover efekti için güncelleme */
+        .stat-card-link:hover .stat-card {
+            transform: translateY(-5px);
+        }
+
+        .stat-card-link:hover {
+            text-decoration: none;
         }
     </style>
 </head>
@@ -403,57 +507,115 @@
         </header>
 
         <div class="stats-grid">
-            <div class="stat-card status-green">
-                <div class="stat-header">
-                    <h3>Total Drugs</h3>
-                    <div class="stat-icon">
-                        <i class="fas fa-box"></i>
+            <a href="@Url.Action("Index", "Drugs")" class="stat-card-link">
+                <div class="stat-card status-blue">
+                    <div class="stat-header">
+                        <h3>Total Drugs</h3>
+                        <div class="stat-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
                     </div>
+                    <div class="stat-value">@Model.TotalDrugs</div>
+                    <div class="stat-label">Total items in stock</div>
                 </div>
-                <div class="stat-value">@Model.TotalDrugs</div>
-                <div class="stat-label">Items in stock</div>
-            </div>
-            <div class="stat-card status-yellow">
-                <div class="stat-header">
-                    <h3>Critical Stock</h3>
-                    <div class="stat-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
+            </a>
+
+            <a href="@Url.Action("Index", "Drugs")" class="stat-card-link">
+                <div class="stat-card status-orange">
+                    <div class="stat-header">
+                        <h3>Critical Stock</h3>
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
                     </div>
+                    <div class="stat-value">@Model.CriticalStockDrugs.Count</div>
+                    <div class="stat-label">Items need reorder</div>
                 </div>
-                <div class="stat-value">@Model.CriticalStockDrugs.Count</div>
-                <div class="stat-label">Items need reorder</div>
-            </div>
-            <div class="stat-card status-blue">
-                <div class="stat-header">
-                    <h3>Categories</h3>
-                    <div class="stat-icon">
-                        <i class="fas fa-list"></i>
+            </a>
+
+            <a href="@Url.Action("Index", "Drugs")" class="stat-card-link">
+                <div class="stat-card status-red">
+                    <div class="stat-header">
+                        <h3>Expiring Items</h3>
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
                     </div>
+                    <div class="stat-value">@Model.ExpiringDrugs.Count</div>
+                    <div class="stat-label">Expired & expiring soon</div>
                 </div>
-                <div class="stat-value">@Model.TotalCategories</div>
-                <div class="stat-label">Total categories</div>
-            </div>
-            <div class="stat-card status-red">
-                <div class="stat-header">
-                    <h3>Users</h3>
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
+            </a>
+
+            <a href="@Url.Action("Users", "Admin")" class="stat-card-link">
+                <div class="stat-card status-purple">
+                    <div class="stat-header">
+                        <h3>Users</h3>
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
                     </div>
+                    <div class="stat-value">@Model.TotalUsers</div>
+                    <div class="stat-label">Total users</div>
                 </div>
-                <div class="stat-value">@Model.TotalUsers</div>
-                <div class="stat-label">Total users</div>
+            </a>
+        </div>
+
+        <div class="expiring-drugs-alert">
+            <h2>Expiring Stock Alerts</h2>
+            <div class="alert-list">
+                @foreach (var drug in Model.ExpiringDrugs)
+                {
+                    TimeSpan dateDifference = drug.ExpiryDate.HasValue
+                    ? drug.ExpiryDate.Value - Model.CurrentDate
+                    : TimeSpan.Zero;
+                    var daysUntilExpiry = (int)dateDifference.TotalDays;
+                    var alertClass = daysUntilExpiry <= 0 ? "expired" : "expiring";
+
+                    <div class="alert-item @alertClass">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span class="drug-name">@drug.Name</span>
+                        <span class="expiry-date">
+                            @if (daysUntilExpiry <= 0)
+                            {
+                                <span class="expired-text">
+                                    Expired @Math.Abs(daysUntilExpiry) days ago
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="expiring-text">Expires in @daysUntilExpiry days</span>
+                            }
+                        </span>
+                    </div>
+                }
             </div>
         </div>
 
         <div class="detail-grid">
             <div class="detail-card">
                 <h3>Critical Stock Items</h3>
-                <ul class="list-group">
+                <div class="critical-stock-list">
                     @foreach (var drug in Model.CriticalStockDrugs)
                     {
-                        <p>@drug.Name - Stock: @drug.Quantity</p>
+                        var stockClass = drug.Quantity <= 5 ? "very-low" : "low";
+                        <div class="stock-item @stockClass">
+                            <div class="item-details">
+                                <span class="item-name">@drug.Name</span>
+                                <span class="item-stock">Stock: @drug.Quantity</span>
+                            </div>
+                            <div class="item-status">
+                                @if (drug.Quantity <= 5)
+                                {
+                                    <span class="status-badge very-low">Very Low</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge low">Low</span>
+                                }
+                            </div>
+                        </div>
                     }
-                </ul>
+                </div>
             </div>
         </div>
     </main>
@@ -469,7 +631,7 @@
                 day: "numeric",
                 hour: "numeric",
                 minute: "numeric",
-                hour12: true,
+                hour12: true
             };
 
             const formattedDateTime = new Intl.DateTimeFormat("en-US", options).format(now);
@@ -479,6 +641,18 @@
         // Update time every second
         setInterval(updateTime, 1000);
         updateTime();
+
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.createElement('button');
+            toggleButton.classList.add('menu-toggle');
+            toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
+            document.querySelector('.main-content').prepend(toggleButton);
+
+            toggleButton.addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+        });
     </script>
 </body>
 </html>
