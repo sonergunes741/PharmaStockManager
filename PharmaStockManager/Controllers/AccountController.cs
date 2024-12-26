@@ -412,7 +412,7 @@ namespace StockManager.Controllers
                         }
                         else if (roles.Contains("Employee"))
                         {
-                            return RedirectToAction("Index", "Manager");
+                            return RedirectToAction("Index", "Employee");
                         }
                         else if (roles.Contains("Customer"))
                         {

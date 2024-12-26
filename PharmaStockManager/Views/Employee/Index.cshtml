@@ -1,0 +1,528 @@
+﻿@model IEnumerable<PharmaStockManager.Models.Drug>
+@{
+    ViewData["Title"] = "Employee Stock Management";
+    Layout = null;
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    /* Copy the same CSS from the admin page but change primary colors */
+    :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #fff;
+        --gray-light: #e8eaed;
+        --gray-hover: #ddd;
+        --filter-bg: #f9f9f9;
+        --filter-border: #ccc;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+        z-index: 1000;
+    }
+
+    .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+    }
+
+    .nav-menu {
+        list-style: none;
+    }
+
+    .nav-item {
+        margin: 0.5rem 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 1rem;
+        }
+
+    .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+        background-color: var(--background);
+        min-height: calc(100vh - 60px);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: var(--white);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .button-add {
+        background-color: var(--lavender);
+        color: var(--white);
+        margin-bottom: 1rem;
+        margin-right: 1rem;
+    }
+
+        .button-add:hover {
+            background-color: #5a54d4;
+            color: var(--white);
+        }
+
+    .filter-form {
+        background: var(--filter-bg);
+        padding: 1rem;
+        border: 1px solid var(--filter-border);
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+        .filter-form input,
+        .filter-form select,
+        .filter-form button {
+            padding: 0.5rem;
+            border: 1px solid var(--filter-border);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .filter-form input,
+        .filter-form select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-form button {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            cursor: pointer;
+            min-width: 100px;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 1rem;
+    }
+
+        table thead {
+            background-color: var(--lavender);
+            color: var(--white);
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray-hover);
+        }
+
+        table tbody tr:hover {
+            background-color: var(--gray-hover);
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: var(--gray-light);
+        }
+
+    .button-edit {
+        background-color: var(--mint-green);
+        color: var(--white);
+        margin-right: 0.5rem;
+    }
+
+    .button-delete {
+        background-color: var(--primary-blue);
+        color: var(--white);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+        .modal-content input {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+        }
+
+    @@media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+
+        .filter-form input,
+        .filter-form select {
+            width: 100%;
+        }
+    }
+
+    .header {
+        background: var(--white);
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+
+    .welcome-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .welcome-text h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+    }
+
+    .welcome-text p {
+        color: var(--text);
+        opacity: 0.8;
+    }
+
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .button2 {
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .button2:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+    /* Copy the rest of the CSS from admin page */
+</style>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <div class="logo-circle">
+                <div class="pill-icon"></div>
+            </div>
+            <span class="logo-text">Pharma Stock</span>
+        </div>
+    </div>
+
+    <nav>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a asp-controller="Employee" asp-action="Index" class="nav-link active">
+                    <i class="fas fa-pills"></i>
+                    Stock Management
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Employee" asp-action="Profile" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    My Profile
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<main class="main-content">
+    <header class="header">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Employee Stock Management</h1>
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <span id="current-time"></span>
+            <a href="@Url.Action("Logout", "Account")" class="button2">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <form id="filter-form" class="filter-form">
+            <input type="text" id="filter-name" placeholder="Drug Name" />
+            <select id="filter-type">
+                <option value="">Drug Type</option>
+                <option value="Ticari">Commercial</option>
+                <option value="Klinik">Clinical</option>
+            </select>
+            <input type="text" id="filter-category" placeholder="Category" />
+            <button type="button" onclick="applyFilter()">Filter</button>
+        </form>
+
+        <section class="all-medicines">
+            <h2>Drug Stock</h2>
+            <table class="medicine-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Quantity</th>
+                        <th>Category</th>
+                        <th>Unit Price</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="medicine-table-body">
+                    @foreach (var item in Model)
+                    {
+                        <tr data-id="@item.Id">
+                            <td>@item.Id</td>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DrugType)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                            <td>@item.ExpiryDate?.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                <button class="button button-edit" onclick="openModal('add', @item.Id)">
+                                    Add Stock
+                                </button>
+                                <button class="button button-delete" onclick="openModal('remove', @item.Id)">
+                                    Remove Stock
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Stock Operation Modal -->
+    <div id="stockModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Stock Operation</h2>
+            <form id="stockForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="drugId" name="id" />
+                <input type="hidden" id="operationType" name="operationType" />
+
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" name="quantity" class="form-control" required min="1" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="button" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="button button-add">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+        let currentAction = '';
+
+        window.openModal = function (action, id) {
+            currentAction = action;
+            const modal = document.getElementById('stockModal');
+            const form = document.getElementById('stockForm');
+            const title = document.getElementById('modal-title');
+
+            form.reset();
+            document.getElementById('drugId').value = id;
+            document.getElementById('operationType').value = action;
+            title.textContent = action === 'add' ? 'Add Stock' : 'Remove Stock';
+
+            modal.style.display = 'flex';
+        };
+
+        window.closeModal = function () {
+            document.getElementById('stockModal').style.display = 'none';
+        };
+
+        // Form submit handler
+        document.getElementById('stockForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const url = currentAction === 'add' ? '/Employee/AddStock' : '/Employee/RemoveStock';
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'RequestVerificationToken': token
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Operation failed: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred during the operation.');
+                });
+        });
+
+        // Filter function
+        window.applyFilter = function () {
+            const name = document.getElementById('filter-name').value.toLowerCase();
+            const type = document.getElementById('filter-type').value;
+            const category = document.getElementById('filter-category').value.toLowerCase();
+
+            const rows = document.querySelectorAll('#medicine-table-body tr');
+            rows.forEach(row => {
+                const matchName = row.cells[1].textContent.toLowerCase().includes(name);
+                const matchType = !type || row.cells[2].textContent === type;
+                const matchCategory = row.cells[4].textContent.toLowerCase().includes(category);
+
+                row.style.display = (matchName && matchType && matchCategory) ? '' : 'none';
+            });
+        };
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            const modal = document.getElementById('stockModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    });
+</script>
