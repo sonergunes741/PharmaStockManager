@@ -128,10 +128,10 @@
         }
 
         .logo-circle {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient( 135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66% );
             border-radius: 50%;
-            background-color: var(--primary-blue);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -139,9 +139,9 @@
 
         .pill-icon {
             width: 20px;
-            height: 8px;
+            height: 32px;
             background-color: var(--white);
-            border-radius: 4px;
+            border-radius: 16px;
         }
 
         .logo-text {
@@ -210,17 +210,11 @@
     <div class="container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <form action="index.html"
+                <form action="/UserPanel/Index"
                       method="get"
                       style="display: flex; align-items: center; gap: 1rem">
                     <button type="submit"
-                            style="
-              all: unset;
-              cursor: pointer;
-              display: flex;
-              align-items: center;
-              gap: 1rem;
-            ">
+                            style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 1rem;">
                         <div class="logo-circle">
                             <div class="pill-icon"></div>
                         </div>
