@@ -422,9 +422,12 @@
                             <button class="button button-customer" onclick="makeCustomer(@user.Id)">
                                 <i class="fas fa-user"></i> Make Customer
                             </button>
-                            <a class="button button-edit" asp-action="EditPermissions" asp-route-id="@user.Id">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
+                            @if (user.Role != "Customer")
+                            {
+                                <a class="button button-edit" asp-action="EditPermissions" asp-route-id="@user.Id">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                            }
                             <button class="button button-delete" onclick="deleteUser(@user.Id)">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
