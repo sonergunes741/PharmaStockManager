@@ -5,8 +5,10 @@ using Microsoft.Extensions.Logging; // Loglama için gerekli
 using System.Linq;
 using PharmaStockManager.Models.ViewModels;
 using PharmaStockManager.Models.ViewModel;
+using PharmaStockManager.Services;
 
 [Authorize(Roles = "Customer")] // Bu controller'a yalnızca "Customer" rolündeki kullanıcılar erişebilir.
+[ServiceFilter(typeof(LogFilter))]
 public class UserPanelController : Controller
 {
     private readonly PharmaContext _context;

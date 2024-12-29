@@ -1,17 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Models;
+using PharmaStockManager.Models.Identity;
+using PharmaStockManager.Services;
 using System;
 using System.Threading.Tasks;
 [Authorize(Roles = "Admin")]
+[ServiceFilter(typeof(LogFilter))]
 public class DrugsController : Controller
 {
     private readonly PharmaContext _context;
+    private readonly UserManager<AppUser> _userManager;
 
-    public DrugsController(PharmaContext context)
+    public DrugsController(PharmaContext context, UserManager<AppUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     // GET: Drugs
@@ -55,13 +61,14 @@ public class DrugsController : Controller
 
                 var transactionRecord = new Transaction
                 {
-                    DrugId = drug.Id,
+                    DrugName = drug.Name,
                     Quantity = drug.Quantity,
                     TransactionType = "Initial Stock",
                     TransactionDate = DateTime.Now,
                     ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                     Type = drug.DrugType,
-                    Price = drug.UnitPrice * drug.Quantity
+                    Price = drug.UnitPrice * drug.Quantity,
+                    UserName = (await _userManager.GetUserAsync(User)).FullName
                 };
 
                 _context.Transactions.Add(transactionRecord);
@@ -100,13 +107,14 @@ public class DrugsController : Controller
                 {
                     var transactionRecord = new Transaction
                     {
-                        DrugId = drug.Id,
+                        DrugName = drug.Name,
                         Quantity = Math.Abs(quantityDifference),
                         TransactionType = quantityDifference > 0 ? "Stock Increase" : "Stock Decrease",
                         TransactionDate = DateTime.Now,
                         ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                         Type = drug.DrugType,
-                        Price = drug.UnitPrice * Math.Abs(quantityDifference)
+                        Price = drug.UnitPrice * Math.Abs(quantityDifference),
+                        UserName = (await _userManager.GetUserAsync(User)).FullName
                     };
 
                     _context.Transactions.Add(transactionRecord);
@@ -155,13 +163,14 @@ public class DrugsController : Controller
 
             var transactionRecord = new Transaction
             {
-                DrugId = drug.Id,
+                DrugName = drug.Name,
                 Quantity = drug.Quantity,
                 TransactionType = "Drug Deleted",
                 TransactionDate = DateTime.Now,
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
-                Price = drug.UnitPrice * drug.Quantity
+                Price = drug.UnitPrice * drug.Quantity,
+                UserName = (await _userManager.GetUserAsync(User)).FullName
             };
 
             _context.Transactions.Add(transactionRecord);
@@ -183,7 +192,6 @@ public class DrugsController : Controller
     public async Task<IActionResult> TransactionHistory()
     {
         var transactions = await _context.Transactions
-            .Include(t => t.Drug)
             .OrderByDescending(t => t.TransactionDate)
             .ToListAsync();
 
@@ -217,13 +225,14 @@ public class DrugsController : Controller
 
             var transactionRecord = new Transaction
             {
-                DrugId = drug.Id,
+                DrugName = drug.Name,
                 Quantity = quantity,
                 TransactionType = operationType == "increase" ? "Stock In" : "Stock Out",
                 TransactionDate = DateTime.Now,
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
-                Price = drug.UnitPrice * quantity
+                Price = drug.UnitPrice * quantity,
+                UserName = (await _userManager.GetUserAsync(User)).FullName
             };
 
             _context.Transactions.Add(transactionRecord);

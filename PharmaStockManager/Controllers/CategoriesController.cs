@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Models;
+using PharmaStockManager.Services;
 
 namespace PharmaStockManager.Controllers
 {
     [Authorize(Roles = "Admin")] // Only allow access to users with the "Admin" role
+    [ServiceFilter(typeof(LogFilter))]
     public class CategoriesController : Controller
     {
         private readonly PharmaContext _context;

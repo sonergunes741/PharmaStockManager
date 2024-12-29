@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using PharmaStockManager.Models;
 using System.Diagnostics;
 using System.Linq;
+using PharmaStockManager.Services;
 
 namespace PharmaStockManager.Controllers
 {
+    [ServiceFilter(typeof(LogFilter))]
     public class HomeController : Controller
     {
         private readonly PharmaContext _context;

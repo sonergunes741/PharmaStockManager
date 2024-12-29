@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using static PharmaStockManager.Services.LogFilter;
 
 namespace PharmaStockManager.Models
 {
@@ -24,6 +25,8 @@ namespace PharmaStockManager.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; } // Yeni eklenen Transaction DbSet'i
         public DbSet<Request> Requests { get; set; } //Requests DbSet
+
+        public DbSet<LogClass> Logs { get; set; }
 
         public DbSet<Permissions> Permissions { get; set; }
 

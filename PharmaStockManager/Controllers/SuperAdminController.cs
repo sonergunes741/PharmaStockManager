@@ -7,6 +7,7 @@ using PharmaStockManager.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 
 [Authorize(Roles = "SuperAdmin")]
+[ServiceFilter(typeof(LogFilter))]
 public class SuperAdminController : Controller
 {
     private readonly PharmaContext _dbContext;

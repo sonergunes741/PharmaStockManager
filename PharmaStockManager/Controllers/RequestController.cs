@@ -1,16 +1,22 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PharmaStockManager.Models;
+using PharmaStockManager.Models.Identity;
 using PharmaStockManager.Models.ViewModels;
+using PharmaStockManager.Services;
 
 [Authorize(Roles = "Admin")]
+[ServiceFilter(typeof(LogFilter))]
 public class RequestController : Controller
 {
     private readonly PharmaContext _context;
+    private readonly UserManager<AppUser> _userManager;
 
-    public RequestController(PharmaContext context)
+    public RequestController(PharmaContext context, UserManager<AppUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     public IActionResult Index()
@@ -31,7 +37,7 @@ public class RequestController : Controller
     }
 
     [HttpPost]
-    public IActionResult Approve(int id, string drugName, int quantity)
+    public async Task<IActionResult> Approve(int id, string drugName, int quantity)
     {
         using var transaction = _context.Database.BeginTransaction();
         try
@@ -58,13 +64,14 @@ public class RequestController : Controller
             // Controllers/RequestController.cs
             var transactionRecord = new Transaction
             {
-                DrugId = drug.Id,
+                DrugName = drug.Name,
                 Quantity = quantity,
                 TransactionType = "Request Approved",
                 TransactionDate = DateTime.Now,
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1), // Null ise 1 yıl sonrasını kullan
                 Type = drug.DrugType,
-                Price = drug.UnitPrice * quantity
+                Price = drug.UnitPrice * quantity,
+                UserName = (await _userManager.GetUserAsync(User)).FullName
             };
 
             // Transaction'ı kaydet
@@ -84,7 +91,7 @@ public class RequestController : Controller
     }
 
     [HttpPost]
-    public IActionResult Reject(int id)
+    public async Task<IActionResult> Reject(int id)
     {
         var request = _context.Requests.FirstOrDefault(r => r.Id == id);
         if (request == null || request.IsApproved || request.IsRejected)
@@ -101,13 +108,14 @@ public class RequestController : Controller
                 // Transaction kaydı oluştur
                 var transactionRecord = new Transaction
                 {
-                    DrugId = drug.Id,
+                    DrugName = drug.Name,
                     Quantity = request.Quantity,
                     TransactionType = "Request Rejected",
                     TransactionDate = DateTime.Now,
                     ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                     Type = drug.DrugType,
-                    Price = drug.UnitPrice * request.Quantity
+                    Price = drug.UnitPrice * request.Quantity,
+                    UserName = (await _userManager.GetUserAsync(User)).FullName
                 };
 
                 _context.Transactions.Add(transactionRecord);

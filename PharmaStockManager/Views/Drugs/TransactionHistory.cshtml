@@ -396,13 +396,14 @@
                     <th>Son Kullanma Tarihi</th>
                     <th>Tip</th>
                     <th>Fiyat</th>
+                    <th>Kişi</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var transaction in Model)
                 {
                     <tr>
-                        <td>@transaction.Drug.Name</td>
+                        <td>@transaction.DrugName</td>
                         <td>@transaction.Quantity</td>
                         <td>
                             @{
@@ -422,6 +423,7 @@
                         <td>@transaction.ExpiryDate.ToString("yyyy-MM-dd")</td>
                         <td>@transaction.Type</td>
                         <td>@transaction.Price.ToString("C2")</td>
+                        <td>@transaction.UserName</td>
                     </tr>
                 }
             </tbody>

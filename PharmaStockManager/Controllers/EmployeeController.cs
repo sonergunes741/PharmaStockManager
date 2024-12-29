@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Models;
 using PharmaStockManager.Models.Identity;
+using PharmaStockManager.Services;
 
 namespace PharmaStockManager.Controllers
 {
     [Authorize(Roles = "Employee")]
+    [ServiceFilter(typeof(LogFilter))]
     public class EmployeeController : Controller
     {
         private readonly PharmaContext _context;
@@ -65,13 +67,14 @@ namespace PharmaStockManager.Controllers
             // Create transaction record
             var transaction = new Transaction
             {
-                DrugId = drug.Id,
+                DrugName = drug.Name,
                 TransactionType = "Add",
                 Quantity = quantity,
                 TransactionDate = DateTime.Now,
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
-                Price = drug.UnitPrice * drug.Quantity
+                Price = drug.UnitPrice * drug.Quantity,
+                UserName = (await _userManager.GetUserAsync(User)).FullName
             };
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
@@ -96,13 +99,14 @@ namespace PharmaStockManager.Controllers
             // Create transaction record
             var transaction = new Transaction
             {
-                DrugId = drug.Id,
+                DrugName = drug.Name,
                 TransactionType = "Remove",
                 Quantity = quantity,
                 TransactionDate = DateTime.Now,
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
-                Price = drug.UnitPrice * drug.Quantity
+                Price = drug.UnitPrice * drug.Quantity,
+                UserName = (await _userManager.GetUserAsync(User)).FullName
             };
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();

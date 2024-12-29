@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<EmailConfirmedFilter>();
 builder.Services.AddScoped<WarehouseService>();
+builder.Services.AddScoped<LogFilter>();
 
 // Add DbContext and Identity to the services
 builder.Services.AddDbContext<PharmaContext>(options =>

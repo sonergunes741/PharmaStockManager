@@ -14,10 +14,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using PharmaStockManager.Models.ViewModel;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using PharmaStockManager.Services;
 
 namespace StockManager.Controllers
 {
-    
+
+    [ServiceFilter(typeof(LogFilter))]
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

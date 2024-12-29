@@ -452,9 +452,6 @@ table {
                             <td>@item.ExpiryDate?.ToString("yyyy-MM-dd")</td>
                             <td>
                                 <button class="button button-edit" onclick="openModal('edit', '@item.DrugType', @item.Id)">
-                                    Düzenle
-                                </button>
-                                <button class="button button-edit" onclick="openModal('edit', '@item.DrugType', @item.Id)">
                                     Stok Güncelle
                                 </button>
                                 <button class="button button-delete" onclick="deleteDrug(@item.Id)">
@@ -469,52 +466,52 @@ table {
     </div>
 
     <!-- Modal for Add/Edit -->
-    <div id="drugModal" class="modal">
-        <div class="modal-content">
-            <h2 id="modal-title">İlaç İşlemi</h2>
-            <form id="drugForm">
-                @Html.AntiForgeryToken()
-                <input type="hidden" id="drugId" name="Id" />
-                <input type="hidden" id="drugType" name="DrugType" />
-                
-                <div class="form-group">
-                    <label for="Name">İlaç Adı</label>
-                    <input type="text" id="Name" name="Name" class="form-control" required />
-                </div>
-                
-                <div class="form-group">
-                    <label for="Category">Kategori</label>
-                    <input type="text" id="Category" name="Category" class="form-control" required />
-                </div>
-                
-                <div class="form-group">
-                    <label for="Quantity">Miktar</label>
-                    <input type="number" id="Quantity" name="Quantity" class="form-control" required />
-                </div>
-                
-                <div class="form-group">
-                    <label for="UnitPrice">Birim Fiyat</label>
-                    <input type="number" id="UnitPrice" name="UnitPrice" step="0.01" class="form-control" required />
-                </div>
-                
-                <div class="form-group">
-                    <label for="ExpiryDate">Son Kullanma Tarihi</label>
-                    <input type="date" id="ExpiryDate" name="ExpiryDate" class="form-control" required />
-                </div>
-                
-                <div class="form-group">
-                    <label for="CriticalStockLevel">Kritik Stok Seviyesi</label>
-                    <input type="number" id="CriticalStockLevel" name="CriticalStockLevel" class="form-control" min="1" required />
-                    <small class="form-text text-muted">Düşük stok uyarısı almak istediğiniz minimum seviye</small>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="button" onclick="closeModal()">İptal</button>
-                    <button type="submit" class="button button-add">Kaydet</button>
-                </div>
-            </form>
-        </div>
+<div id="drugModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modal-title">İlaç İşlemi</h2>
+        <form id="drugForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="drugId" name="Id" />
+            <input type="hidden" id="drugType" name="DrugType" />
+            
+            <div class="form-group">
+                <label for="Name">İlaç Adı</label>
+                <input type="text" id="Name" name="Name" class="form-control" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="Category">Kategori</label>
+                <input type="text" id="Category" name="Category" class="form-control" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="Quantity">Miktar</label>
+                <input type="number" id="Quantity" name="Quantity" class="form-control" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="UnitPrice">Birim Fiyat</label>
+                <input type="number" id="UnitPrice" name="UnitPrice" step="0.01" class="form-control" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="ExpiryDate">Son Kullanma Tarihi</label>
+                <input type="date" id="ExpiryDate" name="ExpiryDate" class="form-control" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="CriticalStockLevel">Kritik Stok Seviyesi</label>
+                <input type="number" id="CriticalStockLevel" name="CriticalStockLevel" class="form-control" min="1" required />
+                <small class="form-text text-muted">Düşük stok uyarısı almak istediğiniz minimum seviye</small>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="button" onclick="closeModal()">İptal</button>
+                <button type="submit" class="button button-add">Kaydet</button>
+            </div>
+        </form>
     </div>
+</div>
 </main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -573,26 +570,26 @@ table {
         };
 
         function fetchDrugDetails(id) {
-            fetch(`/Drugs/Details/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success) {
-                        const drug = data.data;
-                        document.getElementById('drugId').value = drug.id;
-                        document.getElementById('Name').value = drug.name;
-                        document.getElementById('Category').value = drug.category;
-                        document.getElementById('Quantity').value = drug.quantity;
-                        document.getElementById('UnitPrice').value = drug.unitPrice;
-                        document.getElementById('ExpiryDate').value = drug.expiryDate ? drug.expiryDate.split('T')[0] : '';
-                        document.getElementById('CriticalStockLevel').value = drug.criticalStockLevel;
-                    } else {
-                        alert('İlaç bilgileri alınamadı: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('İlaç bilgileri alınırken bir hata oluştu.');
-                });
+    fetch(`/Drugs/Details/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                const drug = data.data;
+                document.getElementById('drugId').value = drug.id;
+                document.getElementById('Name').value = drug.name;
+                document.getElementById('Category').value = drug.category;
+                document.getElementById('Quantity').value = drug.quantity;
+                document.getElementById('UnitPrice').value = drug.unitPrice;
+                document.getElementById('ExpiryDate').value = drug.expiryDate ? drug.expiryDate.split('T')[0] : '';
+                document.getElementById('CriticalStockLevel').value = drug.criticalStockLevel;
+            } else {
+                alert('İlaç bilgileri alınamadı: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('İlaç bilgileri alınırken bir hata oluştu.');
+        });
         }
 
         // Form submit handler

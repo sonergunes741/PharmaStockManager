@@ -5,10 +5,12 @@ using PharmaStockManager.Models;
 using PharmaStockManager.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Models.ViewModel;
+using PharmaStockManager.Services;
 
 namespace PharmaStockManager.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [ServiceFilter(typeof(LogFilter))]
     public class AdminDashboardController : Controller
     {
         private readonly PharmaContext _context;

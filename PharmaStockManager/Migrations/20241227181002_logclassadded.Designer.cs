@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmaStockManager.Models;
 
@@ -11,9 +12,11 @@ using PharmaStockManager.Models;
 namespace PharmaStockManager.Migrations
 {
     [DbContext(typeof(PharmaContext))]
-    partial class PharmaContextModelSnapshot : ModelSnapshot
+    [Migration("20241227181002_logclassadded")]
+    partial class logclassadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -407,8 +410,8 @@ namespace PharmaStockManager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DrugName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DrugId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
@@ -430,10 +433,9 @@ namespace PharmaStockManager.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("DrugId");
 
                     b.ToTable("Transactions");
                 });
@@ -486,9 +488,6 @@ namespace PharmaStockManager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("IPAddress")
                         .IsRequired()
                         .HasMaxLength(45)
@@ -499,12 +498,15 @@ namespace PharmaStockManager.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("userId");
 
                     b.ToTable("Logs");
                 });
@@ -571,11 +573,22 @@ namespace PharmaStockManager.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PharmaStockManager.Models.Transaction", b =>
+                {
+                    b.HasOne("PharmaStockManager.Models.Drug", "Drug")
+                        .WithMany()
+                        .HasForeignKey("DrugId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Drug");
+                });
+
             modelBuilder.Entity("PharmaStockManager.Services.LogFilter+LogClass", b =>
                 {
                     b.HasOne("PharmaStockManager.Models.Identity.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("userId");
 
                     b.Navigation("User");
                 });

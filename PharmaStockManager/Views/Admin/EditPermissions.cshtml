@@ -4,71 +4,48 @@
     ViewData["Title"] = "Edit Permissions";
 }
 
-<main class="main-content">
-    <header class="header">
-        <div class="welcome-section">
-            <div class="welcome-text">
-                <h1>Edit Permissions</h1>
-            </div>
-        </div>
-    </header>
-    <div class="container">
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success">
-                @TempData["SuccessMessage"]
-            </div>
-        }
+<h2>Edit Permissions</h2>
 
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger">
-                @TempData["ErrorMessage"]
-            </div>
-        }
+<form asp-action="EditPermissions" method="post">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Permission</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>Edit Stocks</td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input type="hidden" asp-for="UserID" />
+                            <input class="form-check-input" type="checkbox" asp-for="EditStocks" />
+                            <label class="form-check-label" for="EditStocks">Allow</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Stock In</td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="StockIn" />
+                            <label class="form-check-label" for="StockIn">Allow</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Stock Out</td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="StockOut" />
+                            <label class="form-check-label" for="StockOut">Allow</label>
+                        </div>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
 
-        <form asp-action="EditPermissions" method="post">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Permission</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Edit Stocks</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input type="hidden" asp-for="UserID" />
-                                <input class="form-check-input" type="checkbox" asp-for="EditStocks" />
-                                <label class="form-check-label" for="EditStocks">Allow</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Stock In</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" asp-for="StockIn" />
-                                <label class="form-check-label" for="StockIn">Allow</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Stock Out</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" asp-for="StockOut" />
-                                <label class="form-check-label" for="StockOut">Allow</label>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a asp-action="Users" class="btn btn-secondary">Cancel</a>
-        </form>
-    </div>
-</main>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

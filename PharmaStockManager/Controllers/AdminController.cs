@@ -7,8 +7,10 @@ using PharmaStockManager.Models.Identity;
 using PharmaStockManager.Filters;
 using PharmaStockManager.Models.ViewModels;
 using PharmaStockManager.Models.ViewModel;
+using PharmaStockManager.Services;
 
 [Authorize(Roles = "Admin")]
+[ServiceFilter(typeof(LogFilter))]
 public class AdminController : Controller
 {
     private readonly UserManager<AppUser> _userManager;
