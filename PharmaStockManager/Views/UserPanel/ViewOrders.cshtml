@@ -76,10 +76,12 @@
                 <div class="filter-section">
                     <input type="text" id="search-input" placeholder="Search by Medicine Name" />
                     <select id="status-filter">
-                        <option value="">All Status</option>
+                        <option value="">All</option>
                         <option value="approved">Approved</option>
                         <option value="pending">Pending</option>
+                        <option value="rejected">Rejected</option>
                     </select>
+
                     <button class="filter-btn" onclick="applyFilters()">Search</button>
                     <button class="filter-btn" onclick="clearFilters()">Clear</button>
                     <select id="sort-options" onchange="applyFilters()">
@@ -107,13 +109,14 @@
                                     <td>@order.Quantity</td>
                                     <td>@order.RequestDate.ToString("yyyy-MM-dd")</td>
                                     <td>
-                                        <span class="status @(order.IsApproved ? "approved" : "pending")">
-                                            @(order.IsApproved ? "Approved" : "Pending")
+                                        <span class="status @(order.IsApproved ? "approved" : order.IsRejected ? "rejected" : "pending")">
+                                            @(order.IsApproved ? "Approved" : order.IsRejected ? "Rejected" : "Pending")
                                         </span>
                                     </td>
                                 </tr>
                             }
                         </tbody>
+
                     </table>
                 </div>
             </div>
@@ -133,6 +136,9 @@
             --gray-hover: #dfe1e5;
             --status-green: rgba(139, 195, 174, 0.12);
             --status-red: rgba(230, 92, 92, 0.12);
+            --status-yellow: rgba(255, 223, 88, 0.12);
+            --text: #2f3542;
+            --mint-green: #88b8a5;
         }
 
         /* Include all previously defined styles */
@@ -387,15 +393,18 @@
 
         /* Additional status styles for this page */
         .status.approved {
-            background-color: var(--status-green);
-            color: #2e7d32;
+            background-color: var(--mint-green);
+            color: var(--white);
         }
 
-        .status.pending {
-            background-color: var(--status-red);
-            color: #d32f2f;
+        .status.rejected {
+            background-color: #ff6b6b;
+            color: var(--white);
         }
-
+        .status.pending{
+            background-color: #ffd43b;
+            color: var(--text);
+        }
         .header {
             background: var(--white);
             padding: 1.5rem 2rem;
@@ -455,67 +464,61 @@
     <script>
         // JavaScript function to apply filters
         function applyFilters() {
-            const searchInput = document.getElementById('search-input').value.toLowerCase();
-            const statusFilter = document.getElementById('status-filter').value;
-            const sortOption = document.getElementById('sort-options').value;
+    const searchInput = document.getElementById('search-input').value.toLowerCase();
+    const statusFilter = document.getElementById('status-filter').value.toLowerCase();
+    const sortOption = document.getElementById('sort-options').value;
 
-            const rows = document.querySelectorAll('#orders-table tr');
-            rows.forEach(row => {
-                const name = row.cells[0].textContent.toLowerCase();
-                const date = row.cells[2].textContent;
-                const status = row.cells[3].textContent.toLowerCase();
+    const rows = document.querySelectorAll('#orders-table tr');
+    rows.forEach(row => {
+        const name = row.cells[0].textContent.toLowerCase();
+        const date = row.cells[2].textContent;
+        const status = row.querySelector('.status').classList.contains(statusFilter);
 
-                let showRow = true;
+        let showRow = true;
 
-                // Search filter
-                if (searchInput && !name.includes(searchInput)) {
-                    showRow = false;
-                }
-
-                // Status filter
-                if (statusFilter) {
-                    if (statusFilter === 'approved' && status !== 'approved') {
-                        showRow = false;
-                    }
-                    if (statusFilter === 'pending' && status !== 'pending') {
-                        showRow = false;
-                    }
-                }
-
-                // Show or hide rows
-                if (showRow) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Sorting logic
-            const sortedRows = Array.from(rows).sort((a, b) => {
-                const aData = a.cells;
-                const bData = b.cells;
-
-                switch (sortOption) {
-                    case 'date-asc':
-                        return new Date(aData[2].textContent) - new Date(bData[2].textContent);
-                    case 'date-desc':
-                        return new Date(bData[2].textContent) - new Date(aData[2].textContent);
-                    default:
-                        return 0;
-                }
-            });
-
-            // Reorder rows after sorting
-            const tbody = document.getElementById('orders-table');
-            sortedRows.forEach(row => tbody.appendChild(row));
+        // Search filter
+        if (searchInput && !name.includes(searchInput)) {
+            showRow = false;
         }
 
-        // Clear all filters
-        function clearFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('status-filter').value = '';
-            document.getElementById('sort-options').value = '';
-            applyFilters();
+        // Status filter
+        if (statusFilter) {
+            if (!status) {
+                showRow = false;
+            }
         }
+
+        // Show or hide rows
+        row.style.display = showRow ? '' : 'none';
+    });
+
+    // Sorting logic
+    const sortedRows = Array.from(rows).filter(row => row.style.display !== 'none'); // Sadece görünen satırları sırala
+    sortedRows.sort((a, b) => {
+        const aData = a.cells;
+        const bData = b.cells;
+
+        switch (sortOption) {
+            case 'date-asc':
+                return new Date(aData[2].textContent) - new Date(bData[2].textContent);
+            case 'date-desc':
+                return new Date(bData[2].textContent) - new Date(aData[2].textContent);
+            default:
+                return 0;
+        }
+    });
+
+    // Reorder rows after sorting
+    const tbody = document.querySelector('#orders-table');
+    sortedRows.forEach(row => tbody.appendChild(row));
+}
+
+// Clear all filters
+function clearFilters() {
+    document.getElementById('search-input').value = '';
+    document.getElementById('status-filter').value = '';
+    document.getElementById('sort-options').value = '';
+    applyFilters();
+}
     </script>
 </body>
