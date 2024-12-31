@@ -214,13 +214,26 @@
         border-radius: 12px;
         border: none;
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s ease;
-        background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+        transition: all 0.3s ease-in-out;
+        background: linear-gradient(135deg, #4f8ef7, #3d5afe);
         color: var(--white);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+        text-decoration: none; /*Alt çizgiyi kaldırır*/
+       
     }
 
+        .button:hover {
+            background: linear-gradient(135deg, #3d5afe, #1a73e8); /* Hover sırasında farklı bir mavi geçiş */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1); /* Daha belirgin gölge */
+            transform: translateY(-2px); /* Hover sırasında yukarı hareket */
+        }
+
+        .button:active {
+            transform: translateY(0); /* Tıklama sırasında normale döner */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1); /* Daha sıkı bir gölge */
+        }
     .sidebar {
         width: 250px;
         background-color: var(--text);
@@ -322,7 +335,7 @@
             }
 
     .filter-btn {
-        background-color: var(--primary-blue);
+        background: linear-gradient(135deg, #4f8ef7, #3d5afe);
         color: var(--white);
         border: none;
         border-radius: 12px;
@@ -336,7 +349,7 @@
 
         .filter-btn:hover {
             background-color: var(--mid-tone);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(46, 107, 194, 0.3);
         }
 
@@ -344,6 +357,7 @@
         width: 100%;
         margin-top: 2rem;
         border-collapse: collapse;
+
     }
 
         .table th, .table td {
@@ -353,7 +367,7 @@
         }
 
         .table thead {
-            background-color: var(--mid-tone);
+            background: linear-gradient(135deg, #4f8ef7, #3d5afe);
             color: var(--white);
         }
 
