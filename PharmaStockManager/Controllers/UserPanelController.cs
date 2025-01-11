@@ -6,6 +6,8 @@ using System.Linq;
 using PharmaStockManager.Models.ViewModels;
 using PharmaStockManager.Models.ViewModel;
 using PharmaStockManager.Services;
+using Microsoft.AspNetCore.Identity;
+using PharmaStockManager.Models.Identity;
 
 [Authorize(Roles = "Customer")] // Bu controller'a yalnızca "Customer" rolündeki kullanıcılar erişebilir.
 [ServiceFilter(typeof(LogFilter))]
@@ -13,10 +15,13 @@ public class UserPanelController : Controller
 {
     private readonly PharmaContext _context;
     private readonly ILogger<UserPanelController> _logger; // Logger
-    public UserPanelController(PharmaContext context, ILogger<UserPanelController> logger)
+    private readonly UserManager<AppUser> _userManager;
+    public int MAX_ITEM = 50;// Maksimum ne kadar ilaç seçebilir?
+    public UserPanelController(PharmaContext context, ILogger<UserPanelController> logger, UserManager<AppUser> userManager)
     {
         _context = context;
         _logger = logger; // Logger'ı yapılandırıyoruz
+        _userManager = userManager;
     }
 
     // GET: UserPanel/Index
@@ -178,11 +183,31 @@ public class UserPanelController : Controller
             UserName = user.UserName,
             Email = user.Email,
             ActiveUser = user.ActiveUser,
-            Role = user.UserType
+            Role = user.UserType,
+            PhoneNumber = user.PhoneNumber,
+            RefCode = user.RefCode
         };
 
         return View(model);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateProfile(string fullName, string email, string phoneNumber)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+            return Json(new { success = false, message = "User not found." });
+
+        user.FullName = fullName;
+        user.Email = email;
+        user.PhoneNumber = phoneNumber;
+
+        var result = await _userManager.UpdateAsync(user);
+        if (result.Succeeded)
+            return Json(new { success = true });
+
+        return Json(new { success = false, message = "Update failed." });
+    }
 
 }

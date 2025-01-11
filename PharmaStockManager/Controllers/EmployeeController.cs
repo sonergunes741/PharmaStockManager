@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Bcpg;
 using PharmaStockManager.Models;
 using PharmaStockManager.Models.Identity;
 using PharmaStockManager.Services;
@@ -50,6 +51,11 @@ namespace PharmaStockManager.Controllers
         public async Task<IActionResult> Index()
         {
             var drugs = await _context.Drugs.ToListAsync();
+            var user = await _userManager.GetUserAsync(User);
+            var permissions = await _context.Permissions
+                .FirstOrDefaultAsync(p => p.UserID == user.Id);
+
+            ViewData["Permissions"] = permissions ?? new Permissions();
             return View(drugs);
         }
 
@@ -57,6 +63,9 @@ namespace PharmaStockManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddStock(int id, int quantity)
         {
+            if (!await CheckPermission("stockin"))
+                return Json(new { success = false, message = "You don't have permission to add stock." });
+
             var drug = await _context.Drugs.FindAsync(id);
             if (drug == null)
                 return Json(new { success = false, message = "İlaç bulunamadı." });
@@ -86,6 +95,10 @@ namespace PharmaStockManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveStock(int id, int quantity)
         {
+            if (!await CheckPermission("stockout"))
+                return Json(new { success = false, message = "You don't have permission to remove stock." });
+
+
             var drug = await _context.Drugs.FindAsync(id);
             if (drug == null)
                 return Json(new { success = false, message = "İlaç bulunamadı." });
@@ -122,6 +135,28 @@ namespace PharmaStockManager.Controllers
                 return Json(new { success = false, message = "İlaç bulunamadı." });
 
             return Json(new { success = true, data = drug });
+        }
+
+        private async Task<bool> CheckPermission(string permission)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var userPermissions = await _context.Permissions
+                .FirstOrDefaultAsync(p => p.UserID == user.Id);
+
+            if (userPermissions == null)
+                return false;
+
+            switch (permission.ToLower())
+            {
+                case "editstocks":
+                    return userPermissions.EditStocks;
+                case "stockin":
+                    return userPermissions.StockIn;
+                case "stockout":
+                    return userPermissions.StockOut;
+                default:
+                    return false;
+            }
         }
     }
 }

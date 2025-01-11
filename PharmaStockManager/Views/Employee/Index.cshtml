@@ -406,12 +406,21 @@
                             <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
                             <td>@item.ExpiryDate?.ToString("yyyy-MM-dd")</td>
                             <td>
-                                <button class="button button-edit" onclick="openModal('add', @item.Id)">
-                                    Add Stock
-                                </button>
-                                <button class="button button-delete" onclick="openModal('remove', @item.Id)">
-                                    Remove Stock
-                                </button>
+                                @{
+                                    var permissions = (Permissions)ViewData["Permissions"];
+                                }
+                                @if (permissions.StockIn)
+                                {
+                                    <button class="button button-edit" onclick="openModal('add', @item.Id)">
+                                        Add Stock
+                                    </button>
+                                }
+                                @if (permissions.StockOut)
+                                {
+                                    <button class="button button-delete" onclick="openModal('remove', @item.Id)">
+                                        Remove Stock
+                                    </button>
+                                }
                             </td>
                         </tr>
                     }
@@ -468,31 +477,34 @@
         };
 
         // Form submit handler
-        document.getElementById('stockForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const url = currentAction === 'add' ? '/Employee/AddStock' : '/Employee/RemoveStock';
+            document.getElementById('stockForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const url = currentAction === 'add' ? '/Employee/AddStock' : '/Employee/RemoveStock';
 
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'RequestVerificationToken': token
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'RequestVerificationToken': token
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.message || 'Operation failed');
+                if (data.message && data.message.includes("permission")) {
+                    closeModal();
                 }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert('Operation failed: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred during the operation.');
-                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred during the operation.');
         });
+    });
 
         // Filter function
         window.applyFilter = function () {
