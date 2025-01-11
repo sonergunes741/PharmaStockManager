@@ -273,6 +273,7 @@
                         <div class="card-buttons">
                             <button class="button" onclick="openEditModal(@warehouse.Id)">Update</button>
                             <button class="button delete-btn" onclick="deleteWarehouse(@warehouse.Id)">Delete</button>
+                            <button class="button" onclick="openAddUserModal(@warehouse.Id, '@warehouse.RefCode')">Add User</button>
                         </div>
                     </div>
                 }
@@ -305,6 +306,41 @@
             </form>
         </div>
     </div>
+
+    <!-- Add User Modal -->
+    <div class="modal hidden" id="addUserModal">
+        <div class="modal-content">
+            <h2>Add User to Warehouse</h2>
+            <form id="addUserForm" asp-action="AddAdminUser" asp-controller="SuperAdmin" method="post">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="FullName" placeholder="Enter full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="Email" placeholder="Enter email" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="Password" placeholder="Enter password" required />
+                </div>
+
+
+                <input type="hidden" id="refCode" name="RefCode" readonly />
+
+                <!-- Hidden Warehouse ID -->
+                <input type="hidden" id="warehouseId" name="WarehouseId" />
+
+                <div class="form-actions">
+                    <button type="submit" class="button">Save</button>
+                    <button type="button" class="button" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script>
         function openAddModal() {
@@ -341,6 +377,16 @@
                     });
             }
         }
+
+        function openAddUserModal(warehouseId, refCode) {
+            const modal = document.getElementById('addUserModal');
+            const form = document.getElementById('addUserForm');
+            modal.querySelector('#refCode').value = refCode; // Pre-fill the RefCode field
+            modal.querySelector('#warehouseId').value = warehouseId; // Set the hidden WarehouseId field
+            form.reset();
+            modal.classList.remove('hidden');
+        }
+
 
         function closeModal() {
             const modal = document.querySelector('.modal:not(.hidden)');

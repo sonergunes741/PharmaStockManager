@@ -184,4 +184,55 @@ public class SuperAdminController : Controller
         }
         return NotFound();
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AddAdminUser(RegisterViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var warehouse = await _dbContext.Warehouses.FirstOrDefaultAsync(u => u.RefCode == viewModel.RefCode);
+        if (warehouse == null)
+        {
+            ModelState.AddModelError("RefCode", "Invalid warehouse reference code.");
+            return BadRequest(ModelState);
+        }
+
+        AppUser appUser = new AppUser()
+        {
+            UserName = viewModel.Email,
+            Email = viewModel.Email,
+            RefCode = viewModel.RefCode,
+            ActivationCode = null,
+            FullName = viewModel.FullName,
+            ActiveUser = true
+        };
+
+        var result = await _userManager.CreateAsync(appUser, viewModel.Password);
+        if (!result.Succeeded)
+        {
+            foreach (var item in result.Errors)
+            {
+                Console.WriteLine(item.Description);
+                ModelState.AddModelError("", item.Description);
+            }
+            return BadRequest(ModelState);
+        }
+
+        Permissions permissions = new Permissions()
+        {
+            EditStocks = true,
+            StockIn = true,
+            StockOut = true,
+            UserID = appUser.Id
+        };
+
+        _dbContext.Permissions.Add(permissions);
+        await _userManager.AddToRoleAsync(appUser, "Admin");
+        await _dbContext.SaveChangesAsync();
+
+        return RedirectToAction("ManageWarehouses", "SuperAdmin");
+    }
 }
