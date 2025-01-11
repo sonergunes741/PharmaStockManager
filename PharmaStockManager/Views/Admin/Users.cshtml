@@ -295,6 +295,83 @@
             opacity: 0.9;
         }
 
+    /* Add to your existing style section */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+    }
+
+    .modal-content {
+        background-color: var(--white);
+        padding: 2rem;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .permissions-table {
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: var(--mint-green);
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
 </style>
 
 <div class="sidebar">
@@ -422,9 +499,11 @@
                             <button class="button button-customer" onclick="makeCustomer(@user.Id)">
                                 <i class="fas fa-user"></i> Make Customer
                             </button>
-                            <a class="button button-edit" asp-action="EditPermissions" asp-route-id="@user.Id">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
+                            @if(user.Role == "Employee"){
+                                <button class="button button-edit" onclick="editPermissions('@user.Id')">
+                                    <i class="fas fa-edit"></i> Edit Permissions
+                                </button>
+                            }
                             <button class="button button-delete" onclick="deleteUser(@user.Id)">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
@@ -435,6 +514,57 @@
         </table>
     </div>
 </main>
+
+<!-- Add this right before the closing </main> tag in Users.cshtml -->
+<div id="permissionsModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h2>Edit Permissions</h2>
+        <form id="permissionsForm">
+            <input type="hidden" id="userId" name="userId" />
+            <table class="permissions-table">
+                <thead>
+                    <tr>
+                        <th>Permission</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Edit Stocks</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" name="EditStocks" />
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Stock In</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" name="StockIn" />
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Stock Out</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" name="StockOut" />
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="modal-buttons">
+                <button type="submit" class="button button-edit">Save</button>
+                <button type="button" class="button button-delete" onclick="closePermissionsModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <script>
     function acceptUser(userId) {
@@ -556,4 +686,61 @@
                 });
         }
     }
+
+        // Add to your existing script section
+        function editPermissions(userId) {
+        document.getElementById('userId').value = userId;
+
+        // URL'yi düzelt ve parseInt ekle
+        fetch(`/Admin/GetUserPermissions?userId=${parseInt(userId)}`)
+            .then(response => response.json())
+            .then(permissions => {
+                document.querySelector('input[name="EditStocks"]').checked = permissions.editStocks;
+                document.querySelector('input[name="StockIn"]').checked = permissions.stockIn;
+                document.querySelector('input[name="StockOut"]').checked = permissions.stockOut;
+                document.getElementById('permissionsModal').style.display = 'flex';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching permissions');
+            });
+    }
+
+    function closePermissionsModal() {
+        document.getElementById('permissionsModal').style.display = 'none';
+    }
+
+        document.getElementById('permissionsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const userId = parseInt(document.getElementById('userId').value);
+        const permissions = {
+            userId: userId,
+            editStocks: document.querySelector('input[name="EditStocks"]').checked,
+            stockIn: document.querySelector('input[name="StockIn"]').checked,
+            stockOut: document.querySelector('input[name="StockOut"]').checked
+        };
+
+        fetch('/Admin/UpdatePermissions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: JSON.stringify(permissions)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closePermissionsModal();
+                location.reload();
+            } else {
+                alert('Error updating permissions: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating permissions');
+        });
+    });
 </script>

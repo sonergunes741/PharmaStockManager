@@ -1,286 +1,314 @@
 ﻿@model PharmaStockManager.Models.ViewModel.UserManagementViewModel
 @{
-    ViewData["Title"] = "Kendi Bilgilerim";
+    ViewData["Title"] = "My Profile";
     Layout = null;
 }
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pharma Stock Manager - Kendi Bilgilerim</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <style>
-        :root {
-            --primary-blue: #5a9ecf;
-            --lavender: #a68cb1;
-            --mint-green: #88b8a5;
-            --mid-tone: #93b7df;
-            --background: #f4f5f7;
-            --text: #2f3542;
-            --white: #ffffff;
-            --gray-light: #e8eaed;
-            --gray-hover: #dfe1e5;
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    :root {
+        --sidebar-bg: #2f3542;
+        --text-light: #ffffff;
+        --primary-color: #5a9ecf;
+        --body-bg: #f4f5f7;
+        --card-bg: #ffffff;
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #fff;
+        --gray-light: #e8eaed;
+        --gray-hover: #ddd;
+        --filter-bg: #f9f9f9;
+        --filter-border: #ccc;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        display: flex;
+        background: var(--body-bg);
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px;
+        background: var(--sidebar-bg);
+        min-height: 100vh;
+        padding: 2rem;
+        position: fixed;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+    }
+
+    .nav-menu {
+        list-style: none;
+    }
+
+    .nav-item {
+        margin: 1rem 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        gap: 1rem;
+    }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background: var(--background);
-            color: var(--text);
-            display: flex;
-            min-height: 100vh;
-        }
+    .main-content {
+        margin-left: 250px;
+        padding: 2rem;
+        width: calc(100% - 250px);
+    }
 
-        .container {
-            display: flex;
-            width: 100%;
-        }
+    .header {
+        background: var(--white);
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        max-width: 1200px;
+        margin: 20px auto;
+    }
 
-        .sidebar {
-            width: 250px;
-            background-color: var(--text);
-            height: 100vh;
-            position: fixed;
-            padding: 2rem;
-            color: var(--white);
-        }
+    .welcome-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
 
-        .sidebar-header {
-            padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 2rem;
-        }
+    .welcome-text h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+    }
 
-        .nav-menu {
-            list-style: none;
-        }
+    .welcome-text p {
+        color: var(--text);
+        opacity: 0.8;
+    }
 
-        .nav-item {
-            margin: 0.5rem 0;
-        }
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-            .nav-link:hover,
-            .nav-link.active {
-                background: rgba(255, 255, 255, 0.1);
-                color: var(--white);
-                transform: translateX(5px);
-            }
-
-            .nav-link i {
-                width: 20px;
-                margin-right: 1rem;
-            }
-
-        .main-content {
-            margin-left: 250px;
-            flex: 1;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .profile-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .profile-card {
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 300px;
-        }
-
-        .profile-card h4 {
-            margin-bottom: 1rem;
-        }
-
-        .button {
-            padding: 0.875rem 2rem;
-            border-radius: 12px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            background: var(--primary-blue);
-            color: var(--white);
-            transition: background 0.3s;
-        }
+    .button {
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 
         .button:hover {
-            background: var(--lavender);
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
-        .logo-circle {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient( 135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66% );
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    .profile-form {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        max-width: 800px;
+        margin: 2rem auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2f3542;
+            font-weight: 500;
         }
 
-        .pill-icon {
-            width: 20px;
-            height: 32px;
-            background-color: var(--white);
-            border-radius: 16px;
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 1rem;
         }
 
-        .logo-text {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--white);
-        }
-
-        .header {
-            background: var(--white);
-            padding: 1.5rem 2rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .welcome-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .welcome-text {
-            color: var(--text);
-        }
-
-            .welcome-text h1 {
-                font-size: 1.5rem;
-                margin-bottom: 0.5rem;
+            .form-group input[readonly] {
+                background-color: #f5f5f5;
             }
 
-            .welcome-text p {
-                color: var(--text);
-                opacity: 0.8;
-            }
+    .update-btn {
+        background: #a68cb1;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
 
-        .daily-summary {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            margin-top: 0.5rem;
+        .update-btn:hover {
+            opacity: 0.9;
         }
+</style>
 
-        .summary-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-            .summary-item i {
-                color: var(--primary-blue);
-            }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <form action="/UserPanel/Index"
-                      method="get"
-                      style="display: flex; align-items: center; gap: 1rem">
-                    <button type="submit"
-                            style="all: unset; cursor: pointer; display: flex; align-items: center; gap: 1rem;">
-                        <div class="logo-circle">
-                            <div class="pill-icon"></div>
-                        </div>
-                        <span class="logo-text">Pharma Stock Manager</span>
-                    </button>
-                </form>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <div class="logo-circle">
+                <div class="pill-icon"></div>
             </div>
-
-            <nav>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index", "UserPanel")" class="nav-link">
-                            <i class="fas fa-warehouse"></i>
-                            Depo Bilgileri
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("ViewOrders", "UserPanel")" class="nav-link">
-                            <i class="fas fa-shopping-cart"></i>
-                            Siparişlerim
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">
-                            <i class="fas fa-users"></i>
-                            Kendi Bilgilerim
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <div class="main-content">
-            <header class="header">
-                <div class="welcome-section">
-                    <div class="welcome-text">
-                        <h1>Welcome back</h1>
-                    </div>
-                </div>
-
-                <div class="user-menu">
-                    <span id="current-time"></span>
-                    <a href="@Url.Action("Logout", "Account")" class="button">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </a>
-                </div>
-            </header>
-
-            <h3>Kendi Bilgilerim</h3>
-            <div class="profile-section">
-                <div class="profile-card">
-                    <h4>@Model.UserName</h4>
-                    <p><strong>Email:</strong> @Model.Email</p>
-                    <p><strong>Durum:</strong> @(Model.ActiveUser ? "Aktif" : "Pasif")</p>
-                    <p><strong>Rol:</strong> @Model.Role</p>
-                </div>
-
-                <button class="button" onclick="editProfile()">Bilgilerimi Düzenle</button>
-            </div>
+            <span class="logo-text" style="color: white">Pharma Stock</span>
         </div>
     </div>
 
-    <script>
-        function editProfile() {
-            alert("Bilgilerinizi düzenlemek için ilgili formu açabilirsiniz.");
-        }
-    </script>
-</body>
+    <nav>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "UserPanel")" class="nav-link">
+                    <i class="fas fa-warehouse"></i>
+                    Depo Bilgileri
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("ViewOrders", "UserPanel")" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    Siparişlerim
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-user"></i>
+                    Kendi Bilgilerim
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<main class="main-content">
+    <header class="header">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Kendi Bilgilerim</h1>
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <span id="current-time"></span>
+            <a href="@Url.Action("Logout", "Account")" class="button">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </header>
+
+    <form id="profileForm" class="profile-form">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label for="fullName">Ad Soyad</label>
+            <input type="text" id="fullName" name="fullName" value="@Model.UserName" required />
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="@Model.Email" required />
+        </div>
+
+        <div class="form-group">
+            <label for="phoneNumber">Telefon Numarası</label>
+            <input type="tel" id="phoneNumber" name="phoneNumber" value="@Model.PhoneNumber" required />
+        </div>
+
+        <div class="form-group">
+            <label>Reference Code</label>
+            <input type="text" value="@Model.RefCode" readonly />
+        </div>
+
+        <button type="submit" class="update-btn">Bilgileri Güncelle</button>
+    </form>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.getElementById('profileForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        const formData = new FormData(this);
+
+        fetch('/UserPanel/UpdateProfile', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'RequestVerificationToken': token
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Profil başarıyla güncellendi');
+                } else {
+                    alert('Güncelleme başarısız: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Profil güncellenirken bir hata oluştu');
+            });
+    });
+</script>

@@ -376,4 +376,55 @@ public class AdminController : Controller
             return Json(new { success = false, message = "An error occurred while deleting the user" });
         }
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUserPermissions(int userId)
+    {
+        var permissions = await _context.Permissions
+            .FirstOrDefaultAsync(p => p.UserID == userId);
+
+        if (permissions == null)
+        {
+            permissions = new Permissions
+            {
+                UserID = userId,
+                EditStocks = false,
+                StockIn = false,
+                StockOut = false
+            };
+        }
+
+        return Json(permissions);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdatePermissions([FromBody] Permissions model)
+    {
+        try
+        {
+            var permissions = await _context.Permissions
+                .FirstOrDefaultAsync(p => p.UserID == model.UserID);
+
+            if (permissions == null)
+            {
+                permissions = new Permissions
+                {
+                    UserID = model.UserID
+                };
+                _context.Permissions.Add(permissions);
+            }
+
+            permissions.EditStocks = model.EditStocks;
+            permissions.StockIn = model.StockIn;
+            permissions.StockOut = model.StockOut;
+
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
 }
