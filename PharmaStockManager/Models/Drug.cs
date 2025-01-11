@@ -34,5 +34,6 @@ namespace PharmaStockManager.Models
         [Required]
         [Range(0, int.MaxValue)]
         public int CriticalStockLevel { get; set; } = 10;
+        public int MaxRequest { get; set; } = 50;
     }
 }

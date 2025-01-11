@@ -504,6 +504,10 @@ table {
                 <input type="number" id="CriticalStockLevel" name="CriticalStockLevel" class="form-control" min="1" required />
                 <small class="form-text text-muted">Düşük stok uyarısı almak istediğiniz minimum seviye</small>
             </div>
+            <div class="form-group">
+                <label for="MaxRequest">Maksimum İstek Sayısı</label>
+                <input type="number" id="MaxRequest" name="MaxRequest" class="form-control" min="1" required />
+            </div>
             
             <div class="modal-footer">
                 <button type="button" class="button" onclick="closeModal()">İptal</button>
@@ -529,6 +533,9 @@ table {
 
             form.reset();
             document.getElementById('drugType').value = drugType;
+
+            document.getElementById('MaxRequest').addEventListener('input', function () {
+        });
 
             if (action === 'edit' && id) {
                 title.textContent = 'İlaç Güncelle';
@@ -582,6 +589,7 @@ table {
                 document.getElementById('UnitPrice').value = drug.unitPrice;
                 document.getElementById('ExpiryDate').value = drug.expiryDate ? drug.expiryDate.split('T')[0] : '';
                 document.getElementById('CriticalStockLevel').value = drug.criticalStockLevel;
+                document.getElementById('MaxRequest').value = drug.maxRequest;
             } else {
                 alert('İlaç bilgileri alınamadı: ' + data.message);
             }

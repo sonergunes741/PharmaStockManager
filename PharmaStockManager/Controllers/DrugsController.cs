@@ -49,7 +49,7 @@ public class DrugsController : Controller
     // POST: Drugs/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType,CriticalStockLevel")] Drug drug)
+    public async Task<IActionResult> Create([Bind("Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType,CriticalStockLevel,MaxRequest")] Drug drug)
     {
         if (ModelState.IsValid)
         {
@@ -89,7 +89,7 @@ public class DrugsController : Controller
     // POST: Drugs/Edit
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit([Bind("Id,Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType,CriticalStockLevel")] Drug drug)
+    public async Task<IActionResult> Edit([Bind("Id,Name,Category,Quantity,UnitPrice,ExpiryDate,DrugType,CriticalStockLevel,MaxRequest")] Drug drug)
     {
         if (ModelState.IsValid)
         {
@@ -101,7 +101,7 @@ public class DrugsController : Controller
                 {
                     return Json(new { success = false, message = "İlaç bulunamadı." });
                 }
-
+                // Miktar değişikliğini kontrol et
                 var quantityDifference = drug.Quantity - oldDrug.Quantity;
                 if (quantityDifference != 0)
                 {
@@ -120,6 +120,7 @@ public class DrugsController : Controller
                     _context.Transactions.Add(transactionRecord);
                 }
 
+                // Güncelleme işlemini yap
                 _context.Update(drug);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();

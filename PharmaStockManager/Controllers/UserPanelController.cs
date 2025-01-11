@@ -13,7 +13,6 @@ public class UserPanelController : Controller
 {
     private readonly PharmaContext _context;
     private readonly ILogger<UserPanelController> _logger; // Logger
-    public int MAX_ITEM = 50;// Maksimum ne kadar ilaç seçebilir?
     public UserPanelController(PharmaContext context, ILogger<UserPanelController> logger)
     {
         _context = context;
@@ -56,14 +55,19 @@ public class UserPanelController : Controller
             TempData["ErrorMessage"] = "Quantity must be a positive number.";
             return RedirectToAction(nameof(Index));
         }
-        if (quantity >= 50)
-        {
-            TempData["ErrorMessage"] = $"You can select a maximum of {MAX_ITEM} items.";
-            return RedirectToAction(nameof(Index));
-        }
+
+        // İlgili ilaç veritabanında bulunuyor mu kontrol et
         var drug = _context.Drugs.FirstOrDefault(d => d.Id == drugId);
         if (drug != null)
         {
+            // MaxRequest kontrolü
+            if (quantity > drug.MaxRequest)
+            {
+                TempData["ErrorMessage"] = $"You can select a maximum of {drug.MaxRequest} items.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Talep oluştur
             var request = new Request
             {
                 UserName = User.Identity.Name,
