@@ -15,6 +15,7 @@ using System.Text.Json;
 using PharmaStockManager.Models.ViewModel;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using PharmaStockManager.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace StockManager.Controllers
 {
@@ -561,6 +562,26 @@ namespace StockManager.Controllers
                 }
             }
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> AdminProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AdminProfileViewModel
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                EmailConfirmed = user.EmailConfirmed,
+                // Diğer profil bilgileri eklenebilir
+            };
+
+            return View(model);
         }
 
         [HttpGet]

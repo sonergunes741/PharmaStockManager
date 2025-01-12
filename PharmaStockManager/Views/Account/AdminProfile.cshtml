@@ -1,0 +1,404 @@
+﻿@model PharmaStockManager.Models.ViewModel.AdminProfileViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pharma Stock Manager - Admin Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-blue: #5a9ecf;
+            --lavender: #a68cb1;
+            --mint-green: #88b8a5;
+            --mid-tone: #93b7df;
+            --background: #f4f5f7;
+            --text: #2f3542;
+            --white: #ffffff;
+            --gray-light: #e8eaed;
+            --gray-hover: #dfe1e5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--text);
+            height: 100vh;
+            position: fixed;
+            padding: 2rem;
+            color: var(--white);
+        }
+
+        .sidebar-header {
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-circle {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pill-icon {
+            width: 20px;
+            height: 32px;
+            background-color: var(--white);
+            border-radius: 16px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 0.5rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .nav-link:hover,
+            .nav-link.active {
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--white);
+                transform: translateX(5px);
+            }
+
+            .nav-link i {
+                width: 20px;
+                margin-right: 1rem;
+            }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .profile-header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-title h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-title p {
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        .profile-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .profile-banner {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--mid-tone));
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: var(--white);
+            border-radius: 50%;
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+            .profile-avatar i {
+                font-size: 3rem;
+                color: var(--primary-blue);
+            }
+
+        .profile-content {
+            padding: 5rem 2rem 2rem;
+        }
+
+        .profile-info {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .info-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: var(--text);
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            background: var(--gray-light);
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(139, 195, 74, 0.1);
+            color: #4caf50;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--mid-tone));
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: var(--gray-light);
+            color: var(--text);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="pill-icon"></div>
+                </div>
+                <span class="logo-text">Pharma Stock Manager</span>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "AdminDashboard")" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Drugs")" class="nav-link">
+                        <i class="fas fa-pills"></i>
+                        Inventory
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Request")" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Users", "Admin")" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Categories")" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        Category
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("TransactionHistory", "Drugs")" class="nav-link">
+                        <i class="fas fa-history"></i>
+                        History
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("AdminProfile", "Account")" class="nav-link active">
+                        <i class="fas fa-user-circle"></i>
+                        Profile
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="profile-header">
+            <div class="profile-title">
+                <h1>Admin Profile</h1>
+                <p>Manage your account information</p>
+            </div>
+            <div class="user-menu">
+                <a href="@Url.Action("Logout", "Account")" class="btn btn-primary">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </header>
+
+        <div class="profile-card">
+            <div class="profile-banner">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+            <div class="profile-content">
+                <div class="profile-info">
+                    <div class="info-group">
+                        <div class="info-label">Username</div>
+                        <div class="info-value">@Model.UserName</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">Email Address</div>
+                        <div class="info-value">@Model.Email</div>
+                        @if (Model.EmailConfirmed)
+                        {
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Verified Email</span>
+                            </div>
+                        }
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">Phone Number</div>
+                        <div class="info-value">@Model.PhoneNumber</div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="@Url.Action("ChangePassword", "Account")" class="btn btn-primary">
+                            <i class="fas fa-key"></i>
+                            Change Password
+                        </a>
+                        <a href="@Url.Action("ChangeEmail", "Account")" class="btn btn-secondary">
+                            <i class="fas fa-envelope"></i>
+                            Change Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleButton = document.createElement('button');
+            toggleButton.classList.add('menu-toggle');
+            toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
+            document.querySelector('.main-content').prepend(toggleButton);
+
+            toggleButton.addEventListener('click', function () {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
