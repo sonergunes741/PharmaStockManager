@@ -83,10 +83,11 @@
 
         <header class="hero login-hero">
             <div class="hero-content">
-                <h1>Login</h1>
-                <p>Welcome back! Please log in to access your account.</p>
+                <h1>Giriş Yap</h1>
+                <p>Tekrar hoş geldiniz! Hesabınıza erişmek için lütfen giriş yapın.</p>
             </div>
         </header>
+
 
         <section class="login-form">
             @if (ViewData["RequiresTwoFactor"] != null && (bool)ViewData["RequiresTwoFactor"])
@@ -94,42 +95,45 @@
                 <!-- 2FA Code Form -->
                 <form asp-action="Verify2faCode" asp-controller="Account" method="post">
                     <div>
-                        <label for="code">Enter your 2FA code:</label>
-                        <input type="text" id="code" name="code" class="form-control" placeholder="Enter 6-digit code" required />
+                        <label for="code">2FA kodunuzu girin:</label>
+                        <input type="text" id="code" name="code" class="form-control" placeholder="6 haneli kodu girin" required />
                         <span class="text-danger">@ViewData["ErrorMessage"]</span>
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn-primary">Verify Code</button>
+                        <button type="submit" class="btn-primary">Kodu Doğrula</button>
                     </div>
                 </form>
+
             }
             else
             {
-                <!-- Regular Login Form -->
+                <!-- Normal Giriş Formu -->
                 <form asp-action="Login" asp-controller="Account" method="post">
                     <div>
-                        <label asp-for="Email"></label>
-                        <input asp-for="Email" type="email" class="form-control" placeholder="Enter your email" required />
+                        <label asp-for="Email">E-posta</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresinizi girin" required />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
                     <div>
-                        <label asp-for="Password"></label>
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" required />
+                        <label asp-for="Password">Şifre</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Şifrenizi girin" required />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="button">Login</button>
-                        <a href="/Account/ForgotPassword" class="link-secondary">Forgot Password?</a>
+                        <button type="submit" class="button">Giriş Yap</button>
+                        <a href="/Account/ForgotPassword" class="link-secondary">Şifrenizi mi unuttunuz?</a>
                     </div>
                 </form>
+
             }
 
-            <div class="register-link">
-                <p>Don't have an account? <a href="/Account/Register">Sign up</a></p>
-            </div>
+            <<div class="register-link">
+    <p>Hesabınız yok mu? <a href="/Account/Register">Kayıt olun</a></p>
+</div>
+
         </section>
     </div>
 

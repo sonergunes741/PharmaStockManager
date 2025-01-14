@@ -79,10 +79,10 @@
                         <li class="nav-item">
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">İletişime Geçin</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">Hakkımızda</a>
                         </li>
 
                         @if (User.IsInRole("SuperAdmin")){
@@ -95,16 +95,16 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Drugs" asp-action="Index">Manage Drugs</a>
+                                <a class="nav-link" asp-area="" asp-controller="Drugs" asp-action="Index">İlaçları Yönet</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="Index">Manage Categories</a>
+                                <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="Index">Kategorileri Yönet</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Drugs" asp-action="TransactionHistory">Transaction History</a>
+                                <a class="nav-link" asp-area="" asp-controller="Drugs" asp-action="TransactionHistory">İşlem Geçmişi</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Request" asp-action="Index">Requests</a>
+                                <a class="nav-link" asp-area="" asp-controller="Request" asp-action="Index">Siparişler</a>
                             </li>
                         }
 
@@ -112,7 +112,7 @@
                         @if (User.IsInRole("Customer"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="UserPanel" asp-action="Index">User Panel</a>
+                                <a class="nav-link" asp-area="" asp-controller="UserPanel" asp-action="Index">Kullanıcı Paneli</a>
                             </li>
                         }
                     </ul>
@@ -126,31 +126,31 @@
                             </li>
                             <li class="nav-item dropdown manage-dropdown me-3">
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Manage
+                                    Yönet
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Şifre Değiştir</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeEmail">Change Email</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeEmail">E-posta değiştir</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="EnableAuthenticator">Enable Authenticator</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="EnableAuthenticator">Doğrulayıcıyı aktif et</a>
                                     </li>
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Logout">Çıkış yap</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Login">Giriş yap</a>
                             </li>
                             <li class="nav-item">
-                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+                                <a class="auth-button" asp-area="" asp-controller="Account" asp-action="Register">Kaydol</a>
                             </li>
                         }
                     </ul>
@@ -184,7 +184,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - PharmaStockManager - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - PharmaStockManager - <a asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
         </div>
     </footer>
 

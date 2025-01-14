@@ -139,27 +139,28 @@
 
         <header class="hero contact-hero">
             <div class="hero-content">
-                <h1>Contact Us</h1>
+                <h1>İletişime geçin</h1>
             </div>
         </header>
 
         <section class="contact-details">
-            <h2>Get in Touch</h2>
+            <h2>İletişime Geçin</h2>
             <div class="contact-info">
                 <div class="info-card">
                     <h3>Email</h3>
                     <p><a href="mailto:webwizardssol@gmail.com">webwizardssol@gmail.com</a></p>
                 </div>
                 <div class="info-card">
-                    <h3>Phone</h3>
-                    <p><a>+1 234 567 890</a></p>
+                    <h3>Telefon</h3>
+                    <p><a>+90 555 777 66 44</a></p>
                 </div>
                 <div class="info-card">
-                    <h3>Address</h3>
-                    <p>Gebze Technical University</p>
+                    <h3>Adres</h3>
+                    <p>Gebze Teknik Üniversitesi</p>
                 </div>
             </div>
         </section>
+
         <div>
             @if (TempData["Message"] != null)
             {
@@ -170,21 +171,22 @@
             }
         </div>
         <section class="contact-form">
-            <h2>Send Us a Message</h2>
+            <h2>Bize Mesaj Gönderin</h2>
             <form asp-action="ContactMail" asp-controller="Account" method="post">
-                <label asp-for="Name">Name</label>
-                <input asp-for="Name" type="text" class="form-control" placeholder="Your Name" required>
+                <label asp-for="Name">Adınız</label>
+                <input asp-for="Name" type="text" class="form-control" placeholder="Adınız" required>
 
-                <label asp-for="Email">Email</label>
-                <input asp-for="Email" type="email" class="form-control" placeholder="Your Email" required />
+                <label asp-for="Email">E-posta</label>
+                <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresiniz" required />
                 <span asp-validation-for="Email" class="text-danger"></span>
 
-                <label asp-for="Content">Message</label>
-                <input asp-for="Content" type="text" class="form-control" placeholder="Your Message" required>
-           
-                <button type="submit" class="button">Send Message</button>
+                <label asp-for="Content">Mesaj</label>
+                <input asp-for="Content" type="text" class="form-control" placeholder="Mesajınız" required>
+
+                <button type="submit" class="button">Mesaj Gönder</button>
             </form>
         </section>
+
     </div>
 </body>
 </html>

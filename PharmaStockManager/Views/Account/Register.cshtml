@@ -55,47 +55,48 @@
 
         <header class="hero register-hero">
             <div class="hero-content">
-                <h1>Register</h1>
-                <p>Welcome! Please Register to create your account.</p>
+                <h1>Kayıt Ol</h1>
+                <p>Hoş geldiniz! Hesabınızı oluşturmak için lütfen kayıt olun.</p>
             </div>
         </header>
 
         <section class="register-form">
             <form asp-action="Register" asp-controller="Account" method="post">
                 <div>
-                    <label asp-for="FullName">Name</label>
-                    <input asp-for="FullName" class="form-control" placeholder="Enter your full name" required />
+                    <label asp-for="FullName">Ad Soyad</label>
+                    <input asp-for="FullName" class="form-control" placeholder="Adınızı ve soyadınızı girin" required />
                     <span asp-validation-for="FullName" class="text-danger"></span>
                 </div>
 
                 <div>
-                    <label asp-for="Email"></label>
-                    <input asp-for="Email" class="form-control" placeholder="Enter your email" required />
+                    <label asp-for="Email">E-posta</label>
+                    <input asp-for="Email" class="form-control" placeholder="E-posta adresinizi girin" required />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
                 <div>
-                    <label asp-for="Password"></label>
-                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter a secure password" required />
+                    <label asp-for="Password">Şifre</label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Güvenli bir şifre oluşturun" required />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
                 <div>
-                    <label asp-for="RefCode">Reference Code</label>
-                    <input asp-for="RefCode" class="form-control" placeholder="Reference Code" required />
+                    <label asp-for="RefCode">Referans Kodu</label>
+                    <input asp-for="RefCode" class="form-control" placeholder="Referans kodu" required />
                     <span asp-validation-for="RefCode" class="text-danger"></span>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="button">Register</button>
+                    <button type="submit" class="button">Kayıt Ol</button>
                 </div>
             </form>
 
             <div class="login-link">
-                <p>Already have an account? <a href="/Account/Login">Login here</a></p>
+                <p>Zaten bir hesabınız var mı? <a href="/Account/Login">Buradan giriş yapın</a></p>
             </div>
         </section>
     </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
