@@ -382,7 +382,7 @@ table {
     <header class="header">
         <div class="welcome-section">
             <div class="welcome-text">
-                <h1>İlaç stok yönetimi</h1>
+                <h1>Drug Stock Management</h1>
             </div>
         </div>
 
@@ -390,7 +390,7 @@ table {
             <span id="current-time"></span>
             <a href="@Url.Action("Logout", "Account")" class="button2">
                 <i class="fas fa-sign-out-alt"></i>
-                Çıkış yap
+                Logout
             </a>
         </div>
     </header>
@@ -435,12 +435,12 @@ table {
             <table class="medicine-table">
                 <thead>
                     <tr>
-                        <th>Numara</th>
-                        <th>İsim</th>
+                        <th>ID</th>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
                         <th>İlaç Tipi</th>
-                        <th>Miktar</th>
-                        <th>Kategori</th>
-                        <th>Birim Fiyat</th>
+                        <th>@Html.DisplayNameFor(model => model.Quantity)</th>
+                        <th>@Html.DisplayNameFor(model => model.Category)</th>
+                        <th>@Html.DisplayNameFor(model => model.UnitPrice)</th>
                         <th>Son Kullanma Tarihi</th>
                         <th>İşlemler</th>
                     </tr>
@@ -483,12 +483,12 @@ table {
                 <input type="hidden" id="drugId" name="Id" />
                 <input type="hidden" id="drugType" name="DrugType" />
                 
-                <div class="form-group">
+                <div class="form-group" id="name-group">
                     <label for="Name">İlaç Adı</label>
                     <input type="text" id="Name" name="Name" class="form-control" required />
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="category-group">
                     <label for="Category">Kategori</label>
                     <input type="text" id="Category" name="Category" class="form-control" required />
                 </div>
@@ -498,22 +498,22 @@ table {
                     <input type="number" id="Quantity" name="Quantity" class="form-control" required />
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="unit-price-group">
                     <label for="UnitPrice">Birim Fiyat</label>
                     <input type="number" id="UnitPrice" name="UnitPrice" step="0.01" class="form-control" required />
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="expiry-date-group">
                     <label for="ExpiryDate">Son Kullanma Tarihi</label>
                     <input type="date" id="ExpiryDate" name="ExpiryDate" class="form-control" required />
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="critical-stock-level-group">
                     <label for="CriticalStockLevel">Kritik Stok Seviyesi</label>
                     <input type="number" id="CriticalStockLevel" name="CriticalStockLevel" class="form-control" min="1" required />
                     <small class="form-text text-muted">Düşük stok uyarısı almak istediğiniz minimum seviye</small>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="max-request-group">
                     <label for="MaxRequest">Maksimum İstek Sayısı</label>
                     <input type="number" id="MaxRequest" name="MaxRequest" class="form-control" min="1" required />
                 </div>
@@ -543,18 +543,18 @@ table {
             form.reset();
             document.getElementById('drugType').value = drugType;
 
-            document.getElementById('MaxRequest').addEventListener('input', function () {
-        });
-
             if (action === 'edit' && id) {
                 title.textContent = 'İlaç Güncelle';
                 fetchDrugDetails(id);
+                showAllFields();
             } else if (action === 'updateStock' && id) {
                 title.textContent = 'Stok Güncelle';
                 fetchDrugDetails(id);
+                hideFieldsForStockUpdate();
             } else {
                 title.textContent = `${drugType} İlaç Ekle`;
                 document.getElementById('drugId').value = '';
+                showAllFields();
             }
 
             modal.style.display = 'flex';
@@ -610,6 +610,24 @@ table {
                     console.error('Error:', error);
                     alert('İlaç bilgileri alınırken bir hata oluştu.');
                 });
+        }
+
+        function hideFieldsForStockUpdate() {
+            document.getElementById('name-group').style.display = 'block';
+            document.getElementById('category-group').style.display = 'none';
+            document.getElementById('unit-price-group').style.display = 'none';
+            document.getElementById('expiry-date-group').style.display = 'none';
+            document.getElementById('critical-stock-level-group').style.display = 'none';
+            document.getElementById('max-request-group').style.display = 'none';
+        }
+
+        function showAllFields() {
+            document.getElementById('name-group').style.display = 'block';
+            document.getElementById('category-group').style.display = 'block';
+            document.getElementById('unit-price-group').style.display = 'block';
+            document.getElementById('expiry-date-group').style.display = 'block';
+            document.getElementById('critical-stock-level-group').style.display = 'block';
+            document.getElementById('max-request-group').style.display = 'block';
         }
 
         // Form submit handler
