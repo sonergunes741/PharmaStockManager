@@ -26,6 +26,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\unals\OneDrive\Belgeler\GitHub\PharmaStockManager\PharmaStockManager
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/unals/OneDrive/Belgeler/GitHub/PharmaStockManager/PharmaStockManager/Views/Account/AdminProfile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBZG1pblByb2ZpbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/unals/OneDrive/Belgeler/GitHub/PharmaStockManager/PharmaStockManager/Views/Account/ChangeEmail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDaGFuZ2VFbWFpbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
