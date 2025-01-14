@@ -451,43 +451,43 @@
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "AdminDashboard")" class="nav-link active">
                         <i class="fas fa-chart-line"></i>
-                        Dashboard
+                        Panel
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "Drugs")" class="nav-link">
                         <i class="fas fa-pills"></i>
-                        Inventory
+                        Envanter
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "Request")" class="nav-link">
                         <i class="fas fa-shopping-cart"></i>
-                        Orders
+                        Siparişler
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("Users", "Admin")" class="nav-link">
                         <i class="fas fa-users"></i>
-                        Users
+                        Kullanıcılar
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "Categories")" class="nav-link">
                         <i class="fas fa-chart-bar"></i>
-                        Category
+                        Kategoriler
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("TransactionHistory", "Drugs")" class="nav-link">
                         <i class="fas fa-history"></i>
-                        History
+                        İşlem geçmişi
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("AdminProfile", "Account")" class="nav-link">
                         <i class="fas fa-user-circle"></i>
-                        Profile
+                        Profil
                     </a>
                 </li>
             </ul>
@@ -498,8 +498,8 @@
         <header class="header">
             <div class="welcome-section">
                 <div class="welcome-text">
-                    <h1>Welcome back, Admin!</h1>
-                    <p>Here's your pharmacy's daily summary</p>
+                    <h1>Hoşgeldin, Admin!</h1>
+                    <p>İşte günlük özetin!</p>
                 </div>
             </div>
 
@@ -507,7 +507,7 @@
                 <span id="current-time"></span>
                 <a href="@Url.Action("Logout", "Account")" class="button">
                     <i class="fas fa-sign-out-alt"></i>
-                    Logout
+                    Çıkış yap
                 </a>
             </div>
         </header>
@@ -516,58 +516,58 @@
             <a href="@Url.Action("Index", "Drugs")" class="stat-card-link">
                 <div class="stat-card status-blue">
                     <div class="stat-header">
-                        <h3>Total Drugs</h3>
+                        <h3>Toplam ilaçlar</h3>
                         <div class="stat-icon">
                             <i class="fas fa-box"></i>
                         </div>
                     </div>
                     <div class="stat-value">@Model.TotalDrugs</div>
-                    <div class="stat-label">Total items in stock</div>
+                    <div class="stat-label">Stoktaki toplam ilaç</div>
                 </div>
             </a>
 
             <a href="@Url.Action("Index", "Drugs")" class="stat-card-link">
                 <div class="stat-card status-orange">
                     <div class="stat-header">
-                        <h3>Critical Stock</h3>
+                        <h3>Kritik stok</h3>
                         <div class="stat-icon">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                     </div>
                     <div class="stat-value">@Model.CriticalStockDrugs.Count</div>
-                    <div class="stat-label">Items need reorder</div>
+                    <div class="stat-label">İlaç stoğu güncellenmesi gerekiyor</div>
                 </div>
             </a>
 
             <a href="@Url.Action("Index", "Drugs")" class="stat-card-link">
                 <div class="stat-card status-red">
                     <div class="stat-header">
-                        <h3>Expiring Items</h3>
+                        <h3>Tarihi geçen ilaçlar</h3>
                         <div class="stat-icon">
                             <i class="fas fa-clock"></i>
                         </div>
                     </div>
                     <div class="stat-value">@Model.ExpiringDrugs.Count</div>
-                    <div class="stat-label">Expired & expiring soon</div>
+                    <div class="stat-label">Tarihi geçmiş veya geçmek üzere</div>
                 </div>
             </a>
 
             <a href="@Url.Action("Users", "Admin")" class="stat-card-link">
                 <div class="stat-card status-purple">
                     <div class="stat-header">
-                        <h3>Users</h3>
+                        <h3>Kullanıcılar</h3>
                         <div class="stat-icon">
                             <i class="fas fa-users"></i>
                         </div>
                     </div>
                     <div class="stat-value">@Model.TotalUsers</div>
-                    <div class="stat-label">Total users</div>
+                    <div class="stat-label">Toplam kullanıcılar</div>
                 </div>
             </a>
         </div>
 
         <div class="expiring-drugs-alert">
-            <h2>Expiring Stock Alerts</h2>
+            <h2>Tarihi geçmiş stok uyarısı</h2>
             <div class="alert-list">
                 @foreach (var drug in Model.ExpiringDrugs)
                 {
@@ -596,14 +596,14 @@
                 }
             </div>
 
-            <h2>Critical Stock Alerts</h2>
+            <h2>Kritik stok uyarısı</h2>
 
             <div class="critical-stock-list">
                 @if (!Model.CriticalStockDrugs.Any())
                 {
                     <div class="stock-item" style="background-color: var(--status-green);">
                         <i class="fas fa-check-circle"></i>
-                        <span>All stock levels are normal</span>
+                        <span>Tüm stok seviesi normal</span>
                     </div>
                 }
                 else
@@ -670,7 +670,7 @@
                 hour12: true
             };
 
-            const formattedDateTime = new Intl.DateTimeFormat("en-US", options).format(now);
+            const formattedDateTime = new Intl.DateTimeFormat("tr-TR", options).format(now);
             document.getElementById("current-time").textContent = formattedDateTime;
         }
 

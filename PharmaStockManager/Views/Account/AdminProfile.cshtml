@@ -208,13 +208,14 @@
 
         .edit-icon {
             position: absolute;
-            right: 1rem;
+            right: 5rem;
             top: 50%;
-            transform: translateY(-50%);
+            transform: translateY(-50%) translateX(-0.5rem); /* X ekseninde sola kaydırma */
             color: var(--primary-blue);
-            opacity: 0;
+            opacity: 1; /* Her zaman görünür */
             transition: opacity 0.3s ease;
         }
+
 
         .info-value.editable:hover .edit-icon {
             opacity: 1;
@@ -413,14 +414,9 @@
                     </div>
                     <div class="info-group">
                         <div class="info-label">E-posta Adresi</div>
-                        <div class="info-value editable" onclick="editField(this, 'email')">
+                        <div class="info-value">
                             @Model.Email
-                            <i class="fas fa-pencil edit-icon"></i>
                         </div>
-                        <button class="btn btn-primary save-btn" onclick="saveField(this, 'email')">
-                            <i class="fas fa-save"></i>
-                            Kaydet
-                        </button>
                         @if (Model.EmailConfirmed)
                         {
                             <div class="verified-badge">
@@ -429,6 +425,7 @@
                             </div>
                         }
                     </div>
+
                     <div class="info-group">
                         <div class="info-label">Telefon Numarası</div>
                         <div class="info-value editable" onclick="editPhone(this)">
