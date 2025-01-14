@@ -229,18 +229,11 @@ namespace PharmaStockManager.Migrations
                             Id = 1,
                             Category = "Painkillers",
                             CriticalStockLevel = 10,
-<<<<<<< Updated upstream
-                            DrugType = "Commercial",
-                            MaxRequest = 50,
-                            Name = "Paracetamol",
-                            Quantity = 100,
-=======
                             DrugType = "Tablet",
                             MaxRequest = 50,
                             Name = "Paracetamol",
                             Quantity = 100,
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             UnitPrice = 5.99m
                         },
                         new
@@ -248,42 +241,17 @@ namespace PharmaStockManager.Migrations
                             Id = 2,
                             Category = "Antibiotics",
                             CriticalStockLevel = 10,
-<<<<<<< Updated upstream
-                            DrugType = "Clinical",
-                            MaxRequest = 50,
-                            Name = "Amoxicillin",
-                            Quantity = 50,
-=======
                             DrugType = "Capsule",
                             MaxRequest = 50,
                             Name = "Amoxicillin",
                             Quantity = 50,
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             UnitPrice = 12.50m
                         },
                         new
                         {
                             Id = 3,
                             Category = "Vitamins",
-<<<<<<< Updated upstream
-                            CriticalStockLevel = 10,
-                            DrugType = "Commercial",
-                            MaxRequest = 50,
-                            Name = "Vitamin C",
-                            Quantity = 200,
-                            UnitPrice = 8.99m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Category = "Painkillers",
-                            CriticalStockLevel = 10,
-                            DrugType = "Clinical",
-                            MaxRequest = 50,
-                            Name = "Ibuprofen",
-                            Quantity = 150,
-=======
                             CriticalStockLevel = 10,
                             DrugType = "Syrup",
                             MaxRequest = 50,
@@ -302,7 +270,6 @@ namespace PharmaStockManager.Migrations
                             Name = "Ibuprofen",
                             Quantity = 150,
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             UnitPrice = 6.50m
                         },
                         new
@@ -310,18 +277,11 @@ namespace PharmaStockManager.Migrations
                             Id = 5,
                             Category = "Antibiotics",
                             CriticalStockLevel = 10,
-<<<<<<< Updated upstream
-                            DrugType = "Commercial",
-                            MaxRequest = 50,
-                            Name = "Azithromycin",
-                            Quantity = 70,
-=======
                             DrugType = "Capsule",
                             MaxRequest = 50,
                             Name = "Azithromycin",
                             Quantity = 70,
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             UnitPrice = 10.00m
                         },
                         new
@@ -329,18 +289,11 @@ namespace PharmaStockManager.Migrations
                             Id = 6,
                             Category = "Cough Syrups",
                             CriticalStockLevel = 10,
-<<<<<<< Updated upstream
-                            DrugType = "Clinical",
-                            MaxRequest = 50,
-                            Name = "Dextromethorphan",
-                            Quantity = 120,
-=======
                             DrugType = "Syrup",
                             MaxRequest = 50,
                             Name = "Dextromethorphan",
                             Quantity = 120,
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             UnitPrice = 7.99m
                         },
                         new
@@ -348,18 +301,11 @@ namespace PharmaStockManager.Migrations
                             Id = 7,
                             Category = "Diabetes Medications",
                             CriticalStockLevel = 10,
-<<<<<<< Updated upstream
-                            DrugType = "Commercial",
-                            MaxRequest = 50,
-                            Name = "Metformin",
-                            Quantity = 80,
-=======
                             DrugType = "Tablet",
                             MaxRequest = 50,
                             Name = "Metformin",
                             Quantity = 80,
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             UnitPrice = 15.50m
                         },
                         new
@@ -367,18 +313,11 @@ namespace PharmaStockManager.Migrations
                             Id = 8,
                             Category = "Antihistamines",
                             CriticalStockLevel = 10,
-<<<<<<< Updated upstream
-                            DrugType = "Clinical",
-                            MaxRequest = 50,
-                            Name = "Cetirizine",
-                            Quantity = 90,
-=======
                             DrugType = "Tablet",
                             MaxRequest = 50,
                             Name = "Cetirizine",
                             Quantity = 90,
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             UnitPrice = 4.99m
                         });
                 });
@@ -565,10 +504,7 @@ namespace PharmaStockManager.Migrations
                             IsApproved = true,
                             IsRejected = false,
                             Quantity = 10,
-<<<<<<< Updated upstream
-=======
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             RequestDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "user1"
                         },
@@ -579,10 +515,7 @@ namespace PharmaStockManager.Migrations
                             IsApproved = false,
                             IsRejected = true,
                             Quantity = 5,
-<<<<<<< Updated upstream
-=======
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             RequestDate = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "user2"
                         },
@@ -593,10 +526,7 @@ namespace PharmaStockManager.Migrations
                             IsApproved = false,
                             IsRejected = false,
                             Quantity = 20,
-<<<<<<< Updated upstream
-=======
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             RequestDate = new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "user3"
                         },
@@ -607,10 +537,7 @@ namespace PharmaStockManager.Migrations
                             IsApproved = true,
                             IsRejected = false,
                             Quantity = 8,
-<<<<<<< Updated upstream
-=======
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             RequestDate = new DateTime(2025, 1, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "user4"
                         },
@@ -621,10 +548,7 @@ namespace PharmaStockManager.Migrations
                             IsApproved = false,
                             IsRejected = false,
                             Quantity = 12,
-<<<<<<< Updated upstream
-=======
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             RequestDate = new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "user5"
                         },
@@ -635,10 +559,7 @@ namespace PharmaStockManager.Migrations
                             IsApproved = true,
                             IsRejected = false,
                             Quantity = 15,
-<<<<<<< Updated upstream
-=======
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             RequestDate = new DateTime(2025, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "user6"
                         },
@@ -649,10 +570,7 @@ namespace PharmaStockManager.Migrations
                             IsApproved = false,
                             IsRejected = true,
                             Quantity = 6,
-<<<<<<< Updated upstream
-=======
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             RequestDate = new DateTime(2025, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "user7"
                         },
@@ -663,10 +581,7 @@ namespace PharmaStockManager.Migrations
                             IsApproved = false,
                             IsRejected = false,
                             Quantity = 25,
-<<<<<<< Updated upstream
-=======
                             RefCode = "ADMIN001",
->>>>>>> Stashed changes
                             RequestDate = new DateTime(2025, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserName = "user8"
                         });
