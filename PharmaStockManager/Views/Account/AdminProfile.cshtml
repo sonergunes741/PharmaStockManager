@@ -140,7 +140,7 @@
         }
 
         .profile-banner {
-            height: 200px;
+            height: 140px; /* Reduced from 200px */
             background: linear-gradient(135deg, var(--primary-blue), var(--mid-tone));
             position: relative;
         }
@@ -176,6 +176,7 @@
 
         .info-group {
             margin-bottom: 1.5rem;
+            position: relative;
         }
 
         .info-label {
@@ -190,6 +191,32 @@
             padding: 1rem;
             border-radius: 8px;
             font-weight: 500;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+            .info-value.editable {
+                cursor: pointer;
+                padding-right: 2.5rem;
+            }
+
+                .info-value.editable:hover {
+                    border-color: var(--primary-blue);
+                    background: var(--white);
+                }
+
+        .edit-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .info-value.editable:hover .edit-icon {
+            opacity: 1;
         }
 
         .verified-badge {
@@ -240,6 +267,18 @@
             opacity: 0.9;
         }
 
+        .save-btn {
+            display: none;
+            position: absolute;
+            right: -120px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .info-group.editing .save-btn {
+            display: block;
+        }
+
         @@media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -269,6 +308,13 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .save-btn {
+                position: static;
+                transform: none;
+                margin-top: 1rem;
+            }
+
         }
     </style>
 </head>
@@ -288,43 +334,43 @@
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "AdminDashboard")" class="nav-link">
                         <i class="fas fa-chart-line"></i>
-                        Dashboard
+                        Panel
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "Drugs")" class="nav-link">
                         <i class="fas fa-pills"></i>
-                        Inventory
+                        Envanter
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "Request")" class="nav-link">
                         <i class="fas fa-shopping-cart"></i>
-                        Orders
+                        Siparişler
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("Users", "Admin")" class="nav-link">
                         <i class="fas fa-users"></i>
-                        Users
+                        Kullanıcılar
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "Categories")" class="nav-link">
                         <i class="fas fa-chart-bar"></i>
-                        Category
+                        Kategoriler
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("TransactionHistory", "Drugs")" class="nav-link">
                         <i class="fas fa-history"></i>
-                        History
+                        İşlem Geçmişi
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="@Url.Action("AdminProfile", "Account")" class="nav-link active">
                         <i class="fas fa-user-circle"></i>
-                        Profile
+                        Profil
                     </a>
                 </li>
             </ul>
@@ -334,13 +380,13 @@
     <main class="main-content">
         <header class="profile-header">
             <div class="profile-title">
-                <h1>Admin Profile</h1>
-                <p>Manage your account information</p>
+                <h1>Admin Profili</h1>
+                <p>Hesap bilgilerini yönet</p>
             </div>
             <div class="user-menu">
                 <a href="@Url.Action("Logout", "Account")" class="btn btn-primary">
                     <i class="fas fa-sign-out-alt"></i>
-                    Logout
+                    Çıkış Yap
                 </a>
             </div>
         </header>
@@ -354,33 +400,40 @@
             <div class="profile-content">
                 <div class="profile-info">
                     <div class="info-group">
-                        <div class="info-label">Username</div>
+                        <div class="info-label">Kullanıcı Adı</div>
                         <div class="info-value">@Model.UserName</div>
                     </div>
                     <div class="info-group">
-                        <div class="info-label">Email Address</div>
+                        <div class="info-label">E-posta Adresi</div>
                         <div class="info-value">@Model.Email</div>
                         @if (Model.EmailConfirmed)
                         {
                             <div class="verified-badge">
                                 <i class="fas fa-check-circle"></i>
-                                <span>Verified Email</span>
+                                <span>Doğrulanmış E-posta</span>
                             </div>
                         }
                     </div>
                     <div class="info-group">
-                        <div class="info-label">Phone Number</div>
-                        <div class="info-value">@Model.PhoneNumber</div>
+                        <div class="info-label">Telefon Numarası</div>
+                        <div class="info-value editable" onclick="editPhone(this)">
+                            @(string.IsNullOrEmpty(Model.PhoneNumber) ? "Telefon numarası ekle" : Model.PhoneNumber)
+                            <i class="fas fa-pencil edit-icon"></i>
+                        </div>
+                        <button class="btn btn-primary save-btn" onclick="savePhone(this)">
+                            <i class="fas fa-save"></i>
+                            Kaydet
+                        </button>
                     </div>
 
                     <div class="action-buttons">
                         <a href="@Url.Action("ChangePassword", "Account")" class="btn btn-primary">
                             <i class="fas fa-key"></i>
-                            Change Password
+                            Şifreni Değiştir
                         </a>
                         <a href="@Url.Action("ChangeEmail", "Account")" class="btn btn-secondary">
                             <i class="fas fa-envelope"></i>
-                            Change Email
+                            E-posta Adresini Değiştir
                         </a>
                     </div>
                 </div>
@@ -390,15 +443,159 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const toggleButton = document.createElement('button');
-            toggleButton.classList.add('menu-toggle');
-            toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
-            document.querySelector('.main-content').prepend(toggleButton);
+                const toggleButton = document.createElement('button');
+                toggleButton.classList.add('menu-toggle');
+                toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
+                document.querySelector('.main-content').prepend(toggleButton);
 
-            toggleButton.addEventListener('click', function () {
-                document.querySelector('.sidebar').classList.toggle('active');
+                toggleButton.addEventListener('click', function () {
+                    document.querySelector('.sidebar').classList.toggle('active');
+                });
             });
+
+            function editPhone(element) {
+                const parent = element.parentElement;
+                parent.classList.add('editing');
+                const currentValue = element.textContent.trim();
+                element.contentEditable = true;
+                element.focus();
+
+                // Select all text if it's the placeholder
+                if (currentValue === "Telefon numarası ekle") {
+                    const range = document.createRange();
+                    range.selectNodeContents(element);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            }
+
+            function savePhone(button) {
+            const parent = button.parentElement;
+            const phoneDiv = parent.querySelector('.info-value');
+            const newValue = phoneDiv.textContent.trim();
+            
+            // Basic phone number validation
+            const phoneRegex = /^[0-9+\-\s()]{10,15}$/;
+            if (!phoneRegex.test(newValue)) {
+                alert('Lütfen geçerli bir telefon numarası giriniz.');
+                return;
+            }
+
+            // Here you would typically make an AJAX call to save the phone number
+            fetch('@Url.Action("UpdatePhone", "Account")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any anti-forgery token if required
+                },
+                body: JSON.stringify({ phoneNumber: newValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    phoneDiv.contentEditable = false;
+                    parent.classList.remove('editing');
+                    // Optionally show a success message
+                    showNotification('Telefon numarası başarıyla güncellendi', 'success');
+                } else {
+                    throw new Error(data.message || 'Güncelleme başarısız oldu');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Telefon numarası güncellenirken bir hata oluştu', 'error');
+            });
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            // Style for notification
+            Object.assign(notification.style, {
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                padding: '1rem 2rem',
+                borderRadius: '8px',
+                backgroundColor: type === 'success' ? '#4caf50' : '#f44336',
+                color: 'white',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                zIndex: '1000',
+                animation: 'slideIn 0.3s ease-out'
+            });
+
+            document.body.appendChild(notification);
+
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add these keydown event listeners for better UX
+        document.addEventListener('keydown', function(e) {
+            const activeElement = document.activeElement;
+            if (activeElement.classList.contains('editable') && activeElement.contentEditable === 'true') {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const saveBtn = activeElement.parentElement.querySelector('.save-btn');
+                    if (saveBtn) saveBtn.click();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    activeElement.contentEditable = false;
+                    activeElement.parentElement.classList.remove('editing');
+                    // Reset to original value if needed
+                }
+            }
         });
     </script>
+
+    <style>
+        @@keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--white);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        @@media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
 </body>
 </html>

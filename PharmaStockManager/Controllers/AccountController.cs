@@ -646,6 +646,39 @@ namespace StockManager.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> UpdatePhone([FromBody] UpdatePhoneViewModel model)
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "Kullanıcı bulunamadı" });
+                }
+
+                // Update phone number
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+                if (!setPhoneResult.Succeeded)
+                {
+                    return Json(new { success = false, message = "Telefon numarası güncellenirken bir hata oluştu" });
+                }
+
+                await _userManager.UpdateAsync(user);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { success = false, message = "Bir hata oluştu" });
+            }
+        }
+
+        public class UpdatePhoneViewModel
+        {
+            public string PhoneNumber { get; set; }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> VerifyAuthenticatorCode(string code)
         {
             var user = await _userManager.GetUserAsync(User);

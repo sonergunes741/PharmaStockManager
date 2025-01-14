@@ -109,23 +109,23 @@
 </head>
 <body>
     <div class="container">
-        <button class="back-button" onclick="window.location.href='/'">&larr; Back</button>
-        <h1>Change Email</h1>
-        <p>Update your email address below to keep your account secure.</p>
+        <button class="back-button" onclick="window.location.href='/'">&larr; Geri</button>
+        <h1>E-posta adresini değiştir</h1>
+        <p>E-posta adresinizi aşağıdan güncelleyin.</p>
         <form asp-action="ChangeEmail" asp-controller="Account" method="post">
             <div class="form-group">
-                <label asp-for="NewEmail">New Email</label>
-                <input asp-for="NewEmail" type="text" required placeholder="Enter your new email" />
+                <label asp-for="NewEmail">Yeni E-posta</label>
+                <input asp-for="NewEmail" type="text" required placeholder="Yeni E-posta'nızı girin." />
                 <span asp-validation-for="NewEmail" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Password">Confirm Password</label>
-                <input asp-for="Password" type="password" required placeholder="Confirm your password" />
+                <label asp-for="Password">Şifrenizle onaylayın</label>
+                <input asp-for="Password" type="password" required placeholder="Şifrenizi girin." />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="button">Update Email</button>
+            <button type="submit" class="button">E-posta adresini güncelle</button>
         </form>
     </div>
 </body>
