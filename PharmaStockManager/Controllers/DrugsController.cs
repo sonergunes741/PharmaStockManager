@@ -23,7 +23,18 @@ public class DrugsController : Controller
     // GET: Drugs
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Drugs.ToListAsync());
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "Kullanıcı bulunamadı." });
+        }
+
+        // Yalnızca adminin RefCode'una uygun ilaçları getir
+        var drugs = await _context.Drugs
+            .Where(d => d.RefCode == currentUser.RefCode)
+            .ToListAsync();
+
+        return View(drugs);
     }
 
     // GET: Drugs/Details/5
@@ -56,6 +67,15 @@ public class DrugsController : Controller
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                var currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser == null)
+                {
+                    return Json(new { success = false, message = "Kullanıcı bulunamadı." });
+                }
+
+                // Adminin RefCode'unu ilaca ekle
+                drug.RefCode = currentUser.RefCode;
+
                 _context.Add(drug);
                 await _context.SaveChangesAsync();
 
@@ -68,7 +88,8 @@ public class DrugsController : Controller
                     ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                     Type = drug.DrugType,
                     Price = drug.UnitPrice * drug.Quantity,
-                    UserName = (await _userManager.GetUserAsync(User)).FullName
+                    UserName = currentUser.FullName,
+                    RefCode = currentUser.RefCode
                 };
 
                 _context.Transactions.Add(transactionRecord);
@@ -85,6 +106,7 @@ public class DrugsController : Controller
         }
         return Json(new { success = false, message = "Geçersiz veri girişi." });
     }
+
 
     // POST: Drugs/Edit
     [HttpPost]
@@ -114,7 +136,8 @@ public class DrugsController : Controller
                         ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                         Type = drug.DrugType,
                         Price = drug.UnitPrice * Math.Abs(quantityDifference),
-                        UserName = (await _userManager.GetUserAsync(User)).FullName
+                        UserName = (await _userManager.GetUserAsync(User)).FullName,
+                        RefCode = drug.RefCode,
                     };
 
                     _context.Transactions.Add(transactionRecord);
@@ -171,7 +194,8 @@ public class DrugsController : Controller
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
                 Price = drug.UnitPrice * drug.Quantity,
-                UserName = (await _userManager.GetUserAsync(User)).FullName
+                UserName = (await _userManager.GetUserAsync(User)).FullName,
+                RefCode = drug.RefCode,
             };
 
             _context.Transactions.Add(transactionRecord);
@@ -192,7 +216,14 @@ public class DrugsController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> TransactionHistory()
     {
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "Kullanıcı bulunamadı." });
+        }
+
         var transactions = await _context.Transactions
+            .Where(t => t.RefCode == currentUser.RefCode)
             .OrderByDescending(t => t.TransactionDate)
             .ToListAsync();
 
@@ -233,7 +264,8 @@ public class DrugsController : Controller
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
                 Price = drug.UnitPrice * quantity,
-                UserName = (await _userManager.GetUserAsync(User)).FullName
+                UserName = (await _userManager.GetUserAsync(User)).FullName,
+                RefCode = drug.RefCode,
             };
 
             _context.Transactions.Add(transactionRecord);

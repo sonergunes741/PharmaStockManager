@@ -9,6 +9,7 @@
         public DateTime RequestDate { get; set; } // Talep tarihi
         public bool IsApproved { get; set; } // Onay durumu (Default: False)
         public bool IsRejected { get; set; }
+        public string RefCode { get; set; } = "ADMIN001";
     }
 
 

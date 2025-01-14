@@ -15,5 +15,7 @@ namespace PharmaStockManager.Models
         public decimal Price { get; set; }
 
         public string? UserName { get; set; }
+
+        public string RefCode { get; set; } = "ADMIN001";
     }
 }

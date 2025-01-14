@@ -19,9 +19,18 @@ public class RequestController : Controller
         _userManager = userManager;
     }
 
-    public IActionResult Index()
+    // GET: Request/Index
+    public async Task<IActionResult> Index()
     {
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "User not found." });
+        }
+
+        // Filter requests based on RefCode of the logged-in user
         var requests = _context.Requests
+            .Where(r => _context.Drugs.Any(d => d.Id == r.DrugId && d.RefCode == currentUser.RefCode))
             .Select(r => new RequestViewModel
             {
                 Id = r.Id,
@@ -33,51 +42,54 @@ public class RequestController : Controller
                 IsRejected = r.IsRejected
             })
             .ToList();
+
         return View("~/Views/Request/Requests.cshtml", requests);
     }
 
+    // POST: Request/Approve
     [HttpPost]
     public async Task<IActionResult> Approve(int id, string drugName, int quantity)
     {
         using var transaction = _context.Database.BeginTransaction();
         try
         {
-            // İsteği bul
-            var request = _context.Requests.FirstOrDefault(r => r.Id == id);
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
+
+            // Find the request and ensure the drug belongs to the logged-in user's RefCode
+            var request = _context.Requests.FirstOrDefault(r => r.Id == id && _context.Drugs.Any(d => d.Name == drugName && d.RefCode == currentUser.RefCode));
             if (request == null || request.IsApproved)
             {
                 return Json(new { success = false, message = "Request not found or already approved." });
             }
 
-            // İlgili ilaç stoğunu bul ve güncelle
-            var drug = _context.Drugs.FirstOrDefault(d => d.Name == drugName);
+            var drug = _context.Drugs.FirstOrDefault(d => d.Name == drugName && d.RefCode == currentUser.RefCode);
             if (drug == null || drug.Quantity < quantity)
             {
                 return Json(new { success = false, message = "Insufficient stock or drug not found." });
             }
 
-            // Stoktan düş
+            // Reduce stock
             drug.Quantity -= quantity;
             request.IsApproved = true;
 
-            // Transaction kaydı oluştur
-            // Controllers/RequestController.cs
+            // Create transaction record
             var transactionRecord = new Transaction
             {
                 DrugName = drug.Name,
                 Quantity = quantity,
                 TransactionType = "Request Approved",
                 TransactionDate = DateTime.Now,
-                ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1), // Null ise 1 yıl sonrasını kullan
+                ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
                 Price = drug.UnitPrice * quantity,
                 UserName = (await _userManager.GetUserAsync(User)).FullName
             };
 
-            // Transaction'ı kaydet
             _context.Transactions.Add(transactionRecord);
-
-            // Veritabanını güncelle
             _context.SaveChanges();
             transaction.Commit();
 
@@ -90,10 +102,18 @@ public class RequestController : Controller
         }
     }
 
+    // POST: Request/Reject
     [HttpPost]
     public async Task<IActionResult> Reject(int id)
     {
-        var request = _context.Requests.FirstOrDefault(r => r.Id == id);
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "User not found." });
+        }
+
+        // Find the request and ensure the drug belongs to the logged-in user's RefCode
+        var request = _context.Requests.FirstOrDefault(r => r.Id == id && _context.Drugs.Any(d => d.Id == r.DrugId && d.RefCode == currentUser.RefCode));
         if (request == null || request.IsApproved || request.IsRejected)
         {
             return Json(new { success = false, message = "Request not found or already processed." });
@@ -101,11 +121,10 @@ public class RequestController : Controller
 
         try
         {
-            // İlgili ilaç bilgisini al
-            var drug = _context.Drugs.FirstOrDefault(d => d.Id == request.DrugId);
+            var drug = _context.Drugs.FirstOrDefault(d => d.Id == request.DrugId && d.RefCode == currentUser.RefCode);
             if (drug != null)
             {
-                // Transaction kaydı oluştur
+                // Create transaction record for rejected request
                 var transactionRecord = new Transaction
                 {
                     DrugName = drug.Name,

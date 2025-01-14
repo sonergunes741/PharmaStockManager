@@ -35,5 +35,8 @@ namespace PharmaStockManager.Models
         [Range(0, int.MaxValue)]
         public int CriticalStockLevel { get; set; } = 10;
         public int MaxRequest { get; set; } = 50;
+
+        [MaxLength(8)] // RefCode için uzunluk sınırı
+        public string RefCode { get; set; } = "ADMIN001";
     }
 }

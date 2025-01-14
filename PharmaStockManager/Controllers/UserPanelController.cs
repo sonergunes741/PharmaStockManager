@@ -9,43 +9,63 @@ using PharmaStockManager.Services;
 using Microsoft.AspNetCore.Identity;
 using PharmaStockManager.Models.Identity;
 
-[Authorize(Roles = "Customer")] // Bu controller'a yalnızca "Customer" rolündeki kullanıcılar erişebilir.
+[Authorize(Roles = "Customer")] // This controller can only be accessed by "Customer" role users.
 [ServiceFilter(typeof(LogFilter))]
 public class UserPanelController : Controller
 {
     private readonly PharmaContext _context;
     private readonly ILogger<UserPanelController> _logger; // Logger
     private readonly UserManager<AppUser> _userManager;
-    public int MAX_ITEM = 50;// Maksimum ne kadar ilaç seçebilir?
+    public int MAX_ITEM = 50; // Maximum number of medicines a user can select.
+
     public UserPanelController(PharmaContext context, ILogger<UserPanelController> logger, UserManager<AppUser> userManager)
     {
         _context = context;
-        _logger = logger; // Logger'ı yapılandırıyoruz
+        _logger = logger; // Configure Logger
         _userManager = userManager;
     }
 
     // GET: UserPanel/Index
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        // Kullanıcıya özel veri işlemleri burada yapılabilir
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "User not found." });
+        }
+
+        // Fetch drugs and categories based on the user's RefCode
         var model = new
         {
-            Drugs = _context.Drugs.ToList(),
+            Drugs = _context.Drugs.Where(d => d.RefCode == currentUser.RefCode).ToList(),
             Categories = _context.Categories.ToList()
         };
+
         return View(model);
     }
 
     // GET: UserPanel/ViewDrugs
-    public IActionResult ViewDrugs()
+    public async Task<IActionResult> ViewDrugs()
     {
-        var drugs = _context.Drugs.ToList();
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "User not found." });
+        }
+
+        var drugs = _context.Drugs.Where(d => d.RefCode == currentUser.RefCode).ToList();
         return View(drugs);
     }
 
     // GET: UserPanel/ViewCategories
-    public IActionResult ViewCategories()
+    public async Task<IActionResult> ViewCategories()
     {
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "User not found." });
+        }
+
         var categories = _context.Categories.ToList();
         return View(categories);
     }
@@ -61,25 +81,27 @@ public class UserPanelController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        // İlgili ilaç veritabanında bulunuyor mu kontrol et
-        var drug = _context.Drugs.FirstOrDefault(d => d.Id == drugId);
+        var currentUser = _userManager.GetUserAsync(User).Result;
+        var drug = _context.Drugs.FirstOrDefault(d => d.Id == drugId && d.RefCode == currentUser.RefCode);
+
         if (drug != null)
         {
-            // MaxRequest kontrolü
+            // MaxRequest control
             if (quantity > drug.MaxRequest)
             {
                 TempData["ErrorMessage"] = $"You can select a maximum of {drug.MaxRequest} items.";
                 return RedirectToAction(nameof(Index));
             }
 
-            // Talep oluştur
+            // Create request
             var request = new Request
             {
                 UserName = User.Identity.Name,
                 DrugId = drug.Id,
                 Quantity = quantity,
                 RequestDate = DateTime.Now,
-                IsApproved = false
+                IsApproved = false,
+                RefCode = currentUser.RefCode,
             };
 
             _context.Requests.Add(request);
@@ -96,17 +118,23 @@ public class UserPanelController : Controller
     }
 
     [HttpGet]
-    public IActionResult FilterMedicines(string search, decimal? minPrice, decimal? maxPrice, string stockStatus, string sortOption)
+    public async Task<IActionResult> FilterMedicines(string search, decimal? minPrice, decimal? maxPrice, string stockStatus, string sortOption)
     {
-        var query = _context.Drugs.AsQueryable();
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "User not found." });
+        }
 
-        // Arama filtresi
+        var query = _context.Drugs.Where(m => m.RefCode == currentUser.RefCode).AsQueryable();
+
+        // Search filter
         if (!string.IsNullOrEmpty(search))
         {
             query = query.Where(m => m.Name.Contains(search) || m.Category.Contains(search));
         }
 
-        // Fiyat filtresi
+        // Price filters
         if (minPrice.HasValue)
         {
             query = query.Where(m => m.UnitPrice >= minPrice.Value);
@@ -117,7 +145,7 @@ public class UserPanelController : Controller
             query = query.Where(m => m.UnitPrice <= maxPrice.Value);
         }
 
-        // Stok durumu medici
+        // Stock status
         if (stockStatus == "in-stock")
         {
             query = query.Where(m => m.Quantity > 0);
@@ -127,7 +155,7 @@ public class UserPanelController : Controller
             query = query.Where(m => m.Quantity == 0);
         }
 
-        // Sıralama
+        // Sorting
         query = sortOption switch
         {
             "name-asc" => query.OrderBy(m => m.Name),
@@ -147,13 +175,19 @@ public class UserPanelController : Controller
             m.UnitPrice,
             m.Quantity
         }).ToList();
+
         return Json(filteredMedicines);
     }
 
-
     // GET: UserPanel/ViewOrders
-    public IActionResult ViewOrders()
+    public async Task<IActionResult> ViewOrders()
     {
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Json(new { success = false, message = "User not found." });
+        }
+
         var userOrders = _context.Requests
             .Where(r => r.UserName == User.Identity.Name)
             .Select(r => new RequestViewModel
@@ -170,22 +204,23 @@ public class UserPanelController : Controller
         return View(userOrders);
     }
 
-    public IActionResult MyProfile()
+    // My Profile
+    public async Task<IActionResult> MyProfile()
     {
-        var user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-        if (user == null)
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
         {
             return NotFound();
         }
 
         var model = new UserManagementViewModel
         {
-            UserName = user.UserName,
-            Email = user.Email,
-            ActiveUser = user.ActiveUser,
-            Role = user.UserType,
-            PhoneNumber = user.PhoneNumber,
-            RefCode = user.RefCode
+            UserName = currentUser.UserName,
+            Email = currentUser.Email,
+            ActiveUser = currentUser.ActiveUser,
+            Role = currentUser.UserType,
+            PhoneNumber = currentUser.PhoneNumber,
+            RefCode = currentUser.RefCode
         };
 
         return View(model);
@@ -209,5 +244,4 @@ public class UserPanelController : Controller
 
         return Json(new { success = false, message = "Update failed." });
     }
-
 }
