@@ -50,8 +50,12 @@ namespace PharmaStockManager.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var drugs = await _context.Drugs.ToListAsync();
             var user = await _userManager.GetUserAsync(User);
+
+            var drugs = await _context.Drugs
+                .Where(d => d.RefCode == user.RefCode)
+                .ToListAsync();
+
             var permissions = await _context.Permissions
                 .FirstOrDefaultAsync(p => p.UserID == user.Id);
 
@@ -83,7 +87,8 @@ namespace PharmaStockManager.Controllers
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
                 Price = drug.UnitPrice * drug.Quantity,
-                UserName = (await _userManager.GetUserAsync(User)).FullName
+                UserName = (await _userManager.GetUserAsync(User)).FullName,
+                RefCode = drug.RefCode,
             };
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
@@ -119,7 +124,8 @@ namespace PharmaStockManager.Controllers
                 ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                 Type = drug.DrugType,
                 Price = drug.UnitPrice * drug.Quantity,
-                UserName = (await _userManager.GetUserAsync(User)).FullName
+                UserName = (await _userManager.GetUserAsync(User)).FullName,
+                RefCode = drug.RefCode,
             };
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
