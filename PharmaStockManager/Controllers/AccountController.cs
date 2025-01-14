@@ -646,6 +646,71 @@ namespace StockManager.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> UpdateUsername([FromBody] UpdateUsernameViewModel model)
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "Kullanıcı bulunamadı" });
+                }
+
+                user.UserName = model.Username;
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    return Json(new { success = false, message = "Kullanıcı adı güncellenirken bir hata oluştu" });
+                }
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Bir hata oluştu" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateEmail([FromBody] UpdateEmailViewModel model)
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "Kullanıcı bulunamadı" });
+                }
+
+                user.Email = model.Email;
+                user.EmailConfirmed = false; // Require re-verification
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    return Json(new { success = false, message = "E-posta güncellenirken bir hata oluştu" });
+                }
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Bir hata oluştu" });
+            }
+        }
+
+        public class UpdateUsernameViewModel
+        {
+            public string Username { get; set; }
+        }
+
+        public class UpdateEmailViewModel
+        {
+            public string Email { get; set; }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> UpdatePhone([FromBody] UpdatePhoneViewModel model)
         {
             try

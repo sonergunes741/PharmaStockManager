@@ -193,6 +193,7 @@
             font-weight: 500;
             border: 1px solid transparent;
             transition: all 0.3s ease;
+            margin-right: 120px; /* Add space for save button */
         }
 
             .info-value.editable {
@@ -270,7 +271,7 @@
         .save-btn {
             display: none;
             position: absolute;
-            right: -120px;
+            right: 0;
             top: 50%;
             transform: translateY(-50%);
         }
@@ -401,11 +402,25 @@
                 <div class="profile-info">
                     <div class="info-group">
                         <div class="info-label">Kullanıcı Adı</div>
-                        <div class="info-value">@Model.UserName</div>
+                        <div class="info-value editable" onclick="editField(this, 'username')">
+                            @Model.UserName
+                            <i class="fas fa-pencil edit-icon"></i>
+                    </div>
+                        <button class="btn btn-primary save-btn" onclick="saveField(this, 'username')">
+                            <i class="fas fa-save"></i>
+                            Kaydet
+                        </button>
                     </div>
                     <div class="info-group">
                         <div class="info-label">E-posta Adresi</div>
-                        <div class="info-value">@Model.Email</div>
+                        <div class="info-value editable" onclick="editField(this, 'email')">
+                            @Model.Email
+                            <i class="fas fa-pencil edit-icon"></i>
+                        </div>
+                        <button class="btn btn-primary save-btn" onclick="saveField(this, 'email')">
+                            <i class="fas fa-save"></i>
+                            Kaydet
+                        </button>
                         @if (Model.EmailConfirmed)
                         {
                             <div class="verified-badge">
@@ -452,6 +467,60 @@
                     document.querySelector('.sidebar').classList.toggle('active');
                 });
             });
+
+        function editField(element, fieldType) {
+            const parent = element.parentElement;
+            parent.classList.add('editing');
+            const currentValue = element.textContent.trim();
+            element.contentEditable = true;
+            element.focus();
+        }
+
+        function saveField(button, fieldType) {
+            const parent = button.parentElement;
+            const valueDiv = parent.querySelector('.info-value');
+            const newValue = valueDiv.textContent.trim();
+
+            let url;
+            let data;
+
+            switch (fieldType) {
+                case 'username':
+                    url = '@Url.Action("UpdateUsername", "Account")';
+                    data = { username: newValue };
+                    break;
+                case 'email':
+                    url = '@Url.Action("UpdateEmail", "Account")';
+                    data = { email: newValue };
+                    break;
+                case 'phone':
+                    url = '@Url.Action("UpdatePhone", "Account")';
+                    data = { phoneNumber: newValue };
+                    break;
+            }
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        valueDiv.contentEditable = false;
+                        parent.classList.remove('editing');
+                        showNotification('Bilgiler başarıyla güncellendi', 'success');
+                    } else {
+                        throw new Error(data.message || 'Güncelleme başarısız oldu');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Güncelleme sırasında bir hata oluştu', 'error');
+                });
+        }
 
             function editPhone(element) {
                 const parent = element.parentElement;
