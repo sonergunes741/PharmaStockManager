@@ -61,15 +61,16 @@ namespace PharmaStockManager.Models
 
             // Drugs Dummy Data
             modelBuilder.Entity<Drug>().HasData(
-                new Drug { Id = 1, Name = "Paracetamol", Category = "Painkillers", Quantity = 100, UnitPrice = 5.99m, DrugType = "Tablet" },
-                new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 50, UnitPrice = 12.50m, DrugType = "Capsule" },
-                new Drug { Id = 3, Name = "Vitamin C", Category = "Vitamins", Quantity = 200, UnitPrice = 8.99m, DrugType = "Syrup" },
-                new Drug { Id = 4, Name = "Ibuprofen", Category = "Painkillers", Quantity = 150, UnitPrice = 6.50m, DrugType = "Tablet" },
-                new Drug { Id = 5, Name = "Azithromycin", Category = "Antibiotics", Quantity = 70, UnitPrice = 10.00m, DrugType = "Capsule" },
-                new Drug { Id = 6, Name = "Dextromethorphan", Category = "Cough Syrups", Quantity = 120, UnitPrice = 7.99m, DrugType = "Syrup" },
-                new Drug { Id = 7, Name = "Metformin", Category = "Diabetes Medications", Quantity = 80, UnitPrice = 15.50m, DrugType = "Tablet" },
-                new Drug { Id = 8, Name = "Cetirizine", Category = "Antihistamines", Quantity = 90, UnitPrice = 4.99m, DrugType = "Tablet" }
+                new Drug { Id = 1, Name = "Paracetamol", Category = "Painkillers", Quantity = 100, UnitPrice = 5.99m, DrugType = "Commercial" },
+                new Drug { Id = 2, Name = "Amoxicillin", Category = "Antibiotics", Quantity = 50, UnitPrice = 12.50m, DrugType = "Clinical" },
+                new Drug { Id = 3, Name = "Vitamin C", Category = "Vitamins", Quantity = 200, UnitPrice = 8.99m, DrugType = "Commercial" },
+                new Drug { Id = 4, Name = "Ibuprofen", Category = "Painkillers", Quantity = 150, UnitPrice = 6.50m, DrugType = "Clinical" },
+                new Drug { Id = 5, Name = "Azithromycin", Category = "Antibiotics", Quantity = 70, UnitPrice = 10.00m, DrugType = "Commercial" },
+                new Drug { Id = 6, Name = "Dextromethorphan", Category = "Cough Syrups", Quantity = 120, UnitPrice = 7.99m, DrugType = "Clinical" },
+                new Drug { Id = 7, Name = "Metformin", Category = "Diabetes Medications", Quantity = 80, UnitPrice = 15.50m, DrugType = "Commercial" },
+                new Drug { Id = 8, Name = "Cetirizine", Category = "Antihistamines", Quantity = 90, UnitPrice = 4.99m, DrugType = "Clinical" }
             );
+
 
             // Requests Dummy Data
             modelBuilder.Entity<Request>().HasData(
