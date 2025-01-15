@@ -9,22 +9,22 @@ namespace PharmaStockManager.Models.Identity
             var password = value as string;
 
             if (password == null)
-                return new ValidationResult("Password is required.");
+                return new ValidationResult("Şifre Gerekli");
 
             if (password.Length < 8)
-                return new ValidationResult("Password must be at least 8 characters long.");
+                return new ValidationResult("Şifre en az 8 karakterli olmalıdır.");
 
             if (!password.Any(char.IsLower))
-                return new ValidationResult("Password must contain at least one lowercase letter.");
+                return new ValidationResult("Şifre en az bir küçük harf içermelidir.");
 
             if (!password.Any(char.IsUpper))
-                return new ValidationResult("Password must contain at least one uppercase letter.");
+                return new ValidationResult("Şifre en az bir büyük harf içermelidir.");
 
             if (!password.Any(char.IsDigit))
-                return new ValidationResult("Password must contain at least one number.");
+                return new ValidationResult("Şifre en az bir sayı içermelidir.");
 
             if (!password.Any(c => !char.IsLetterOrDigit(c)))
-                return new ValidationResult("Password must contain at least one symbol.");
+                return new ValidationResult("Şifre en az bir sembol içermelidir.");
 
             return ValidationResult.Success;
         }
