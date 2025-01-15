@@ -251,7 +251,7 @@
             <span id="current-time"></span>
             <a href="@Url.Action("Logout", "Account")" class="button">
                 <i class="fas fa-sign-out-alt"></i>
-                Logout
+                Çıkış
             </a>
         </div>
     </header>
@@ -265,7 +265,7 @@
         </div>
 
         <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">E-mail</label>
             <input type="email" id="email" name="email" value="@Model.Email" required />
         </div>
 
@@ -279,9 +279,10 @@
         </div>
 
         <div class="form-group">
-            <label>Reference Code</label>
-            <input type="text" value="@Model.RefCode" readonly />
-        </div>
+    <label>Referans Kodu</label>
+    <input type="text" value="@Model.RefCode" readonly />
+</div>
+
 
         <button type="submit" class="update-btn">Bilgileri Güncelle</button>
     </form>

@@ -77,52 +77,54 @@
                 <header class="header">
                     <div class="welcome-section">
                         <div class="welcome-text">
-                            <h1>Welcome back</h1>
+                            <h1>Tekrar hoş geldiniz</h1>
                         </div>
+
                     </div>
 
                     <div class="user-menu">
                         <span id="current-time"></span>
                         <a href="@Url.Action("Logout", "Account")" class="button2">
                             <i class="fas fa-sign-out-alt"></i>
-                            Logout
+                            Çıkış
                         </a>
                     </div>
                 </header>
                 <!-- Filter and Drug Table -->
                 <div class="filter-section">
-                    <input type="text" id="search-input" placeholder="Search by Name and Category" />
-                    <input type="number" id="min-price" placeholder="Min Price" />
-                    <input type="number" id="max-price" placeholder="Max Price" />
+                    <input type="text" id="search-input" placeholder="Ad ve Kategoriye Göre Ara" />
+                    <input type="number" id="min-price" placeholder="Minimum Fiyat" />
+                    <input type="number" id="max-price" placeholder="Maksimum Fiyat" />
                     <select id="stock-filter">
-                        <option value="">All Stock</option>
-                        <option value="in-stock">In Stock</option>
-                        <option value="out-of-stock">Out of Stock</option>
+                        <option value="">Tüm Stok</option>
+                        <option value="in-stock">Stokta Var</option>
+                        <option value="out-of-stock">Stokta Yok</option>
                     </select>
-                    <button class="filter-btn" onclick="applyFilters()">Search</button>
-                    <button class="filter-btn" onclick="clearFilters()">Clear</button>
+                    <button class="filter-btn" onclick="applyFilters()">Ara</button>
+                    <button class="filter-btn" onclick="clearFilters()">Temizle</button>
                     <select id="sort-options" onchange="applyFilters()">
-                        <option value="">Sort By</option>
-                        <option value="name-asc">Name (A-Z)</option>
-                        <option value="name-desc">Name (Z-A)</option>
-                        <option value="price-asc">Lowest Price</option>
-                        <option value="price-desc">Highest Price</option>
-                        <option value="category-asc">Category (A-Z)</option>
-                        <option value="category-desc">Category (Z-A)</option>
+                        <option value="">Sırala</option>
+                        <option value="name-asc">İsim (A-Z)</option>
+                        <option value="name-desc">İsim (Z-A)</option>
+                        <option value="price-asc">En Düşük Fiyat</option>
+                        <option value="price-desc">En Yüksek Fiyat</option>
+                        <option value="category-asc">Kategori (A-Z)</option>
+                        <option value="category-desc">Kategori (Z-A)</option>
                     </select>
                 </div>
 
+
                 <div class="row">
-                    <h3 class="text-center">Available Drugs</h3>
+                    <h3 class="text-center">Mevcut İlaçlar</h3>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Medicine Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                    <th>Action</th> <!-- Stock Request Column -->
+                                    <th>İlaç Adı</th>
+                                    <th>Kategori</th>
+                                    <th>Fiyat</th>
+                                    <th>Durum</th>
+                                    <th>İşlem</th> <!-- Stok Talep Kolonu -->
                                 </tr>
                             </thead>
                             <tbody id="medicine-table">
@@ -134,7 +136,7 @@
                                         <td>@drug.UnitPrice</td>
                                         <td>
                                             <span class="status @(drug.Quantity > 0 ? "in-stock" : "out-of-stock")">
-                                                @(drug.Quantity > 0 ? "In Stock" : "Out of Stock")
+                                                @(drug.Quantity > 0 ? "Stokta Var" : "Stokta Yok")
                                             </span>
                                         </td>
                                         <td>
@@ -143,14 +145,14 @@
                                                 <form asp-controller="UserPanel" asp-action="RequestStock" method="post">
                                                     <input type="hidden" name="drugId" value="@drug.Id" />
                                                     <div class="input-group">
-                                                        <input type="number" name="quantity" class="form-control" placeholder="Quantity" required />
-                                                        <button type="submit" class="btn button">Request Stock</button>
+                                                        <input type="number" name="quantity" class="form-control" placeholder="Miktar" required />
+                                                        <button type="submit" class="btn button">Stok Talep Et</button>
                                                     </div>
                                                 </form>
                                             }
                                             else
                                             {
-                                                <button class="btn btn-secondary" disabled>Out of Stock</button>
+                                                <button class="btn btn-secondary" disabled>Stokta Yok</button>
                                             }
                                         </td>
                                     </tr>
@@ -159,6 +161,7 @@
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
 </body>
