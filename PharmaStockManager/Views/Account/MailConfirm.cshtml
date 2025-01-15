@@ -1,11 +1,11 @@
 ﻿@model PharmaStockManager.Models.Identity.MailConfirmViewModel
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pharma Stock Manager - Confirm Email</title>
+    <title>Eposta Doğrulama - Pharma Stock Manager</title>
     <link rel="stylesheet" href="~/css/styles.css" />
     <style>
         :root {
@@ -123,21 +123,21 @@
 </head>
 <body>
     <div class="container">
-        <button class="back-button" onclick="window.location.href='/'">&larr; Back</button>
-        <h1>Confirm your Mail</h1>
+        <button class="back-button" onclick="window.location.href='/'">&larr; Geri</button>
+        <h1>Epostanızı doğrulayın.</h1>
         <form asp-action="MailConfirm" asp-controller="Account" method="post">
             <div class="form-group">
-                <label>Email Address</label>
+                <label>Eposta Adresi</label>
                 <input type="text" disabled class="form-control" value="@ViewBag.Email" />
             </div>
             <div class="form-group">
-                <label asp-for="ConfirmCode">Confirm Code</label>
-                <input asp-for="ConfirmCode" type="text" class="form-control" placeholder="Enter your 6-digit code here" required />
+                <label asp-for="ConfirmCode">Doğrulama Kodu</label>
+                <input asp-for="ConfirmCode" type="text" class="form-control" placeholder="6 haneli kodu giriniz." required />
                 <span asp-validation-for="ConfirmCode" class="text-danger"></span>
             </div>
             <div>
-                <button type="submit" class="button">Confirm Email</button>
-                <button type="button" id="resendCodeBtn" class="button" onclick="sendActivationCode()">Resend Code</button>
+                <button type="submit" class="button">Eposta Doğrula</button>
+                <button type="button" id="resendCodeBtn" class="button" onclick="sendActivationCode()">Kod Gönder</button>
                 <span id="cooldownText" class="text-muted"></span>
             </div>
         </form>
@@ -155,7 +155,7 @@
             fetch('/Account/SendActivationCode', { method: 'POST' })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error('Bağlantı hatası oluştu');
                     }
                     return response.json();
                 })
@@ -163,12 +163,12 @@
                     if (data.success) {
                         // Start cooldown timer
                         let timeLeft = 60;
-                        cooldownText.textContent = `Resend in ${timeLeft} seconds`;
+                        cooldownText.textContent = `Tekrar göndermek için ${timeLeft} saniye bekleyiniz.`;
 
                         const cooldownInterval = setInterval(() => {
                             timeLeft--;
                             if (timeLeft > 0) {
-                                cooldownText.textContent = `Resend in ${timeLeft} seconds`;
+                                cooldownText.textContent = `Tekrar göndermek için ${timeLeft} saniye bekleyiniz.`;
                             } else {
                                 clearInterval(cooldownInterval);
                                 resendBtn.disabled = false;
@@ -182,7 +182,7 @@
                 .catch(error => {
                     console.error('Error:', error);
                     resendBtn.disabled = false;
-                    cooldownText.textContent = 'Failed to send code';
+                    cooldownText.textContent = 'Kod Gönderilemedi.';
                 });
         }
     </script>

@@ -1,10 +1,10 @@
 ﻿@model ManageUsersViewModel
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
+    <title>Kullanıcıları Yönet - Pharma Stock Manager</title>
     <style>
         /* General Styles */
         body {
@@ -150,28 +150,28 @@
 </head>
 <body>
     <div class="container">
-        <button class="back-button" onclick="window.location.href='/SuperAdmin/'">← Back</button>
+        <button class="back-button" onclick="window.location.href='/SuperAdmin/'">← Geri</button>
         <header>
-            <h1>Manage Users</h1>
+            <h1>Kullanıcıları Yönet</h1>
         </header>
         <nav>
-            <button class="role-button active" data-role="admins">Admins</button>
-            <button class="role-button" data-role="customers">Customers</button>
-            <button class="role-button" data-role="employees">Employees</button>
+            <button class="role-button active" data-role="admins">Adminler</button>
+            <button class="role-button" data-role="customers">Müşteriler</button>
+            <button class="role-button" data-role="employees">Çalışanlar</button>
         </nav>
         <main>
             <!-- Admin Table -->
             <div class="table-container active" id="admins">
-                <h2>Admins</h2>
+                <h2>Adminler</h2>
                 <table class="user-table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Warehouse Name</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Depo Adı</th>
+                            <th>İsim</th>
+                            <th>Eposta</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -184,26 +184,26 @@
                                 <td>@user.Email</td>
                                 @if (@user.ActiveUser)
                                 {
-                                    <td>Active</td>
+                                    <td>Aktif</td>
                                     <td>
                                         <a class="action-button button-deactivate" asp-action="DeactivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Deactivate
+                                            Deaktive
                                         </a>
                                         <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Delete
+                                            Sil
                                         </a>
 
                                     </td>
                                 }
                                 else
                                 {
-                                    <td>Passive</td>
+                                    <td>Pasif</td>
                                     <td>
                                         <a class="action-button button-activate" asp-action="ActivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Activate
+                                            Aktifleştirme
                                         </a>
                                         <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Delete
+                                            Sil
                                         </a>
                                     </td>
                                 }
@@ -219,11 +219,11 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Warehouse Name</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Depo Adı</th>
+                            <th>İsim</th>
+                            <th>Eposta</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -236,26 +236,26 @@
                                 <td>@user.Email</td>
                                 @if (@user.ActiveUser)
                                 {
-                                    <td>Active</td>
+                                    <td>Aktif</td>
                                     <td>
                                         <a class="action-button button-deactivate" asp-action="DeactivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Deactivate
+                                            Deaktive
                                         </a>
                                         <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Delete
+                                            Sil
                                         </a>
 
                                     </td>
                                 }
                                 else
                                 {
-                                    <td>Passive</td>
+                                    <td>Pasif</td>
                                     <td>
                                         <a class="action-button button-activate" asp-action="ActivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Activate
+                                            Aktifleştirme
                                         </a>
                                         <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Delete
+                                            Sil
                                         </a>
                                     </td>
                                 }
@@ -271,11 +271,11 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Warehouse Name</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Depo Adı</th>
+                            <th>İsim</th>
+                            <th>Eposta</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -286,27 +286,28 @@
                                 <td>@user.WarehouseName</td>
                                 <td>@user.FullName</td>
                                 <td>@user.Email</td>
-                                @if (user.ActiveUser)
+                                @if (@user.ActiveUser)
                                 {
-                                    <td>Active</td>
+                                    <td>Aktif</td>
                                     <td>
                                         <a class="action-button button-deactivate" asp-action="DeactivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Deactivate
+                                            Deaktive
                                         </a>
                                         <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Delete
+                                            Sil
                                         </a>
-                                       
+
                                     </td>
-                                }else
+                                }
+                                else
                                 {
-                                    <td>Passive</td>
+                                    <td>Pasif</td>
                                     <td>
                                         <a class="action-button button-activate" asp-action="ActivateUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Activate
+                                            Aktifleştirme
                                         </a>
                                         <a class="action-button button-delete" asp-action="DeleteUser" asp-controller="SuperAdmin" asp-route-id="@user.Id">
-                                            Delete
+                                            Sil
                                         </a>
                                     </td>
                                 }
@@ -348,13 +349,13 @@
 
                 if (button.classList.contains('button-activate')) {
                     actionText = 'activate';
-                    confirmMessage = 'Are you sure you want to activate this user?';
+                    confirmMessage = 'İşleme devam etmek istiyor musunuz ?';
                 } else if (button.classList.contains('button-deactivate')) {
                     actionText = 'deactivate';
-                    confirmMessage = 'Are you sure you want to deactivate this user?';
+                    confirmMessage = 'İşleme devam etmek istiyor musunuz ?';
                 } else if (button.classList.contains('button-delete')) {
                     actionText = 'delete';
-                    confirmMessage = 'Are you sure you want to permanently delete this user? This action cannot be undone.';
+                    confirmMessage = 'İşleme devam etmek istiyor musunuz ? Bu işlem geri alınamaz';
                 }
 
                 if (confirmMessage && confirm(confirmMessage)) {

@@ -2,11 +2,11 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enable Two-Factor Authentication</title>
+    <title>2FA - Pharma Stock Manager</title>
     <link rel="stylesheet" href="~/css/styles.css" />
     <style>
         :root {
@@ -125,7 +125,7 @@
 </head>
 <body>
     <div class="container">
-        <button class="back-button" onclick="window.location.href='/'">&larr; Back</button>
+        <button class="back-button" onclick="window.location.href='/'">&larr; Geri</button>
         @if (TempData["Message"] != null)
         {
             var messageType = TempData["MessageType"]?.ToString();
@@ -135,29 +135,28 @@
         }
         @if (TempData["TwoFactorEnabled"] == "true")
         {
-            <h1>Disable Two-Factor Authentication</h1>
-            <p>Remove two-factor authentication (2FA).</p>
+            <h1>2FA Deaktive et</h1>
             <form asp-action="Disable2FAConfirm" asp-controller="Account" method="post">
-                <button type="submit" class="button">Disable 2FA</button>
+                <button type="submit" class="button">2FA korumayı kaldır.</button>
             </form>
 
         } else
         {
-            <h1>Enable Two-Factor Authentication</h1>
-            <p>Secure your account by enabling two-factor authentication (2FA).</p>
+            <h1>İki aşamalı doğrulamayı aktifleştirme</h1>
+            <p>İki aşamalı doğrulamayı aktifleştirerek hesabınızı güvenceye alın.</p>
             <div class="qr-container">
-                <p>Scan the QR code below using your authenticator app:</p>
+                <p>Authenticator uygulamasını kullanarak Qr Kodunu taratınız.</p>
                 <img src="@ViewBag.QrCodeImage" alt="Two-Factor Authentication QR Code" height="180" width="180" />
-                <p>Or enter this key manually:</p>
+                <p>Ya da bu metini Authenticator uygulamasına elle yazınız.</p>
                 <strong>@ViewBag.AuthenticatorKey</strong>
             </div>
             <form asp-action="VerifyAuthenticatorCode" asp-controller="Account" method="post">
                 <div class="form-group">
-                    <label for="code">Enter the verification code from your app:</label>
-                    <input type="text" id="code" name="code" required placeholder="Verification code" />
+                    <label for="code">Doğrulama kodunu giriniz</label>
+                    <input type="text" id="code" name="code" required placeholder="Doğrulama kodu" />
                 </div>
 
-                <button type="submit" class="button">Enable 2FA</button>
+                <button type="submit" class="button">2FA Aktifleştir</button>
             </form>
         }
         
