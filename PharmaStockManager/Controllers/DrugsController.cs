@@ -316,4 +316,57 @@ public class DrugsController : Controller
             return Json(new { success = false, message = $"Stok işlemi sırasında hata oluştu: {ex.Message}" });
         }
     }
+
+    // POST: Drugs/UpdateStock
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateStock([Bind("Id,Quantity")] Drug drug)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var existingDrug = await _context.Drugs.AsNoTracking().FirstOrDefaultAsync(d => d.Id == drug.Id);
+            if (existingDrug == null)
+            {
+                return Json(new { success = false, message = "İlaç bulunamadı." });
+            }
+
+            // Miktar değişikliğini kontrol et
+            var quantityDifference = drug.Quantity - existingDrug.Quantity;
+            if (quantityDifference != 0)
+            {
+                var transactionRecord = new Transaction
+                {
+                    DrugName = existingDrug.Name,
+                    Quantity = Math.Abs(quantityDifference),
+                    TransactionType = quantityDifference > 0 ? "Stock Increase" : "Stock Decrease",
+                    TransactionDate = DateTime.Now,
+                    ExpiryDate = existingDrug.ExpiryDate ?? DateTime.Now.AddYears(1),
+                    Type = existingDrug.DrugType,
+                    Price = existingDrug.UnitPrice * Math.Abs(quantityDifference),
+                    UserName = (await _userManager.GetUserAsync(User)).FullName,
+                    RefCode = existingDrug.RefCode,
+                };
+
+                _context.Transactions.Add(transactionRecord);
+
+                // Sadece quantity'yi güncelle
+                _context.Database.ExecuteSqlRaw(
+                    "UPDATE Drugs SET Quantity = {0} WHERE Id = {1}",
+                    drug.Quantity, drug.Id);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Json(new { success = true, message = "Stok başarıyla güncellendi." });
+            }
+
+            return Json(new { success = true, message = "Stok miktarı değişmedi." });
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return Json(new { success = false, message = "Güncelleme sırasında hata oluştu: " + ex.Message });
+        }
+    }
 }

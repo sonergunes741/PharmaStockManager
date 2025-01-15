@@ -661,32 +661,46 @@ table {
             document.getElementById('Quantity').disabled = false;
         }
 
+            // Form submit handler
         // Form submit handler
-        document.getElementById('drugForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const url = currentAction === 'edit' ? '/Drugs/Edit' : currentAction === 'updateStock' ? '/Drugs/UpdateStock' : '/Drugs/Create';
+    document.getElementById('drugForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let formData = new FormData(this);  // const yerine let kullanıyoruz
+        let url;
 
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'RequestVerificationToken': token
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert('İşlem başarısız: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('İşlem sırasında bir hata oluştu.');
-            });
+        if (currentAction === 'edit') {
+            url = '/Drugs/Edit';
+        } else if (currentAction === 'updateStock') {
+            url = '/Drugs/UpdateStock';
+            // UpdateStock için sadece Id ve Quantity gönder
+            const newFormData = new FormData();
+            newFormData.append('Id', formData.get('Id'));
+            newFormData.append('Quantity', formData.get('Quantity'));
+            formData = newFormData;  // Artık bu atama çalışacak
+        } else {
+            url = '/Drugs/Create';
+        }
+
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'RequestVerificationToken': token
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('İşlem başarısız: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('İşlem sırasında bir hata oluştu.');
         });
+    });
 
         // Filter function
         window.applyFilter = function() {
