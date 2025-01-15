@@ -448,16 +448,10 @@ table {
             <input type="text" id="filter-name" placeholder="İlaç Adı" />
             <select id="filter-type">
                 <option value="">İlaç Tipi</option>
-                <option value="Ticari">Ticari</option>
-                <option value="Klinik">Klinik</option>
+                <option value="Ticari">Commercial</option>
+                <option value="Klinik">Clinical</option>
             </select>
-            <select id="filter-category" >
-                <option value="">Kategori</option>
-                @foreach (var category in ViewBag.Categories)
-                {
-                    <option value="@category.Name">@category.Name</option>
-                }
-            </select>
+            <input type="text" id="filter-category" placeholder="Kategori" />
             <input type="date" id="filter-expiry-date" placeholder="Son Kullanma Tarihi" />
             <button type="button" onclick="applyFilter()">Filtrele</button>
         </form>
@@ -503,21 +497,6 @@ table {
                     }
                 </tbody>
             </table>
-            <div class="pagination">
-                @if (ViewBag.HasPreviousPage)
-                {
-                    <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" class="button">Önceki</a>
-                }
-
-                <span class="page-info">
-                    Sayfa @ViewBag.CurrentPage / @ViewBag.TotalPages
-                </span>
-
-                @if (ViewBag.HasNextPage)
-                {
-                    <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" class="button">Sonraki</a>
-                }
-            </div>
         </section>
     </div>
 
@@ -530,20 +509,14 @@ table {
                 <input type="hidden" id="drugId" name="Id" />
                 <input type="hidden" id="drugType" name="DrugType" />
                 
-                <div class="form-group" id="name-group">
+                <div class="form-group">
                     <label for="Name">İlaç Adı</label>
                     <input type="text" id="Name" name="Name" class="form-control" required />
                 </div>
                 
-                <div class="form-group" id="category-group">
+                <div class="form-group">
                     <label for="Category">Kategori</label>
-                    <select id="filter-type" name="Category" class="form-control" required>
-                        <option value="">Kategori Seçiniz</option>
-                        @foreach (var category in ViewBag.Categories)
-                        {
-                            <option value="@category.Name">@category.Name</option>
-                        }
-                    </select>
+                    <input type="text" id="Category" name="Category" class="form-control" required />
                 </div>
                 
                 <div class="form-group">
@@ -551,22 +524,22 @@ table {
                     <input type="number" id="Quantity" name="Quantity" class="form-control" required />
                 </div>
                 
-                <div class="form-group" id="unit-price-group">
+                <div class="form-group">
                     <label for="UnitPrice">Birim Fiyat</label>
                     <input type="number" id="UnitPrice" name="UnitPrice" step="0.01" class="form-control" required />
                 </div>
                 
-                <div class="form-group" id="expiry-date-group">
+                <div class="form-group">
                     <label for="ExpiryDate">Son Kullanma Tarihi</label>
                     <input type="date" id="ExpiryDate" name="ExpiryDate" class="form-control" required />
                 </div>
                 
-                <div class="form-group" id="critical-stock-level-group">
+                <div class="form-group">
                     <label for="CriticalStockLevel">Kritik Stok Seviyesi</label>
                     <input type="number" id="CriticalStockLevel" name="CriticalStockLevel" class="form-control" min="1" required />
                     <small class="form-text text-muted">Düşük stok uyarısı almak istediğiniz minimum seviye</small>
                 </div>
-                <div class="form-group" id="max-request-group">
+                <div class="form-group">
                     <label for="MaxRequest">Maksimum İstek Sayısı</label>
                     <input type="number" id="MaxRequest" name="MaxRequest" class="form-control" min="1" required />
                 </div>
@@ -596,18 +569,21 @@ table {
             form.reset();
             document.getElementById('drugType').value = drugType;
 
+            document.getElementById('MaxRequest').addEventListener('input', function () {
+        });
+
             if (action === 'edit' && id) {
                 title.textContent = 'İlaç Güncelle';
                 fetchDrugDetails(id);
-                showAllFields();
+                enableAllFields();
             } else if (action === 'updateStock' && id) {
                 title.textContent = 'Stok Güncelle';
                 fetchDrugDetails(id);
-                hideFieldsForStockUpdate();
+                disableAllFieldsExceptQuantity();
             } else {
                 title.textContent = `${drugType} İlaç Ekle`;
                 document.getElementById('drugId').value = '';
-                showAllFields();
+                enableAllFields();
             }
 
             modal.style.display = 'flex';
@@ -665,29 +641,31 @@ table {
                 });
         }
 
-        function hideFieldsForStockUpdate() {
-            document.getElementById('name-group').style.display = 'block';
-            document.getElementById('category-group').style.display = 'none';
-            document.getElementById('unit-price-group').style.display = 'none';
-            document.getElementById('expiry-date-group').style.display = 'none';
-            document.getElementById('critical-stock-level-group').style.display = 'none';
-            document.getElementById('max-request-group').style.display = 'none';
+        function disableAllFieldsExceptQuantity() {
+            document.getElementById('Name').disabled = true;
+            document.getElementById('Category').disabled = true;
+            document.getElementById('UnitPrice').disabled = true;
+            document.getElementById('ExpiryDate').disabled = true;
+            document.getElementById('CriticalStockLevel').disabled = true;
+            document.getElementById('MaxRequest').disabled = true;
+            document.getElementById('Quantity').disabled = false;
         }
 
-        function showAllFields() {
-            document.getElementById('name-group').style.display = 'block';
-            document.getElementById('category-group').style.display = 'block';
-            document.getElementById('unit-price-group').style.display = 'block';
-            document.getElementById('expiry-date-group').style.display = 'block';
-            document.getElementById('critical-stock-level-group').style.display = 'block';
-            document.getElementById('max-request-group').style.display = 'block';
+        function enableAllFields() {
+            document.getElementById('Name').disabled = false;
+            document.getElementById('Category').disabled = false;
+            document.getElementById('UnitPrice').disabled = false;
+            document.getElementById('ExpiryDate').disabled = false;
+            document.getElementById('CriticalStockLevel').disabled = false;
+            document.getElementById('MaxRequest').disabled = false;
+            document.getElementById('Quantity').disabled = false;
         }
 
         // Form submit handler
         document.getElementById('drugForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(this);
-            const url = currentAction === 'edit' ? '/Drugs/Edit' : '/Drugs/Create';
+            const url = currentAction === 'edit' ? '/Drugs/Edit' : currentAction === 'updateStock' ? '/Drugs/UpdateStock' : '/Drugs/Create';
 
             fetch(url, {
                 method: 'POST',
@@ -711,17 +689,17 @@ table {
         });
 
         // Filter function
-        window.applyFilter = function () {
+        window.applyFilter = function() {
             const name = document.getElementById('filter-name').value.toLowerCase();
             const type = document.getElementById('filter-type').value;
-            const category = document.getElementById('filter-category').value;
+            const category = document.getElementById('filter-category').value.toLowerCase();
             const expiryDate = document.getElementById('filter-expiry-date').value;
 
             const rows = document.querySelectorAll('#medicine-table-body tr');
             rows.forEach(row => {
                 const matchName = row.cells[1].textContent.toLowerCase().includes(name);
                 const matchType = !type || row.cells[2].textContent === type;
-                const matchCategory = !category || row.cells[4].textContent === category;
+                const matchCategory = row.cells[4].textContent.toLowerCase().includes(category);
                 const rowExpiryDate = row.cells[6].textContent;
                 const matchExpiry = !expiryDate || rowExpiryDate <= expiryDate;
 
