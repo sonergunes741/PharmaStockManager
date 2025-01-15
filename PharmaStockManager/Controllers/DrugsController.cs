@@ -13,6 +13,7 @@ public class DrugsController : Controller
 {
     private readonly PharmaContext _context;
     private readonly UserManager<AppUser> _userManager;
+    private readonly int _pageSize = 10;
 
     public DrugsController(PharmaContext context, UserManager<AppUser> userManager)
     {
@@ -21,7 +22,7 @@ public class DrugsController : Controller
     }
 
     // GET: Drugs
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? page)
     {
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
@@ -29,11 +30,31 @@ public class DrugsController : Controller
             return Json(new { success = false, message = "Kullanıcı bulunamadı." });
         }
 
-        // Yalnızca adminin RefCode'una uygun ilaçları getir
+        var pageNumber = page ?? 1; // Eğer sayfa numarası belirtilmemişse 1. sayfa
+
+        // Toplam ilaç sayısını al
+        var totalDrugs = await _context.Drugs
+            .Where(d => d.RefCode == currentUser.RefCode)
+            .CountAsync();
+
+        // İlaçları sayfalı şekilde getir
         var drugs = await _context.Drugs
             .Where(d => d.RefCode == currentUser.RefCode)
+            .OrderBy(d => d.Id) // İsteğe bağlı sıralama
+            .Skip((pageNumber - 1) * _pageSize)
+            .Take(_pageSize)
             .ToListAsync();
+
+        // Toplam sayfa sayısını hesapla
+        var totalPages = (int)Math.Ceiling(totalDrugs / (double)_pageSize);
+
+        // ViewBag'e sayfalama bilgilerini ekle
+        ViewBag.CurrentPage = pageNumber;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.HasPreviousPage = pageNumber > 1;
+        ViewBag.HasNextPage = pageNumber < totalPages;
         ViewBag.Categories = _context.Categories.ToList();
+
         return View(drugs);
     }
 
@@ -214,7 +235,7 @@ public class DrugsController : Controller
 
     // GET: Drugs/TransactionHistory
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> TransactionHistory()
+    public async Task<IActionResult> TransactionHistory(int? page)
     {
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
@@ -222,10 +243,25 @@ public class DrugsController : Controller
             return Json(new { success = false, message = "Kullanıcı bulunamadı." });
         }
 
-        var transactions = await _context.Transactions
+        var pageNumber = page ?? 1;
+        var pageSize = 10; // Her sayfada gösterilecek kayıt sayısı
+
+        var query = _context.Transactions
             .Where(t => t.RefCode == currentUser.RefCode)
-            .OrderByDescending(t => t.TransactionDate)
+            .OrderByDescending(t => t.TransactionDate);
+
+        var totalRecords = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+        var transactions = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        ViewBag.CurrentPage = pageNumber;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.HasPreviousPage = pageNumber > 1;
+        ViewBag.HasNextPage = pageNumber < totalPages;
 
         return View(transactions);
     }
