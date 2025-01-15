@@ -31,7 +31,7 @@ public class UserPanelController : Controller
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
         {
-            return Json(new { success = false, message = "User not found." });
+            return Json(new { success = false, message = "Kullanıcı bulunamadı." });
         }
 
         // Fetch drugs and categories based on the user's RefCode
@@ -50,7 +50,7 @@ public class UserPanelController : Controller
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
         {
-            return Json(new { success = false, message = "User not found." });
+            return Json(new { success = false, message = "Kullanıcı bulunamadı." });
         }
 
         var drugs = _context.Drugs.Where(d => d.RefCode == currentUser.RefCode).ToList();
@@ -63,7 +63,7 @@ public class UserPanelController : Controller
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
         {
-            return Json(new { success = false, message = "User not found." });
+            return Json(new { success = false, message = "Kullanıcı bulunamadı." });
         }
 
         var categories = _context.Categories.Where(c => c.RefCode == currentUser.RefCode).ToList();
@@ -77,7 +77,7 @@ public class UserPanelController : Controller
     {
         if (quantity <= 0)
         {
-            TempData["ErrorMessage"] = "Quantity must be a positive number.";
+            TempData["ErrorMessage"] = "Girilen Sayı 0 dan büyük olmalı.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -89,7 +89,7 @@ public class UserPanelController : Controller
             // MaxRequest control
             if (quantity > drug.MaxRequest)
             {
-                TempData["ErrorMessage"] = $"You can select a maximum of {drug.MaxRequest} items.";
+                TempData["ErrorMessage"] = $"En fazla {drug.MaxRequest} adet ilaç talep edilebilir.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -107,11 +107,11 @@ public class UserPanelController : Controller
             _context.Requests.Add(request);
             _context.SaveChanges();
 
-            TempData["SuccessMessage"] = $"Your request for {quantity} units of {drug.Name} has been submitted.";
+            TempData["SuccessMessage"] = $" {quantity} adet {drug.Name} istek gönderildi.";
         }
         else
         {
-            TempData["ErrorMessage"] = "Requested drug does not exist.";
+            TempData["ErrorMessage"] = "Böyle bir ilaç yok.";
         }
 
         return RedirectToAction(nameof(Index));
@@ -123,7 +123,7 @@ public class UserPanelController : Controller
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
         {
-            return Json(new { success = false, message = "User not found." });
+            return Json(new { success = false, message = "Kullanıcı bulunamadı." });
         }
 
         var query = _context.Drugs.Where(m => m.RefCode == currentUser.RefCode).AsQueryable();
@@ -185,7 +185,7 @@ public class UserPanelController : Controller
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
         {
-            return Json(new { success = false, message = "User not found." });
+            return Json(new { success = false, message = "Kullanıcı bulunamadı." });
         }
 
         var userOrders = _context.Requests
@@ -232,7 +232,7 @@ public class UserPanelController : Controller
     {
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
-            return Json(new { success = false, message = "User not found." });
+            return Json(new { success = false, message = "Kullanıcı bulunamadı." });
 
         user.FullName = fullName;
         user.Email = email;
@@ -242,6 +242,6 @@ public class UserPanelController : Controller
         if (result.Succeeded)
             return Json(new { success = true });
 
-        return Json(new { success = false, message = "Update failed." });
+        return Json(new { success = false, message = "Güncelleme başarısız." });
     }
 }
