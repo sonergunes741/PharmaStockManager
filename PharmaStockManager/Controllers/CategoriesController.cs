@@ -65,8 +65,14 @@ namespace PharmaStockManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
             if (ModelState.IsValid)
             {
+                category.RefCode = currentUser.RefCode;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Category created successfully.";
