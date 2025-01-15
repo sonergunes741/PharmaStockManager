@@ -1,24 +1,147 @@
 ﻿@model PharmaStockManager.Models.Category
-
 @{
-    ViewData["Title"] = "Details";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Details - PharmaStockManager</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        :root {
+            --primary-blue: #5a9ecf;
+            --lavender: #a68cb1;
+            --mint-green: #88b8a5;
+            --mid-tone: #93b7df;
+            --background: #f4f5f7;
+            --text: #2f3542;
+            --white: #fff;
+            --gray-light: #e8eaed;
+            --gray-hover: #ddd;
+        }
 
-<h1>Details</h1>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+        }
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+        body {
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            background-color: var(--background);
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: var(--white);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .content-body {
+            padding: 40px;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .details-row {
+            margin-bottom: 20px;
+        }
+
+        .details-label {
+            color: var(--text);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .details-value {
+            color: var(--text);
+            font-size: 16px;
+            padding: 8px 0;
+        }
+
+        .action-links {
+            margin-top: 20px;
+        }
+
+            .action-links .btn {
+                background-color: var(--lavender);
+                color: var(--white);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .action-links .btn:hover {
+                    background-color: darken(var(--lavender), 10%);
+                }
+
+            .action-links a {
+                text-decoration: none;
+                margin-right: 15px;
+            }
+
+        a.back-link {
+            display: block;
+            margin-top: 10px; /* İsterseniz biraz boşluk ekleyebilirsiniz */
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="content-header">
+            <h1 class="header-title">Detaylar</h1>
+            <h4>Kategori</h4>
+        </div>
+        <div class="content-body">
+            <div class="details-row">
+                <div class="details-label">
+                    İsim
+                </div>
+                <div class="details-value">
+                    @Html.DisplayFor(model => model.Name)
+                </div>
+            </div>
+            <div class="action-links">
+                <button class="btn" onclick="location.href='@Url.Action("Edit", new { id = Model?.Id })'">Düzenle</button>
+                <a asp-action="Index" class="back-link">Kategori listesine geri dön</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
