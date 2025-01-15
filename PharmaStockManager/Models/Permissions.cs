@@ -7,7 +7,7 @@ namespace PharmaStockManager.Models
         public bool EditStocks { get; set; } = false;
         public bool StockIn { get; set; } = false;
         public bool StockOut { get; set; } = false;
-
+        public bool RequestApprove { get; set; } = false;
 
 
 

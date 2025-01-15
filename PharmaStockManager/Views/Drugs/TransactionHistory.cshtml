@@ -505,18 +505,24 @@
         const transactionType = document.getElementById('transactionTypeFilter').value;
         const date = document.getElementById('dateFilter').value;
 
-        // Filtreleri URL parametresi olarak ekle
-        const params = new URLSearchParams(window.location.search);
-        params.set('page', '1'); // Filtreleme yapıldığında ilk sayfaya dön
+        const rows = document.querySelectorAll('.transaction-table tbody tr');
 
-        if (drugName) params.set('drugName', drugName);
-        if (transactionType) params.set('transactionType', transactionType);
-        if (date) params.set('date', date);
+        rows.forEach(row => {
+            const nameMatch = row.cells[0].textContent.toLowerCase().includes(drugName);
+            const typeMatch = !transactionType || row.cells[2].textContent.includes(transactionType);
+            const rowDate = row.cells[3].textContent.split(' ')[0];
+            const dateMatch = !date || rowDate === date;
 
-        window.location.href = window.location.pathname + '?' + params.toString();
+            row.style.display = nameMatch && typeMatch && dateMatch ? '' : 'none';
+        });
     }
 
     function resetFilters() {
-        window.location.href = window.location.pathname;
+        document.getElementById('drugNameFilter').value = '';
+        document.getElementById('transactionTypeFilter').value = '';
+        document.getElementById('dateFilter').value = '';
+
+        const rows = document.querySelectorAll('.transaction-table tbody tr');
+        rows.forEach(row => row.style.display = '');
     }
 </script>
