@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PharmaStockManager")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d007ecb33c527d50d82219ac6444a2a3975a390")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30a8551068f398e51f1b2e6be4eb7e1d8c8dbbb6")]
 [assembly: System.Reflection.AssemblyProductAttribute("PharmaStockManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PharmaStockManager")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
