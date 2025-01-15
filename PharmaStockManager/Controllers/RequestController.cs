@@ -28,7 +28,7 @@ public class RequestController : Controller
     string status,
     string sortOption,
     int page = 1,
-    int pageSize = 1)
+    int pageSize = 5)
     {
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)

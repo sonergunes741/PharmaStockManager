@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "My Profile";
     Layout = null;
+
+    var permissions = (Permissions)ViewData["Permissions"];
 }
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -243,6 +245,15 @@
                     Stock Management
                 </a>
             </li>
+            @if (permissions.RequestApprove)
+            {
+                <li class="nav-item">
+                    <a asp-controller="Employee" asp-action="Requests" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Siparişler
+                    </a>
+                </li>
+            }
             <li class="nav-item">
                 <a asp-controller="Employee" asp-action="Profile" class="nav-link active">
                     <i class="fas fa-user"></i>

@@ -1,0 +1,627 @@
+﻿@model IEnumerable<PharmaStockManager.Models.ViewModels.RequestViewModel>
+@{
+    ViewData["Title"] = "Requests";
+    Layout = null;
+}
+
+<style>
+    :root {
+        --primary-blue: #5a9ecf;
+        --lavender: #a68cb1;
+        --mint-green: #88b8a5;
+        --mid-tone: #93b7df;
+        --background: #f4f5f7;
+        --text: #2f3542;
+        --white: #fff;
+        --gray-light: #e8eaed;
+        --gray-hover: #ddd;
+        --filter-bg: #f9f9f9;
+        --filter-border: #ccc;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        background: var(--background);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: var(--text);
+        height: 100vh;
+        position: fixed;
+        padding: 2rem;
+        color: var(--white);
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+        z-index: 1000;
+    }
+
+    .sidebar-header {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .logo-circle {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pill-icon {
+        width: 20px;
+        height: 32px;
+        background-color: var(--white);
+        border-radius: 16px;
+    }
+
+    .nav-menu {
+        list-style: none;
+    }
+
+    .nav-item {
+        margin: 0.5rem 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 1rem;
+        }
+
+    .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 2rem;
+        background-color: var(--background);
+        min-height: calc(100vh - 60px);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: var(--white);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 1rem;
+    }
+
+        .orders-table thead {
+            background-color: var(--lavender);
+            color: var(--white);
+        }
+
+        .orders-table th, .orders-table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray-hover);
+        }
+
+        .orders-table tbody tr:hover {
+            background-color: var(--gray-hover);
+        }
+
+        .orders-table tbody tr:nth-child(even) {
+            background-color: var(--gray-light);
+        }
+
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .badge-success {
+        background-color: var(--mint-green);
+        color: var(--white);
+    }
+
+    .badge-warning {
+        background-color: #ffd43b;
+        color: var(--text);
+    }
+
+    .badge-danger {
+        background-color: #ff6b6b;
+        color: var(--white);
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        margin-right: 0.5rem;
+        transition: opacity 0.2s;
+    }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+    .btn-approve {
+        background-color: var(--mint-green);
+        color: var(--white);
+    }
+
+    .btn-reject {
+        background-color: var(--primary-blue);
+        color: var(--white);
+    }
+
+    @@media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+    }
+
+    .header {
+        background: var(--white);
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+
+    .welcome-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .welcome-text h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+    }
+
+    .welcome-text p {
+        color: var(--text);
+        opacity: 0.8;
+    }
+
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .button2 {
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+        color: var(--white);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .button2:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+    #sort-options {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        border: 1px solid var(--gray-hover);
+        background-color: var(--filter-bg);
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+    }
+
+    .filter-section {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: 1rem 0;
+        gap: 1rem;
+    }
+
+        .filter-section input,
+        .filter-section select {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px var(--shadow);
+            transition: all 0.3s ease-in-out;
+            width: 200px; /* Butonlar ve inputlar için uygun genişlik */
+        }
+
+            .filter-section input:focus,
+            .filter-section select:focus {
+                outline: none;
+                border-color: var(--primary-blue);
+                box-shadow: 0 2px 5px rgba(46, 107, 194, 0.5);
+            }
+
+    .filter-btn {
+        background-color: var(--primary-blue);
+        color: var(--white);
+        border: none;
+        border-radius: 12px;
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 3px 8px var(--shadow);
+        transition: all 0.3s ease-in-out;
+        width: auto; /* Butonların uygun genişlikte olmasını sağla */
+    }
+
+        .filter-btn:hover {
+            background-color: var(--mid-tone);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 107, 194, 0.3);
+        }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 0.5rem;
+    }
+
+    .pagination-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--lavender);
+        background-color: var(--white);
+        color: var(--lavender);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--lavender);
+            color: var(--white);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .pagination-info {
+        margin: 0 1rem;
+        color: var(--text);
+    }
+
+    .current-page {
+        background-color: var(--lavender);
+        color: var(--white);
+    }
+</style>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <div class="logo-circle">
+                <div class="pill-icon"></div>
+            </div>
+            <span class="logo-text">Pharma Stock</span>
+        </div>
+    </div>
+
+    <nav>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a asp-controller="Employee" asp-action="Index" class="nav-link">
+                    <i class="fas fa-pills"></i>
+                    Stock Management
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Employee" asp-action="Requests" class="nav-link active">
+                    <i class="fas fa-shopping-cart"></i>
+                    Requests
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Employee" asp-action="Profile" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    My Profile
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<main class="main-content">
+    @Html.AntiForgeryToken()
+    <header class="header">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Request Management</h1>
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <span id="current-time"></span>
+            <a href="@Url.Action("Logout", "Account")" class="button2">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="filter-section">
+            <input type="text" id="search-input" placeholder="Search by drug or user name" />
+            <input type="number" id="min-quantity" placeholder="Minimum quantity" />
+            <input type="number" id="max-quantity" placeholder="Maximum quantity" />
+            <select id="stock-filter">
+                <option value="">Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+            </select>
+            <button class="filter-btn" onclick="applyFilters()">Search</button>
+            <button class="filter-btn" onclick="clearFilters()">Clear</button>
+        </div>
+
+        <select id="sort-options" onchange="applyFilters()">
+            <option value="">Sort</option>
+            <option value="name-asc">Drug Name (A-Z)</option>
+            <option value="name-desc">Drug Name (Z-A)</option>
+            <option value="quantity-asc">Quantity (Low to High)</option>
+            <option value="quantity-desc">Quantity (High to Low)</option>
+            <option value="date-asc">Request Date (Oldest)</option>
+            <option value="date-desc">Request Date (Newest)</option>
+        </select>
+
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Drug Name</th>
+                    <th>Quantity</th>
+                    <th>User</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var request in Model)
+                {
+                    <tr>
+                        <td>@request.DrugName</td>
+                        <td>@request.Quantity</td>
+                        <td>@request.UserName</td>
+                        <td>@request.RequestDate.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>
+                            @if (request.IsApproved)
+                            {
+                                <span class="badge badge-success">Approved</span>
+                            }
+                            else if (request.IsRejected)
+                            {
+                                <span class="badge badge-danger">Rejected</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">Pending</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!request.IsApproved && !request.IsRejected)
+                            {
+                                <button class="btn btn-approve approve-btn"
+                                        data-id="@request.Id"
+                                        data-quantity="@request.Quantity"
+                                        data-drugname="@request.DrugName">
+                                    Approve
+                                </button>
+                                <button class="btn btn-reject reject-btn"
+                                        data-id="@request.Id">
+                                    Reject
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <a href="javascript:void(0)" onclick="navigateToPage(@(ViewBag.CurrentPage - 1))" class="pagination-btn">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </a>
+            }
+
+            <span class="pagination-info">
+                Page @ViewBag.CurrentPage / @ViewBag.TotalPages
+            </span>
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <a href="javascript:void(0)" onclick="navigateToPage(@(ViewBag.CurrentPage + 1))" class="pagination-btn">
+                    Next <i class="fas fa-chevron-right"></i>
+                </a>
+            }
+        </div>
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // Apply Filters
+    function applyFilters() {
+        const search = document.getElementById("search-input").value;
+        const minQuantity = document.getElementById("min-quantity").value;
+        const maxQuantity = document.getElementById("max-quantity").value;
+        const status = document.getElementById("stock-filter").value;
+        const sortOption = document.getElementById("sort-options").value;
+
+        const queryParams = new URLSearchParams({
+            search: search,
+            minQuantity: minQuantity,
+            maxQuantity: maxQuantity,
+            status: status,
+            sortOption: sortOption,
+        });
+
+        window.location.href = `/Employee/Requests?${queryParams.toString()}`;
+    }
+
+    // Clear Filters
+    function clearFilters() {
+        document.getElementById("search-input").value = '';
+        document.getElementById("min-quantity").value = '';
+        document.getElementById("max-quantity").value = '';
+        document.getElementById("stock-filter").value = '';
+        document.getElementById("sort-options").value = '';
+        applyFilters();
+    }
+
+    // Navigate Pages
+    function navigateToPage(page) {
+        const params = new URLSearchParams(window.location.search);
+        params.set("page", page);
+        window.location.href = `/Employee/Requests?${params.toString()}`;
+    }
+
+    // Approve Request
+    document.querySelectorAll('.approve-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const id = parseInt(this.dataset.id);
+            const drugName = this.dataset.drugname;
+            const quantity = parseInt(this.dataset.quantity);
+
+            if (confirm("Are you sure you want to approve this request?")) {
+                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                fetch('/Employee/ApproveRequest', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'RequestVerificationToken': token
+                    },
+                    body: `id=${id}&drugName=${encodeURIComponent(drugName)}&quantity=${quantity}&__RequestVerificationToken=${token}`
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Request approved successfully.");
+                            location.reload();
+                        } else {
+                            alert(data.message || "An error occurred.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred.");
+                    });
+            }
+        });
+    });
+
+    // Reject Request
+    document.querySelectorAll(".reject-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            const id = parseInt(this.dataset.id);
+
+            if (confirm("Are you sure you want to reject this request?")) {
+                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                fetch('/Employee/RejectRequest', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "RequestVerificationToken": token
+                    },
+                    body: `id=${id}&__RequestVerificationToken=${token}`
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Request rejected successfully.");
+                            location.reload();
+                        } else {
+                            alert(data.message || "An error occurred.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred.");
+                    });
+            }
+        });
+    });
+
+    // Update Time
+    function updateTime() {
+        const now = new Date();
+        document.getElementById("current-time").textContent = now.toLocaleString();
+    }
+
+    // Initial setup
+    document.addEventListener("DOMContentLoaded", () => {
+        updateTime();
+        setInterval(updateTime, 60000); // Update time every minute
+    });
+</script>
+

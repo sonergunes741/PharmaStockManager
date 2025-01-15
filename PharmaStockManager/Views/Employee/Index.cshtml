@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Employee Stock Management";
     Layout = null;
+    
+    var permissions = (Permissions)ViewData["Permissions"];
+                                
 }
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -337,9 +340,19 @@
             <li class="nav-item">
                 <a asp-controller="Employee" asp-action="Index" class="nav-link active">
                     <i class="fas fa-pills"></i>
-                    Stock Management
+                    Stok Yönetimi
                 </a>
             </li>
+            @if (permissions.RequestApprove)
+            {
+                <li class="nav-item">
+                    <a asp-controller="Employee" asp-action="Requests" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Siparişler
+                    </a>
+                </li>
+            }
+            
             <li class="nav-item">
                 <a asp-controller="Employee" asp-action="Profile" class="nav-link">
                     <i class="fas fa-user"></i>
@@ -406,9 +419,7 @@
                             <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
                             <td>@item.ExpiryDate?.ToString("yyyy-MM-dd")</td>
                             <td>
-                                @{
-                                    var permissions = (Permissions)ViewData["Permissions"];
-                                }
+                                
                                 @if (permissions.StockIn)
                                 {
                                     <button class="button button-edit" onclick="openModal('add', @item.Id)">
