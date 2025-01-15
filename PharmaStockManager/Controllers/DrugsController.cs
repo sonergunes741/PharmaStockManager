@@ -33,7 +33,7 @@ public class DrugsController : Controller
         var drugs = await _context.Drugs
             .Where(d => d.RefCode == currentUser.RefCode)
             .ToListAsync();
-
+        ViewBag.Categories = _context.Categories.ToList();
         return View(drugs);
     }
 
