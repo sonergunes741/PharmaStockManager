@@ -4,6 +4,7 @@
     Layout = null;
 }
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 <style>
     :root {
         --primary-blue: #5a9ecf;
@@ -369,19 +370,22 @@
             <li class="nav-item">
                 <a asp-controller="Employee" asp-action="Index" class="nav-link">
                     <i class="fas fa-pills"></i>
-                    Stock Management
+                    Stok Yönetimi
                 </a>
             </li>
-            <li class="nav-item">
-                <a asp-controller="Employee" asp-action="Requests" class="nav-link active">
-                    <i class="fas fa-shopping-cart"></i>
-                    Requests
-                </a>
-            </li>
+
+                <li class="nav-item">
+                    <a asp-controller="Employee" asp-action="Requests" class="nav-link active">
+                        <i class="fas fa-shopping-cart"></i>
+                        Siparişler
+                    </a>
+                </li>
+            
+
             <li class="nav-item">
                 <a asp-controller="Employee" asp-action="Profile" class="nav-link">
                     <i class="fas fa-user"></i>
-                    My Profile
+                    Profil
                 </a>
             </li>
         </ul>
@@ -393,7 +397,7 @@
     <header class="header">
         <div class="welcome-section">
             <div class="welcome-text">
-                <h1>Request Management</h1>
+                <h1>Sipariş Yönetimi</h1>
             </div>
         </div>
 
@@ -401,45 +405,45 @@
             <span id="current-time"></span>
             <a href="@Url.Action("Logout", "Account")" class="button2">
                 <i class="fas fa-sign-out-alt"></i>
-                Logout
+                Çıkış yap
             </a>
         </div>
     </header>
 
     <div class="container">
         <div class="filter-section">
-            <input type="text" id="search-input" placeholder="Search by drug or user name" />
-            <input type="number" id="min-quantity" placeholder="Minimum quantity" />
-            <input type="number" id="max-quantity" placeholder="Maximum quantity" />
+            <input type="text" id="search-input" placeholder="Ara" />
+            <input type="number" id="min-quantity" placeholder="Minimum miktar" />
+            <input type="number" id="max-quantity" placeholder="Maksimum miktar" />
             <select id="stock-filter">
-                <option value="">Status</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
+                <option value="">Durum</option>
+                <option value="pending">Beklemede</option>
+                <option value="approved">Onaylandı</option>
+                <option value="rejected">Reddedildi</option>
             </select>
-            <button class="filter-btn" onclick="applyFilters()">Search</button>
-            <button class="filter-btn" onclick="clearFilters()">Clear</button>
+            <button class="filter-btn" onclick="applyFilters()">Ara</button>
+            <button class="filter-btn" onclick="clearFilters()">Temiz</button>
         </div>
 
         <select id="sort-options" onchange="applyFilters()">
-            <option value="">Sort</option>
-            <option value="name-asc">Drug Name (A-Z)</option>
-            <option value="name-desc">Drug Name (Z-A)</option>
-            <option value="quantity-asc">Quantity (Low to High)</option>
-            <option value="quantity-desc">Quantity (High to Low)</option>
-            <option value="date-asc">Request Date (Oldest)</option>
-            <option value="date-desc">Request Date (Newest)</option>
+            <option value="">Sırala</option>
+            <option value="name-asc">İlaç adı (A-Z)</option>
+            <option value="name-desc">İlaç adı (Z-A)</option>
+            <option value="quantity-asc">Miktar (Artan)</option>
+            <option value="quantity-desc">Miktar (Azalan)</option>
+            <option value="date-asc">Sipariş Tarihi (Eski)</option>
+            <option value="date-desc">Sipariş Tarihi (Yeni)</option>
         </select>
 
         <table class="orders-table">
             <thead>
                 <tr>
-                    <th>Drug Name</th>
-                    <th>Quantity</th>
-                    <th>User</th>
-                    <th>Request Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>İlaç adı</th>
+                    <th>Miktar</th>
+                    <th>Kullanıcı</th>
+                    <th>Sipariş tarihi</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
                 </tr>
             </thead>
             <tbody>
@@ -453,15 +457,15 @@
                         <td>
                             @if (request.IsApproved)
                             {
-                                <span class="badge badge-success">Approved</span>
+                                <span class="badge badge-success">Onaylandı</span>
                             }
                             else if (request.IsRejected)
                             {
-                                <span class="badge badge-danger">Rejected</span>
+                                <span class="badge badge-danger">Reddedildi</span>
                             }
                             else
                             {
-                                <span class="badge badge-warning">Pending</span>
+                                <span class="badge badge-warning">Beklemede</span>
                             }
                         </td>
                         <td>
@@ -471,11 +475,11 @@
                                         data-id="@request.Id"
                                         data-quantity="@request.Quantity"
                                         data-drugname="@request.DrugName">
-                                    Approve
+                                    Onayla
                                 </button>
                                 <button class="btn btn-reject reject-btn"
                                         data-id="@request.Id">
-                                    Reject
+                                    Reddet
                                 </button>
                             }
                         </td>
