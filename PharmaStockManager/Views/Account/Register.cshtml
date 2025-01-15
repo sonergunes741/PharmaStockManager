@@ -62,6 +62,12 @@
 
         <section class="register-form">
             <form asp-action="Register" asp-controller="Account" method="post">
+                @if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
+                {
+                    <div class="alert alert-danger">
+                        @ViewData["ErrorMessage"]
+                    </div>
+                }
                 <div>
                     <label asp-for="FullName">Ad Soyad</label>
                     <input asp-for="FullName" class="form-control" placeholder="Adınızı ve soyadınızı girin" required />

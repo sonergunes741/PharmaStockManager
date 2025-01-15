@@ -290,7 +290,18 @@ namespace StockManager.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                var checkemail = await _userManager.FindByEmailAsync(viewModel.Email);
+                if(checkemail != null)
+                {
+                    ViewData["ErrorMessage"] = "Eposta adresi kullanımda";
+                    return View();
+                }
+                var checkrefcode = await _dbContext.Warehouses.FirstOrDefaultAsync(m => m.RefCode == viewModel.RefCode);
+                if(checkrefcode == null)
+                {
+                    ViewData["ErrorMessage"] = "Referans kodu hatalı";
+                    return View();
+                }
                 AppUser appUser = new AppUser()
                 {
                     UserName = viewModel.Email,
@@ -317,14 +328,6 @@ namespace StockManager.Controllers
 
                     await _signInManager.PasswordSignInAsync(viewModel.Email, viewModel.Password, false, true);
                     return RedirectToAction("MailConfirm", "Account");
-                }
-                else
-                {
-                    foreach (var item in result.Errors)
-                    {
-                        Console.WriteLine(item.Description);
-                        ModelState.AddModelError("", item.Description);
-                    }
                 }
             }
             return View();
