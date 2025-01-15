@@ -1,11 +1,14 @@
 ﻿@model List<Warehouse>
+@{
+    
+}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Warehouse Management</title>
+    <title>Depo Yönetimi - Pharma Stock Manager</title>
     <link rel="stylesheet" href="~/css/styles.css" />
     <style>
         :root {
@@ -250,13 +253,13 @@
 </head>
 <body>
     <div class="container">
-        <button class="back-button" onclick="window.location.href='/SuperAdmin/'">← Back</button>
+        <button class="back-button" onclick="window.location.href='/SuperAdmin/'">← Geri</button>
         <div class="page-content">
-            <h1>Warehouse Management</h1>
+            <h1>Depo Yönetimi</h1>
 
             <div class="action-buttons">
                 <button class="button" onclick="openAddModal()">
-                    Add New Warehouse
+                    Yeni Depo Ekle
                 </button>
             </div>
 
@@ -265,10 +268,10 @@
                 {
                     <div class="warehouse-card">
                         <h3>@warehouse.Name</h3>
-                        <p><strong>Ref Code:</strong> @warehouse.RefCode</p>
-                        <p><strong>Address:</strong> @warehouse.Address</p>
-                        <p><strong>Created:</strong> @warehouse.CreatedAt.ToShortDateString()</p>
-                        <p><strong>Last Updated:</strong> @warehouse.UpdatedAt.ToShortDateString()</p>
+                        <p><strong>Referans Kodu:</strong> @warehouse.RefCode</p>
+                        <p><strong>Adres:</strong> @warehouse.Address</p>
+                        <p><strong>Oluşturulma Tarihi:</strong> @warehouse.CreatedAt.ToShortDateString()</p>
+                        <p><strong>Son Güncelleme Tarihi:</strong> @warehouse.UpdatedAt.ToShortDateString()</p>
 
                         <div class="card-buttons">
                             <button class="button" onclick="openEditModal(@warehouse.Id)">Update</button>
@@ -283,11 +286,11 @@
 
     <div class="modal hidden" id="addWarehouseModal">
         <div class="modal-content">
-            <h2>Add Warehouse</h2>
+            <h2>Depo Ekleme</h2>
             <form id="addWarehouseForm" asp-action="SaveWarehouse" asp-controller="SuperAdmin" method="post">
                 <div class="form-group">
-                    <label for="name">Warehouse Name</label>
-                    <input type="text" id="name" name="Name" placeholder="Enter warehouse name" required />
+                    <label for="name">Depo Adı</label>
+                    <input type="text" id="name" name="Name" placeholder="Depo adını giriniz." required />
                 </div>
 
                 <div class="form-group">
@@ -295,13 +298,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" id="address" name="Address" placeholder="Enter address" />
+                    <label for="address">Adres</label>
+                    <input type="text" id="address" name="Address" placeholder="Adresinizi giriniz." />
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="button">Save</button>
-                    <button type="button" class="button" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="button">Kaydet</button>
+                    <button type="button" class="button" onclick="closeModal()">İptal Et</button>
                 </div>
             </form>
         </div>
@@ -310,21 +313,21 @@
     <!-- Add User Modal -->
     <div class="modal hidden" id="addUserModal">
         <div class="modal-content">
-            <h2>Add User to Warehouse</h2>
+            <h2>Depoya Admin ekle</h2>
             <form id="addUserForm" asp-action="AddAdminUser" asp-controller="SuperAdmin" method="post">
                 <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="FullName" placeholder="Enter full name" required />
+                    <label for="fullName">İsim</label>
+                    <input type="text" id="fullName" name="FullName" placeholder="İsminizi giriniz." required />
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="Email" placeholder="Enter email" required />
+                    <label for="email">Eposta</label>
+                    <input type="email" id="email" name="Email" placeholder="Eposta adresinizi giriniz." required />
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="Password" placeholder="Enter password" required />
+                    <label for="password">Şifre</label>
+                    <input type="password" id="password" name="Password" placeholder="Şifrenizi giriniz." required />
                 </div>
 
 
@@ -334,8 +337,8 @@
                 <input type="hidden" id="warehouseId" name="WarehouseId" />
 
                 <div class="form-actions">
-                    <button type="submit" class="button">Save</button>
-                    <button type="button" class="button" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="button">Kaydet</button>
+                    <button type="button" class="button" onclick="closeModal()">İptal Et</button>
                 </div>
             </form>
         </div>
@@ -348,7 +351,7 @@
             const form = document.getElementById('addWarehouseForm');
             form.reset();
             form.setAttribute('action', '/SuperAdmin/SaveWarehouse');
-            modal.querySelector('h2').textContent = 'Add Warehouse';
+            modal.querySelector('h2').textContent = 'Depo Ekleme';
             modal.classList.remove('hidden');
         }
 
@@ -358,7 +361,7 @@
                 .then(warehouse => {
                     const modal = document.getElementById('addWarehouseModal');
                     const form = document.getElementById('addWarehouseForm');
-                    modal.querySelector('h2').textContent = 'Edit Warehouse';
+                    modal.querySelector('h2').textContent = 'Depo Düzenleme';
                     modal.querySelector('#name').value = warehouse.Name;
                     modal.querySelector('#address').value = warehouse.Address;
                     modal.querySelector('#refCode').value = warehouse.RefCode;
@@ -368,7 +371,7 @@
         }
 
         function deleteWarehouse(id) {
-            if (confirm('Are you sure you want to delete this warehouse?')) {
+            if (confirm('Depoyu silmek istediğinize emin misiniz ?')) {
                 fetch(`/SuperAdmin/DeleteWarehouse/${id}`, { method: 'POST' })
                     .then(response => {
                         if (response.ok) {

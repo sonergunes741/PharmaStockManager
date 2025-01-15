@@ -92,6 +92,7 @@ namespace StockManager.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 var user = await _userManager.FindByEmailAsync(viewModel.Email);
                 if (user == null)
                 {
@@ -109,9 +110,13 @@ namespace StockManager.Controllers
                 }
 
                 SendPasswordResetEmail(viewModel.Email, resetLink);
-
-                return RedirectToAction("Login", "Account");
+                ViewData["SuccessMessage"] = "Link gönderme işlemi başarılı";
             }
+            else
+            {
+                ViewData["ErrorMessage"] = "Bilinmedik bir hata oluştu.";
+            }
+
             return View(viewModel);
         }
 

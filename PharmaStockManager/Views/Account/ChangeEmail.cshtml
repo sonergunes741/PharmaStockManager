@@ -1,16 +1,13 @@
-﻿@{
-    Layout = null;
-}
-
+﻿
 @model PharmaStockManager.Models.Identity.ChangeEmailViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Change Email</title>
+    <title>Eposta Değiştir - Pharma Stock Manager</title>
     <link rel="stylesheet" href="~/css/styles.css" />
     <style>
         :root {
@@ -119,7 +116,7 @@
         <form asp-action="ChangeEmail" asp-controller="Account" method="post">
             <div class="form-group">
                 <label asp-for="NewEmail">Yeni E-posta</label>
-                <input asp-for="NewEmail" type="text" required placeholder="Yeni E-posta'nızı girin." />
+                <input asp-for="NewEmail" type="text" required placeholder="Yeni E-postanızı girin." />
                 <span asp-validation-for="NewEmail" class="text-danger"></span>
             </div>
 
