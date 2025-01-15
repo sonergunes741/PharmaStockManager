@@ -484,9 +484,11 @@
                         <td>@user.UserName</td>
                         <td>
                             <span class="role-badge @(user.Role == "Employee" ? "role-employee" :
-                                            user.Role == "Customer" ? "role-customer" :
-                                            "role-pending")">
-                                @(isPending ? "Pending" : user.Role)
+                              user.Role == "Customer" ? "role-customer" :
+                              "role-pending")">
+                                @(user.Role == "Employee" ? "Çalışan" :
+                                    user.Role == "Customer" ? "Müşteri" :
+                                    "Beklemede")
                             </span>
                         </td>
                         <td>
@@ -583,7 +585,7 @@
 
 <script>
     function acceptUser(userId) {
-        if (confirm('Are you sure you want to accept this user?')) {
+        if (confirm('Kullanıcıyı kabul etmek istediğinize emin misiniz ?')) {
             fetch('/Admin/AcceptUser', {
                 method: 'POST',
                 headers: {
@@ -602,13 +604,13 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while accepting the user');
+                    alert('Bilinmedik bir hata oluştu.');
                 });
         }
     }
 
     function rejectUser(userId) {
-        if (confirm('Are you sure you want to reject this user?')) {
+        if (confirm('Kullanıcıyı reddetmek istediğinizden emin misiniz ?')) {
             fetch('/Admin/RejectUser', {
                 method: 'POST',
                 headers: {
@@ -627,7 +629,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while rejecting the user');
+                    alert('Bilinmedik bir hata oluştu.');
                 });
         }
     }
@@ -650,7 +652,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while changing the user role');
+                    alert('Bilinmedik bir hata oluştu.');
                 });
         }
     }
@@ -674,7 +676,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while changing the user role');
+                    alert('Bilinmedik bir hata oluştu.');
                 });
         }
     }
@@ -697,7 +699,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while deleting the user');
+                    alert('Bilinmedik bir hata oluştu.');
                 });
         }
     }
@@ -757,7 +759,7 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred while updating permissions');
+                alert('Bilinmedik bir hata oluştu.');
         });
     });
 </script>
