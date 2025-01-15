@@ -53,6 +53,7 @@ public class DrugsController : Controller
         ViewBag.TotalPages = totalPages;
         ViewBag.HasPreviousPage = pageNumber > 1;
         ViewBag.HasNextPage = pageNumber < totalPages;
+        ViewBag.Categories = _context.Categories.ToList();
 
         return View(drugs);
     }

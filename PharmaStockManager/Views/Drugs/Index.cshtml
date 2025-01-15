@@ -448,10 +448,16 @@ table {
             <input type="text" id="filter-name" placeholder="İlaç Adı" />
             <select id="filter-type">
                 <option value="">İlaç Tipi</option>
-                <option value="Ticari">Commercial</option>
-                <option value="Klinik">Clinical</option>
+                <option value="Ticari">Ticari</option>
+                <option value="Klinik">Klinik</option>
             </select>
-            <input type="text" id="filter-category" placeholder="Kategori" />
+            <select id="filter-category" >
+                <option value="">Kategori</option>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Name">@category.Name</option>
+                }
+            </select>
             <input type="date" id="filter-expiry-date" placeholder="Son Kullanma Tarihi" />
             <button type="button" onclick="applyFilter()">Filtrele</button>
         </form>
@@ -531,7 +537,13 @@ table {
                 
                 <div class="form-group" id="category-group">
                     <label for="Category">Kategori</label>
-                    <input type="text" id="Category" name="Category" class="form-control" required />
+                    <select id="filter-type" name="Category" class="form-control" required>
+                        <option value="">Kategori Seçiniz</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Name">@category.Name</option>
+                        }
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -699,17 +711,17 @@ table {
         });
 
         // Filter function
-        window.applyFilter = function() {
+        window.applyFilter = function () {
             const name = document.getElementById('filter-name').value.toLowerCase();
             const type = document.getElementById('filter-type').value;
-            const category = document.getElementById('filter-category').value.toLowerCase();
+            const category = document.getElementById('filter-category').value;
             const expiryDate = document.getElementById('filter-expiry-date').value;
 
             const rows = document.querySelectorAll('#medicine-table-body tr');
             rows.forEach(row => {
                 const matchName = row.cells[1].textContent.toLowerCase().includes(name);
                 const matchType = !type || row.cells[2].textContent === type;
-                const matchCategory = row.cells[4].textContent.toLowerCase().includes(category);
+                const matchCategory = !category || row.cells[4].textContent === category;
                 const rowExpiryDate = row.cells[6].textContent;
                 const matchExpiry = !expiryDate || rowExpiryDate <= expiryDate;
 
