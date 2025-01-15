@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "Transaction History";
     Layout = null;
+
+    var prevDisabled = !ViewBag.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !ViewBag.HasNextPage ? "disabled" : "";
+    var currentPage = ViewBag.CurrentPage;
+    var totalPages = ViewBag.TotalPages;
 }
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -290,6 +295,44 @@
             transform: translateY(-2px);
             opacity: 0.9;
         }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 0.5rem;
+    }
+
+    .pagination-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--lavender);
+        background-color: var(--white);
+        color: var(--lavender);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--lavender);
+            color: var(--white);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .pagination-info {
+        margin: 0 1rem;
+        color: var(--text);
+    }
+
+    .current-page {
+        background-color: var(--lavender);
+        color: var(--white);
+    }
 </style>
 
 <div class="sidebar">
@@ -434,6 +477,25 @@
                 }
             </tbody>
         </table>
+        <div class="pagination">
+            @if(currentPage != 1){
+            <a href="@Url.Action("TransactionHistory", new { page = currentPage - 1 })"
+               class="pagination-btn @prevDisabled">
+                <i class="fas fa-chevron-left"></i> Önceki
+            </a>
+            }
+            
+            <span class="pagination-info">
+                Sayfa @currentPage / @totalPages
+            </span>
+            @if(currentPage < totalPages){
+                <a href="@Url.Action("TransactionHistory", new { page = currentPage + 1 })"
+                   class="pagination-btn @nextDisabled">
+                    Sonraki <i class="fas fa-chevron-right"></i>
+                </a>
+            }
+            
+        </div>
     </div>
 </main>
 
@@ -443,24 +505,18 @@
         const transactionType = document.getElementById('transactionTypeFilter').value;
         const date = document.getElementById('dateFilter').value;
 
-        const rows = document.querySelectorAll('.transaction-table tbody tr');
+        // Filtreleri URL parametresi olarak ekle
+        const params = new URLSearchParams(window.location.search);
+        params.set('page', '1'); // Filtreleme yapıldığında ilk sayfaya dön
 
-        rows.forEach(row => {
-            const nameMatch = row.cells[0].textContent.toLowerCase().includes(drugName);
-            const typeMatch = !transactionType || row.cells[2].textContent.includes(transactionType);
-            const rowDate = row.cells[3].textContent.split(' ')[0];
-            const dateMatch = !date || rowDate === date;
+        if (drugName) params.set('drugName', drugName);
+        if (transactionType) params.set('transactionType', transactionType);
+        if (date) params.set('date', date);
 
-            row.style.display = nameMatch && typeMatch && dateMatch ? '' : 'none';
-        });
+        window.location.href = window.location.pathname + '?' + params.toString();
     }
 
     function resetFilters() {
-        document.getElementById('drugNameFilter').value = '';
-        document.getElementById('transactionTypeFilter').value = '';
-        document.getElementById('dateFilter').value = '';
-
-        const rows = document.querySelectorAll('.transaction-table tbody tr');
-        rows.forEach(row => row.style.display = '');
+        window.location.href = window.location.pathname;
     }
 </script>

@@ -318,6 +318,32 @@ table {
             transform: translateY(-2px);
             opacity: 0.9;
         }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 1rem;
+    }
+
+        .pagination .button {
+            padding: 0.5rem 1rem;
+            background-color: var(--mid-tone);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .pagination .button:hover {
+                background-color: var(--primary-blue);
+            }
+
+        .pagination .page-info {
+            font-size: 1rem;
+            color: var(--text);
+        }
 </style>
 
 <div class="sidebar">
@@ -471,6 +497,21 @@ table {
                     }
                 </tbody>
             </table>
+            <div class="pagination">
+                @if (ViewBag.HasPreviousPage)
+                {
+                    <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" class="button">Önceki</a>
+                }
+
+                <span class="page-info">
+                    Sayfa @ViewBag.CurrentPage / @ViewBag.TotalPages
+                </span>
+
+                @if (ViewBag.HasNextPage)
+                {
+                    <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" class="button">Sonraki</a>
+                }
+            </div>
         </section>
     </div>
 
