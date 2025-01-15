@@ -160,6 +160,8 @@ namespace PharmaStockManager.Controllers
                     return userPermissions.StockIn;
                 case "stockout":
                     return userPermissions.StockOut;
+                case "requestapprove":
+                    return userPermissions.RequestApprove;
                 default:
                     return false;
             }

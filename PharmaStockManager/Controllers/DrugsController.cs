@@ -104,7 +104,7 @@ public class DrugsController : Controller
                 {
                     DrugName = drug.Name,
                     Quantity = drug.Quantity,
-                    TransactionType = "Initial Stock",
+                    TransactionType = "Stock In",
                     TransactionDate = DateTime.Now,
                     ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                     Type = drug.DrugType,
@@ -152,7 +152,7 @@ public class DrugsController : Controller
                     {
                         DrugName = drug.Name,
                         Quantity = Math.Abs(quantityDifference),
-                        TransactionType = quantityDifference > 0 ? "Stock Increase" : "Stock Decrease",
+                        TransactionType = quantityDifference > 0 ? "Stock Adjustment" : "Stock Decrease",
                         TransactionDate = DateTime.Now,
                         ExpiryDate = drug.ExpiryDate ?? DateTime.Now.AddYears(1),
                         Type = drug.DrugType,

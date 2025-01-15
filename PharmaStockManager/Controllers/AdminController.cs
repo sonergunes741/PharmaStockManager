@@ -417,6 +417,7 @@ public class AdminController : Controller
             permissions.EditStocks = model.EditStocks;
             permissions.StockIn = model.StockIn;
             permissions.StockOut = model.StockOut;
+            permissions.RequestApprove = model.RequestApprove;
 
             await _context.SaveChangesAsync();
 

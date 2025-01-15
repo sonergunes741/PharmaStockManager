@@ -562,6 +562,15 @@
                             </label>
                         </td>
                     </tr>
+                    <tr>
+                        <td>Sipariş Onaylama</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" name="RequestApprove" />
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="modal-buttons">
@@ -704,6 +713,7 @@
                 document.querySelector('input[name="EditStocks"]').checked = permissions.editStocks;
                 document.querySelector('input[name="StockIn"]').checked = permissions.stockIn;
                 document.querySelector('input[name="StockOut"]').checked = permissions.stockOut;
+                document.querySelector('input[name="RequestApprove"]').checked = permissions.requestApprove;
                 document.getElementById('permissionsModal').style.display = 'flex';
             })
             .catch(error => {
@@ -724,7 +734,8 @@
             userId: userId,
             editStocks: document.querySelector('input[name="EditStocks"]').checked,
             stockIn: document.querySelector('input[name="StockIn"]').checked,
-            stockOut: document.querySelector('input[name="StockOut"]').checked
+            stockOut: document.querySelector('input[name="StockOut"]').checked,
+            requestApprove: document.querySelector('input[name="RequestApprove"]').checked
         };
 
         fetch('/Admin/UpdatePermissions', {
