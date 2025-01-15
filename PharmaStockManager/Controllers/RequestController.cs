@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Models;
 using PharmaStockManager.Models.Identity;
 using PharmaStockManager.Models.ViewModels;
@@ -20,7 +21,14 @@ public class RequestController : Controller
     }
 
     // GET: Request/Index
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(
+    string search,
+    int? minQuantity,
+    int? maxQuantity,
+    string status,
+    string sortOption,
+    int page = 1,
+    int pageSize = 1)
     {
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
@@ -28,8 +36,8 @@ public class RequestController : Controller
             return Json(new { success = false, message = "User not found." });
         }
 
-        // Filter requests based on RefCode of the logged-in user
-        var requests = _context.Requests
+        // Base query
+        var requestsQuery = _context.Requests
             .Where(r => _context.Drugs.Any(d => d.Id == r.DrugId && d.RefCode == currentUser.RefCode))
             .Select(r => new RequestViewModel
             {
@@ -40,11 +48,52 @@ public class RequestController : Controller
                 RequestDate = r.RequestDate,
                 IsApproved = r.IsApproved,
                 IsRejected = r.IsRejected
-            })
-            .ToList();
+            });
+
+        // Apply filters (same as before)
+        if (!string.IsNullOrEmpty(search))
+        {
+            search = search.ToLower();
+            requestsQuery = requestsQuery.Where(r => r.DrugName.ToLower().Contains(search) || r.UserName.ToLower().Contains(search));
+        }
+        if (minQuantity.HasValue) requestsQuery = requestsQuery.Where(r => r.Quantity >= minQuantity.Value);
+        if (maxQuantity.HasValue) requestsQuery = requestsQuery.Where(r => r.Quantity <= maxQuantity.Value);
+        if (!string.IsNullOrEmpty(status))
+        {
+            status = status.ToLower();
+            requestsQuery = status switch
+            {
+                "pending" => requestsQuery.Where(r => !r.IsApproved && !r.IsRejected),
+                "in-stock" => requestsQuery.Where(r => r.IsApproved),
+                "out-of-stock" => requestsQuery.Where(r => r.IsRejected),
+                _ => requestsQuery
+            };
+        }
+        requestsQuery = sortOption switch
+        {
+            "name-asc" => requestsQuery.OrderBy(r => r.DrugName),
+            "name-desc" => requestsQuery.OrderByDescending(r => r.DrugName),
+            "quantity-asc" => requestsQuery.OrderBy(r => r.Quantity),
+            "quantity-dsc" => requestsQuery.OrderByDescending(r => r.Quantity),
+            "request-asc" => requestsQuery.OrderBy(r => r.RequestDate),
+            "request-dsc" => requestsQuery.OrderByDescending(r => r.RequestDate),
+            _ => requestsQuery
+        };
+
+        // Paging logic
+        int totalItems = await requestsQuery.CountAsync();
+        var requests = await requestsQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
         return View("~/Views/Request/Requests.cshtml", requests);
     }
+
+
 
     // POST: Request/Approve
     [HttpPost]

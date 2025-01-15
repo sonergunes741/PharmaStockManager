@@ -316,6 +316,44 @@
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(46, 107, 194, 0.3);
         }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 0.5rem;
+    }
+
+    .pagination-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--lavender);
+        background-color: var(--white);
+        color: var(--lavender);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--lavender);
+            color: var(--white);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .pagination-info {
+        margin: 0 1rem;
+        color: var(--text);
+    }
+
+    .current-page {
+        background-color: var(--lavender);
+        color: var(--white);
+    }
 </style>
 
 <div class="sidebar">
@@ -467,10 +505,37 @@
             </tbody>
         </table>
     </div>
+        
+        <div class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <a href="javascript:void(0)" onclick="navigateToPage(@(ViewBag.CurrentPage - 1))" class="pagination-btn">
+                    <i class="fas fa-chevron-left"></i> Önceki
+                </a>
+            }
+
+            <span class="pagination-info">
+                Sayfa @ViewBag.CurrentPage / @ViewBag.TotalPages
+            </span>
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <a href="javascript:void(0)" onclick="navigateToPage(@(ViewBag.CurrentPage + 1))" class="pagination-btn">
+                    Sonraki <i class="fas fa-chevron-right"></i>
+                </a>
+            }
+        </div>
+
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    function navigateToPage(page) {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('page', page);
+        window.location.search = searchParams.toString();
+    }
+
     $(document).ready(function () {
         $('.approve-btn').click(function () {
             const requestId = $(this).data('id');
@@ -523,62 +588,23 @@
     });
 
     function applyFilters() {
-        const searchInput = document.getElementById('search-input').value.toLowerCase();
-        const minQuantity = parseInt(document.getElementById('min-quantity').value) || 0;
-        const maxQuantity = parseInt(document.getElementById('max-quantity').value) || Number.MAX_SAFE_INTEGER;
-        const statusFilter = document.getElementById('stock-filter').value.toLowerCase();
+        const searchInput = document.getElementById('search-input').value;
+        const minQuantity = document.getElementById('min-quantity').value;
+        const maxQuantity = document.getElementById('max-quantity').value;
+        const statusFilter = document.getElementById('stock-filter').value;
         const sortOption = document.getElementById('sort-options').value;
-        const tableBody = document.querySelector('.orders-table tbody');
 
-        // Orijinal tablo satırlarını al
-        const filteredRows = originalTableRows.filter(row => {
-            const drugName = row.children[0].innerText.toLowerCase();
-            const userName = row.children[2].innerText.toLowerCase();
-            const quantity = parseInt(row.children[1].innerText);
-            const status = row.children[4].innerText.toLowerCase();
-
-            // Filtreleme koşulları
-            const matchesSearch = drugName.includes(searchInput) || userName.includes(searchInput);
-            const matchesQuantity = quantity >= minQuantity && quantity <= maxQuantity;
-
-            let matchesStatus = true;
-            if (statusFilter === "pending") {
-                matchesStatus = !status.includes("approved") && !status.includes("rejected");
-            } else if (statusFilter === "in-stock") {
-                matchesStatus = status.includes("approved");
-            } else if (statusFilter === "out-of-stock") {
-                matchesStatus = status.includes("rejected");
-            }
-
-            return matchesSearch && matchesQuantity && matchesStatus;
+        const queryParams = new URLSearchParams({
+            search: searchInput,
+            minQuantity: minQuantity,
+            maxQuantity: maxQuantity,
+            status: statusFilter,
+            sortOption: sortOption
         });
 
-        // Sıralama işlemi
-        filteredRows.sort((a, b) => {
-            const getCellValue = (row, index) => row.children[index].innerText.trim();
-
-            switch (sortOption) {
-                case 'name-asc':
-                    return getCellValue(a, 0).localeCompare(getCellValue(b, 0));
-                case 'name-desc':
-                    return getCellValue(b, 0).localeCompare(getCellValue(a, 0));
-                case 'quantity-asc':
-                    return parseInt(getCellValue(a, 1)) - parseInt(getCellValue(b, 1));
-                case 'quantity-dsc':
-                    return parseInt(getCellValue(b, 1)) - parseInt(getCellValue(a, 1));
-                case 'request-asc':
-                    return new Date(getCellValue(a, 3)) - new Date(getCellValue(b, 3));
-                case 'request-dsc':
-                    return new Date(getCellValue(b, 3)) - new Date(getCellValue(a, 3));
-                default:
-                    return 0; // Varsayılan sıralama
-            }
-        });
-
-        // Tabloyu güncelle
-        tableBody.innerHTML = '';
-        filteredRows.forEach(row => tableBody.appendChild(row));
+        window.location.href = `/Request/Index?${queryParams.toString()}`;
     }
+
 
     function clearFilters() {
         // Filtre alanlarını temizle
