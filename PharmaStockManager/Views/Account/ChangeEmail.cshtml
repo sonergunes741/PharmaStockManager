@@ -1,4 +1,8 @@
-﻿@model PharmaStockManager.Models.Identity.ChangeEmailViewModel
+﻿@{
+    Layout = null;
+}
+
+@model PharmaStockManager.Models.Identity.ChangeEmailViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
@@ -109,7 +113,7 @@
 </head>
 <body>
     <div class="container">
-        <button class="back-button" onclick="window.location.href='/'">&larr; Geri</button>
+        <button class="back-button" onclick="window.location.href='/Account/AdminProfile'">&larr; Geri</button>
         <h1>E-posta adresini değiştir</h1>
         <p>E-posta adresinizi aşağıdan güncelleyin.</p>
         <form asp-action="ChangeEmail" asp-controller="Account" method="post">
