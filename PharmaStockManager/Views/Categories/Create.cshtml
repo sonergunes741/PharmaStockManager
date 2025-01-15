@@ -1,33 +1,460 @@
 ﻿@model PharmaStockManager.Models.Category
-
 @{
-    ViewData["Title"] = "Create";
+    Layout = null;
 }
 
-<h1>Create</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create - PharmaStockManager</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-blue: #5a9ecf;
+            --lavender: #a68cb1;
+            --mint-green: #88b8a5;
+            --mid-tone: #93b7df;
+            --background: #f4f5f7;
+            --text: #2f3542;
+            --white: #fff;
+            --gray-light: #e8eaed;
+            --gray-hover: #ddd;
+        }
 
-<h4>Category</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            background-color: var(--background);
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: var(--white);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .content-body {
+            padding: 40px;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .details-row {
+            margin-bottom: 20px;
+        }
+
+        .details-label {
+            color: var(--text);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .details-value {
+            color: var(--text);
+            font-size: 16px;
+            padding: 8px 0;
+        }
+
+        .action-links {
+            margin-top: 20px;
+        }
+
+            .action-links .btn {
+                background-color: var(--lavender);
+                color: var(--white);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .action-links .btn:hover {
+                    background-color: darken(var(--lavender), 10%);
+                }
+
+            .action-links a {
+                text-decoration: none;
+                margin-right: 15px;
+            }
+
+        a.back-link {
+            display: block;
+            margin-top: 10px; /* İsterseniz biraz boşluk ekleyebilirsiniz */
+        }
+
+    </style>
+    <style>
+        :root {
+            --primary-blue: #5a9ecf;
+            --lavender: #a68cb1;
+            --mint-green: #88b8a5;
+            --mid-tone: #93b7df;
+            --background: #f4f5f7;
+            --text: #2f3542;
+            --white: #fff;
+            --gray-light: #e8eaed;
+            --gray-hover: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--text);
+            height: 100vh;
+            position: fixed;
+            padding: 2rem;
+            color: var(--white);
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-circle {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary-blue) 33%, var(--mint-green) 33% 66%, var(--lavender) 66%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pill-icon {
+            width: 20px;
+            height: 32px;
+            background-color: var(--white);
+            border-radius: 16px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 0.5rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .nav-link:hover, .nav-link.active {
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--white);
+                transform: translateX(5px);
+            }
+
+            .nav-link i {
+                width: 20px;
+                margin-right: 1rem;
+            }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            background-color: var(--background);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+
+        .btn-create {
+            background-color: var(--lavender);
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-edit {
+            background-color: #ffd43b;
+            color: var(--text);
+        }
+
+        .btn-details {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .btn-delete {
+            background-color: #ff6b6b;
+            color: var(--white);
+        }
+
+        .categories-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+            .categories-table thead {
+                background-color: var(--lavender);
+                color: var(--white);
+            }
+
+            .categories-table th,
+            .categories-table td {
+                padding: 1rem;
+                text-align: left;
+                border-bottom: 1px solid var(--gray-light);
+            }
+
+            .categories-table tbody tr:hover {
+                background-color: var(--gray-hover);
+            }
+
+            .categories-table tbody tr:nth-child(even) {
+                background-color: var(--gray-light);
+            }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        .header {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .welcome-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .welcome-text p {
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .button2 {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #b0c7e8, var(--mid-tone), #7a9dc4);
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .button2:hover {
+                transform: translateY(-2px);
+                opacity: 0.9;
+            }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="pill-icon"></div>
+                </div>
+                <span class="logo-text">Pharma Stock Manager</span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a asp-controller="AdminDashboard" asp-action="Index" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        Panel
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Drugs" asp-action="Index" class="nav-link">
+                        <i class="fas fa-pills"></i>
+                        Envanter
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Request" asp-action="Index" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Siparişler
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Admin" asp-action="Users" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        Kullanıcılar
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Categories" asp-action="Index" class="nav-link active">
+                        <i class="fas fa-chart-bar"></i>
+                        Kategoriler
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Drugs" asp-action="TransactionHistory" class="nav-link">
+                        <i class="fas fa-history"></i>
+                        İşlem Geçmişi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Account" asp-action="AdminProfile" class="nav-link">
+                        <i class="fas fa-user-circle"></i>
+                        Profil
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="main-content">
+        <div class="content-header">
+            <h1 class="header-title">Create</h1>
+            <h4>Category</h4>
+        </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        <div class="content-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Name">İsim</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create</button>
+
+                <a asp-action="Index" class="back-link">Kategori listesine geri dön</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
