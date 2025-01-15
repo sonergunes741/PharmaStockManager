@@ -271,7 +271,11 @@
 
         <div class="form-group">
             <label for="phoneNumber">Telefon Numarası</label>
-            <input type="tel" id="phoneNumber" name="phoneNumber" value="@Model.PhoneNumber" required />
+            <input type="tel" id="phoneNumber" name="phoneNumber"
+                   value="@Model.PhoneNumber"
+                   pattern="^\+?\d{10,15}$"
+                   title="Lütfen geçerli bir telefon numarası girin (örn. +901234567890)"
+                   required />
         </div>
 
         <div class="form-group">
