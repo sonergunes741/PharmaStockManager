@@ -20,6 +20,8 @@
 		<PackageReference Include="NETCore.MailKit" Version="2.1.0" />
 		<PackageReference Include="QRCoder" Version="1.6.0" />
 		<PackageReference Include="System.Drawing.Common" Version="9.0.0" />
+		<PackageReference Include="X.PagedList" Version="10.5.7" />
+		<PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
 	</ItemGroup>
 
 </Project>

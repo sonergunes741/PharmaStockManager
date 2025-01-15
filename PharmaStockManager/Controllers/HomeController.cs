@@ -19,12 +19,7 @@ namespace PharmaStockManager.Controllers
 
         public IActionResult Index()
         {
-            var model = new
-            {
-                Drugs = _context.Drugs.ToList(),
-                Categories = _context.Categories.ToList()
-            };
-            return View(model);
+            return View();
         }
         
         public IActionResult About()

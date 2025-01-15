@@ -124,10 +124,6 @@ public class SuperAdminController : Controller
         return RedirectToAction("ManageUsers", "SuperAdmin");
     }
 
-    public IActionResult SystemSettings()
-    {
-        return View();
-    }
     public IActionResult ManageWarehouses()
     {
         var warehouses = _dbContext.Warehouses.ToList();

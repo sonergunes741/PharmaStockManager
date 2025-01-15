@@ -7,12 +7,16 @@ using PharmaStockManager.Models.Identity;
 using PharmaStockManager.Services;
 using System;
 using System.Threading.Tasks;
+using X.PagedList;
+using X.PagedList.Extensions;
+
 [Authorize(Roles = "Admin")]
 [ServiceFilter(typeof(LogFilter))]
 public class DrugsController : Controller
 {
     private readonly PharmaContext _context;
     private readonly UserManager<AppUser> _userManager;
+    private const int DefaultPageSize = 10;
 
     public DrugsController(PharmaContext context, UserManager<AppUser> userManager)
     {
@@ -188,16 +192,57 @@ public class DrugsController : Controller
         }
     }
 
-    // GET: Drugs/TransactionHistory
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> TransactionHistory()
+    public IActionResult TransactionHistory(string drugName, string transactionType, string date, int? page)
     {
-        var transactions = await _context.Transactions
-            .OrderByDescending(t => t.TransactionDate)
-            .ToListAsync();
+        try
+        {
+            // Fetch transactions from the database
+            var query = _context.Transactions.AsQueryable();
 
-        return View(transactions);
+            // Apply filters
+            if (!string.IsNullOrWhiteSpace(drugName))
+            {
+                query = query.Where(t => t.DrugName.Contains(drugName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(transactionType))
+            {
+                query = query.Where(t => t.TransactionType == transactionType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(date))
+            {
+                if (DateTime.TryParse(date, out var parsedDate))
+                {
+                    query = query.Where(t => t.TransactionDate.Date == parsedDate.Date);
+                }
+            }
+
+            // Order by most recent transactions
+            query = query.OrderByDescending(t => t.TransactionDate);
+
+            // Define pagination parameters
+            int pageSize = 1; // Adjust page size as necessary
+            int pageNumber = page ?? 1;
+
+            // Prepare the view model
+            var viewModel = new TransactionHistoryViewModel
+            {
+                DrugName = drugName,
+                TransactionType = transactionType,
+                Date = date,
+                Transactions = query.ToPagedList(pageNumber, pageSize)
+            };
+
+            return View(viewModel);
+        }
+        catch (Exception ex)
+        {
+            return View("Error");
+        }
     }
+
 
     private bool DrugExists(int id)
     {
