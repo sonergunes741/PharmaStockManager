@@ -215,7 +215,7 @@ public class UserPanelController : Controller
 
         var model = new UserManagementViewModel
         {
-            UserName = currentUser.UserName,
+            UserName = currentUser.FullName,
             Email = currentUser.Email,
             ActiveUser = currentUser.ActiveUser,
             Role = currentUser.UserType,
