@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmaStockManager.Models;
+using PharmaStockManager.Models.Identity;
 using PharmaStockManager.Services;
 
 namespace PharmaStockManager.Controllers
@@ -15,16 +17,23 @@ namespace PharmaStockManager.Controllers
     public class CategoriesController : Controller
     {
         private readonly PharmaContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CategoriesController(PharmaContext context)
+        public CategoriesController(PharmaContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
+            return View(await _context.Categories.Where(d => d.RefCode == currentUser.RefCode).ToListAsync());
         }
 
         // GET: Categories/Details/5

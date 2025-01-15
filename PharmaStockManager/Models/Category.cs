@@ -9,5 +9,7 @@ namespace PharmaStockManager.Models
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
+
+        public string RefCode { get; set; } = "ADMIN001";
     }
 }

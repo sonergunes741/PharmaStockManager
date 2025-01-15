@@ -38,7 +38,7 @@ public class UserPanelController : Controller
         var model = new
         {
             Drugs = _context.Drugs.Where(d => d.RefCode == currentUser.RefCode).ToList(),
-            Categories = _context.Categories.ToList()
+            Categories = _context.Categories.Where(d => d.RefCode == currentUser.RefCode).ToList()
         };
 
         return View(model);
@@ -66,7 +66,7 @@ public class UserPanelController : Controller
             return Json(new { success = false, message = "User not found." });
         }
 
-        var categories = _context.Categories.ToList();
+        var categories = _context.Categories.Where(c => c.RefCode == currentUser.RefCode).ToList();
         return View(categories);
     }
 
