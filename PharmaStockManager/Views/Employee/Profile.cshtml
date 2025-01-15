@@ -257,7 +257,7 @@
             <li class="nav-item">
                 <a asp-controller="Employee" asp-action="Profile" class="nav-link active">
                     <i class="fas fa-user"></i>
-                    My Profile
+                    Profil
                 </a>
             </li>
         </ul>
@@ -268,7 +268,7 @@
     <header class="header">
         <div class="welcome-section">
             <div class="welcome-text">
-                <h1>My Profile</h1>
+                <h1>Profil</h1>
             </div>
         </div>
 
@@ -276,7 +276,7 @@
             <span id="current-time"></span>
             <a href="@Url.Action("Logout", "Account")" class="button2">
                 <i class="fas fa-sign-out-alt"></i>
-                Logout
+                Çıkış yap
             </a>
         </div>
     </header>
@@ -285,12 +285,12 @@
         @Html.AntiForgeryToken()
 
         <div class="form-group">
-            <label for="fullName">Full Name</label>
+            <label for="fullName">İsim Soyisim</label>
             <input type="text" id="fullName" name="fullName" value="@Model.FullName" required />
         </div>
 
         <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">E-posta</label>
             <input type="email" id="email" name="email" value="@Model.Email" required />
         </div>
 
@@ -304,11 +304,11 @@
         </div>
 
         <div class="form-group">
-            <label>Reference Code</label>
+            <label>Referans kodu</label>
             <input type="text" value="@Model.RefCode" readonly />
         </div>
 
-        <button type="submit" class="update-btn">Update Profile</button>
+        <button type="submit" class="update-btn">Profili güncelle</button>
     </form>
 </main>
 

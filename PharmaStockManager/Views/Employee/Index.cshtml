@@ -356,7 +356,7 @@
             <li class="nav-item">
                 <a asp-controller="Employee" asp-action="Profile" class="nav-link">
                     <i class="fas fa-user"></i>
-                    My Profile
+                    Profil
                 </a>
             </li>
         </ul>
@@ -367,7 +367,7 @@
     <header class="header">
         <div class="welcome-section">
             <div class="welcome-text">
-                <h1>Employee Stock Management</h1>
+                <h1>Stok Yönetimi</h1>
             </div>
         </div>
 
@@ -375,36 +375,36 @@
             <span id="current-time"></span>
             <a href="@Url.Action("Logout", "Account")" class="button2">
                 <i class="fas fa-sign-out-alt"></i>
-                Logout
+                Çıkış yap
             </a>
         </div>
     </header>
 
     <div class="container">
         <form id="filter-form" class="filter-form">
-            <input type="text" id="filter-name" placeholder="Drug Name" />
+            <input type="text" id="filter-name" placeholder="İlaç adı" />
             <select id="filter-type">
-                <option value="">Drug Type</option>
-                <option value="Ticari">Commercial</option>
-                <option value="Klinik">Clinical</option>
+                <option value="">İlaç tipi</option>
+                <option value="Ticari">Ticari</option>
+                <option value="Klinik">Klinik</option>
             </select>
-            <input type="text" id="filter-category" placeholder="Category" />
-            <button type="button" onclick="applyFilter()">Filter</button>
+            <input type="text" id="filter-category" placeholder="Kategori" />
+            <button type="button" onclick="applyFilter()">Filtre</button>
         </form>
 
         <section class="all-medicines">
-            <h2>Drug Stock</h2>
+            <h2>İlaç stok</h2>
             <table class="medicine-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Quantity</th>
-                        <th>Category</th>
-                        <th>Unit Price</th>
-                        <th>Expiry Date</th>
-                        <th>Actions</th>
+                        <th>Numara</th>
+                        <th>İsim</th>
+                        <th>Tip</th>
+                        <th>Miktar</th>
+                        <th>Kategori</th>
+                        <th>Birim Fiyat</th>
+                        <th>Son Kullanma Tarihi</th>
+                        <th>İşlemler</th>
                     </tr>
                 </thead>
                 <tbody id="medicine-table-body">
@@ -423,13 +423,13 @@
                                 @if (permissions.StockIn)
                                 {
                                     <button class="button button-edit" onclick="openModal('add', @item.Id)">
-                                        Add Stock
+                                        Stok ekle
                                     </button>
                                 }
                                 @if (permissions.StockOut)
                                 {
                                     <button class="button button-delete" onclick="openModal('remove', @item.Id)">
-                                        Remove Stock
+                                        Stok çıkar
                                     </button>
                                 }
                             </td>
