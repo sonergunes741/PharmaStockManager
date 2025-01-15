@@ -4,11 +4,11 @@ namespace PharmaStockManager.Models.Identity
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email address")]
+        [Required(ErrorMessage = "Eposta gerekli")]
+        [EmailAddress(ErrorMessage = "Geçersiz Eposta Adresi")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
+        [Required(ErrorMessage = "Şifre Gerekli")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

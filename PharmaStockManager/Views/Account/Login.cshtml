@@ -1,4 +1,5 @@
 ﻿@model PharmaStockManager.Models.Identity.LoginViewModel
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
@@ -8,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/styles.css">
     <style>
+        /* Custom styles for login form and buttons */
         .form-actions button {
             padding: 0.75rem 1.5rem;
             background-color: var(--primary-blue);
@@ -39,8 +41,7 @@
             text-align: center; /* Center the text horizontally */
             background-color: #f4f4f4; /* Optional, adjust according to your design */
         }
-    </style>
-    <style>
+
         body {
             margin: 0;
             padding: 0;
@@ -88,7 +89,6 @@
             </div>
         </header>
 
-
         <section class="login-form">
             @if (ViewData["RequiresTwoFactor"] != null && (bool)ViewData["RequiresTwoFactor"])
             {
@@ -104,21 +104,28 @@
                         <button type="submit" class="btn-primary">Kodu Doğrula</button>
                     </div>
                 </form>
-
             }
             else
             {
-                <!-- Normal Giriş Formu -->
+                <!-- Normal Login Form -->
                 <form asp-action="Login" asp-controller="Account" method="post">
+                    <!-- Display validation errors at the top -->
+                    @if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
+                    {
+                        <div class="alert alert-danger">
+                            @ViewData["ErrorMessage"]
+                        </div>
+                    }
+
                     <div>
                         <label asp-for="Email">E-posta</label>
-                        <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresinizi girin" required />
+                        <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresinizi girin" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
                     <div>
                         <label asp-for="Password">Şifre</label>
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Şifrenizi girin" required />
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Şifrenizi girin" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
@@ -127,16 +134,16 @@
                         <a href="/Account/ForgotPassword" class="link-secondary">Şifrenizi mi unuttunuz?</a>
                     </div>
                 </form>
-
             }
 
-            <<div class="register-link">
+            <!-- Register link -->
+            <div class="register-link">
                 <p>Hesabınız yok mu? <a href="/Account/Register">Kayıt olun</a></p>
             </div>
-
         </section>
     </div>
 
+    <!-- Script to validate form and display validation errors -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>

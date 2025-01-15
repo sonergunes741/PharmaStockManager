@@ -394,21 +394,27 @@ namespace StockManager.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Find the user by email
                 var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
 
+                // Check if the user exists and if the account is active
                 if (user != null && user.ActiveUser)
                 {
+                    // Attempt to sign the user in
                     var result = await _signInManager.PasswordSignInAsync(user.UserName, loginViewModel.Password, false, lockoutOnFailure: true);
 
                     if (result.RequiresTwoFactor)
                     {
+                        // Redirect to Two-Factor Authentication page
                         ViewData["RequiresTwoFactor"] = true;
-                        return View(loginViewModel); // Re-render the page with the 2FA form
+                        return View(loginViewModel);
                     }
 
                     if (result.Succeeded)
                     {
+                        // Check the user's roles and redirect accordingly
                         var roles = await _userManager.GetRolesAsync(user);
+
                         if (roles.Contains("Admin"))
                         {
                             return RedirectToAction("Index", "AdminDashboard");
@@ -426,14 +432,41 @@ namespace StockManager.Controllers
                             return RedirectToAction("Index", "SuperAdmin");
                         }
 
-                        // Default fallback
+                        // Default fallback if no roles are matched
                         return RedirectToAction("Index", "Home");
                     }
+                    else if (result.IsLockedOut)
+                    {
+                        // If the account is locked
+                        ModelState.AddModelError("", "Hesabınız kilitlendi lütfen yetkiliyle görüşün.");
+                        ViewData["ErrorMessage"] = "Hesabınız kilitlendi lütfen yetkiliyle görüşün.";
+                    }
+                    else if (result.IsNotAllowed)
+                    {
+                        // If login is not allowed (e.g., email confirmation required)
+                        ModelState.AddModelError("", "Hesabınızda bir sorun oluştu lütfen yetkiliyle görüşün.");
+                        ViewData["ErrorMessage"] = "Hesabınızda bir sorun oluştu lütfen yetkiliyle görüşün.";
+                    }
+                    else
+                    {
+                        // If the password is incorrect
+                        ModelState.AddModelError("", "Eposta veya şifre yanlış.");
+                        ViewData["ErrorMessage"] = "Eposta veya şifre yanlış.";
+                    }
+                }
+                else
+                {
+                    // If the user doesn't exist or the account is inactive
+                    ModelState.AddModelError("", "");
+                    ViewData["ErrorMessage"] = "Kullanıcı Bulunamadı";
                 }
             }
-            ModelState.AddModelError("", "Invalid login attempt.");
+
+            // Return the view with validation error messages
             return View(loginViewModel);
         }
+
+
 
         [HttpGet]
         public async Task<IActionResult> MailConfirm()
