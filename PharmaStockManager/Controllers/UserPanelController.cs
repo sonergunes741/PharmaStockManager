@@ -96,7 +96,7 @@ public class UserPanelController : Controller
             // Create request
             var request = new Request
             {
-                UserName = User.Identity.Name,
+                UserName = currentUser.UserName,
                 DrugId = drug.Id,
                 Quantity = quantity,
                 RequestDate = DateTime.Now,
