@@ -10986,11 +10986,19 @@
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< Updated upstream
       "projectUniqueName": "C:\\Users\\Baskan\\Desktop\\pharma_stock\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
       "projectName": "PharmaStockManager",
       "projectPath": "C:\\Users\\Baskan\\Desktop\\pharma_stock\\PharmaStockManager\\PharmaStockManager\\PharmaStockManager.csproj",
       "packagesPath": "C:\\Users\\Baskan\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Baskan\\Desktop\\pharma_stock\\PharmaStockManager\\PharmaStockManager\\obj\\",
+=======
+      "projectUniqueName": "C:\\Users\\Baskan\\Desktop\\psm\\PharmaStockManager\\PharmaStockManager.csproj",
+      "projectName": "PharmaStockManager",
+      "projectPath": "C:\\Users\\Baskan\\Desktop\\psm\\PharmaStockManager\\PharmaStockManager.csproj",
+      "packagesPath": "C:\\Users\\Baskan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Baskan\\Desktop\\psm\\PharmaStockManager\\obj\\",
+>>>>>>> Stashed changes
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Baskan\\AppData\\Roaming\\NuGet\\NuGet.Config",
